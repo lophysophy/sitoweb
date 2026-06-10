@@ -305,6 +305,10 @@ a:focus-visible {
   margin-bottom: 8px;
 }
 
+.discipline-head .chip-row {
+  margin-top: 12px;
+}
+
 /* Mosaic tiles are navigation links: flush, gap 0, no radius, no border,
    no shadow. Hovering a tile narrows its siblings so the row stays flush
    and full. Each image sits at a fixed scale behind its tile, which acts
