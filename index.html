@@ -1,31 +1,31 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Lophy Sophy</title>
-  <link rel="icon" type="image/jpeg" href="images/lophysophy.jpg">
+  <link rel="icon" type="image/jpeg" href="/images/lophysophy.jpg">
   <meta name="description" content="Portfolio of Sofia Lucarelli, alias Lophy Sophy. Visual development, character design, 2D animation and traditional illustration. Character Animation student at Gobelins Paris.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
 
   <header class="site-header">
     <div class="header-inner">
       <div class="header-side">
-        <a class="wordmark" href="index.html">Lophy Sophy<span class="wordmark-sub">Sofia Lucarelli</span></a>
+        <a class="wordmark" href="/index.html">Lophy Sophy<span class="wordmark-sub">Sofia Lucarelli</span></a>
       </div>
       <nav class="site-nav nav-center" aria-label="Work categories">
-        <a href="concept-art.html">Visual Development</a>
-        <a href="illustration.html">Illustration</a>
-        <a href="animation.html">Animation</a>
+        <a href="/html/concept-art.html">Visual Development</a>
+        <a href="/html/illustration.html">Illustration</a>
+        <a href="/html/animation.html">Animation</a>
       </nav>
       <nav class="site-nav header-side right" aria-label="Main navigation">
-        <a href="index.html">Work</a>
-        <a href="about.html">About</a>
+        <a href="/html/showreel.html">Showreel</a>
+        <a href="/html/about.html">About</a>
       </nav>
     </div>
   </header>
@@ -33,8 +33,8 @@
   <main>
 
     <section class="hero">
-      <img src="images/reel-frame.jpg" alt="Colored frame from the 2025 animation showreel of Sofia Lucarelli">
-      <a class="play-button" href="animation.html" aria-label="Go to the animation showreel page">
+      <img src="/images/reel-frame.jpg" alt="Colored frame from the 2025 animation showreel of Sofia Lucarelli">
+      <a class="play-button" href="/html/showreel.html" aria-label="Go to the showreel page">
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M8 5v14l11-7z"></path></svg>
       </a>
     </section>
@@ -50,20 +50,7 @@
         <h2 class="section-title">Visual Development</h2>
         <p class="kicker">Concept Art · BG Painting · Character Design</p>
       </div>
-      <div class="mosaic">
-        <a class="tile" href="concept-art.html">
-          <img src="images/concept-art/04.jpg" alt="Concept art preview, link to the concept art gallery">
-          <span class="tile-overlay"><span class="tile-label">04</span></span>
-        </a>
-        <a class="tile" href="concept-art.html">
-          <img src="images/concept-art/09.jpg" alt="Concept art preview, link to the concept art gallery">
-          <span class="tile-overlay"><span class="tile-label">09</span></span>
-        </a>
-        <a class="tile" href="concept-art.html">
-          <img src="images/concept-art/15.jpg" alt="Concept art preview, link to the concept art gallery">
-          <span class="tile-overlay"><span class="tile-label">15</span></span>
-        </a>
-      </div>
+      <div class="mosaic" data-portfolio-preview="visual-development" data-limit="3"></div>
     </section>
 
     <section class="discipline">
@@ -71,20 +58,7 @@
         <h2 class="section-title">Illustration</h2>
         <p class="kicker">Watercolor · Etching · Colored Pencil</p>
       </div>
-      <div class="mosaic">
-        <a class="tile" href="illustration.html">
-          <img src="images/illustration/03.jpg" alt="Illustration preview, link to the illustration gallery">
-          <span class="tile-overlay"><span class="tile-label">03</span></span>
-        </a>
-        <a class="tile" href="illustration.html">
-          <img src="images/illustration/07.jpg" alt="Illustration preview, link to the illustration gallery">
-          <span class="tile-overlay"><span class="tile-label">07</span></span>
-        </a>
-        <a class="tile" href="illustration.html">
-          <img src="images/illustration/10.jpg" alt="Illustration preview, link to the illustration gallery">
-          <span class="tile-overlay"><span class="tile-label">10</span></span>
-        </a>
-      </div>
+      <div class="mosaic" data-portfolio-preview="illustration" data-limit="3"></div>
     </section>
 
     <section class="discipline">
@@ -92,12 +66,7 @@
         <h2 class="section-title">Animation</h2>
         <p class="kicker">2D Animation · Compositing</p>
       </div>
-      <div class="mosaic single">
-        <a class="tile" href="animation.html">
-          <img src="images/reel-frame.jpg" alt="Showreel preview, link to the animation page">
-          <span class="tile-overlay"><span class="tile-label">reel-frame</span></span>
-        </a>
-      </div>
+      <div class="mosaic" data-portfolio-preview="animation" data-limit="3"></div>
     </section>
 
   </main>
@@ -106,6 +75,8 @@
     <p>© 2026 Sofia Lucarelli · <a href="mailto:lophy.sophy@gmail.com">lophy.sophy@gmail.com</a> · <a class="icon-link" href="https://www.instagram.com/lophy.sophy" target="_blank" rel="noopener">Instagram</a></p>
   </footer>
 
-  <script src="script.js"></script>
+  <script src="/javascript/images-data.js"></script>
+  <script src="/javascript/gallery.js"></script>
+  <script src="/javascript/script.js"></script>
 </body>
 </html>
