@@ -262,6 +262,7 @@ body.menu-open .hero-corners .menu-toggle {
   background: none;
   border: 0;
   cursor: pointer;
+  color: var(--aqua-gray); /* default on solid headers; white over the hero video */
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -290,13 +291,15 @@ body.menu-open .hero-corners .menu-toggle {
 }
 
 /* Dropdown menu holding every section (mobile only) */
-/* The menu and the top bar are one white sheet: it starts at the very top and
-   its reserved 60px header sits behind the fixed name/hamburger, so the bar
-   background and the dropdown grow and collapse together as a single element. */
+/* On most pages the bar is a solid sticky header, so the dropdown slides down
+   below it (top: 60px). On the homepage the bar is transparent over the video,
+   so the .mobile-menu--hero variant starts at the very top and reserves the bar
+   row behind the fixed name/hamburger — there the bar background and the
+   dropdown grow and collapse together as a single white sheet. */
 .mobile-menu {
   display: none;
   position: fixed;
-  top: 0;
+  top: 60px;
   left: 0;
   right: 0;
   z-index: 19; /* below .hero-corners (20): name + hamburger sit on the sheet */
@@ -306,10 +309,17 @@ body.menu-open .hero-corners .menu-toggle {
 .mobile-menu-inner {
   display: flex;
   flex-direction: column;
-  padding-top: 60px; /* the bar row the name/hamburger overlay */
   background: var(--white);
   border-bottom: 1px solid var(--aqua-mist);
   box-shadow: 0 14px 28px rgba(16, 48, 46, 0.14);
+}
+
+.mobile-menu--hero {
+  top: 0;
+}
+
+.mobile-menu--hero .mobile-menu-inner {
+  padding-top: 60px; /* the bar row the fixed name/hamburger overlay */
 }
 
 .mobile-menu a {
@@ -1030,36 +1040,30 @@ body.menu-open .hero-corners .menu-toggle {
    -------------------------------------------------------------------------- */
 
 @media (max-width: 768px) {
+  /* Every page collapses its inline nav into the hamburger + dropdown on mobile,
+     leaving a clean single-row bar with the name and the hamburger. */
   .site-header {
-    height: auto;
+    height: 60px;
   }
 
   .header-inner {
-    height: auto;
-    padding: 8px 16px 0;
-    flex-wrap: wrap;
-    row-gap: 0;
+    padding: 0 18px;
   }
 
-  /* Category links drop to their own centered row below the wordmark */
-  .nav-center {
-    order: 3;
-    flex-basis: 100%;
-    justify-content: center;
-  }
-
-  /* Homepage on mobile: the category bar is replaced by a dropdown menu, so only
-     the name (left) and the hamburger (right) sit over the intro. */
-  .site-header--home {
-    display: none;
-  }
-
+  .nav-center,
+  .header-side.right,
   .corner-right {
     display: none;
   }
 
   .menu-toggle {
     display: flex;
+  }
+
+  /* Homepage on mobile: the pinning category bar is gone; the name and hamburger
+     sit over the intro via .hero-corners instead. */
+  .site-header--home {
+    display: none;
   }
 
   /* Apple-style slide: the panel rolls down/up via max-height alone — no
