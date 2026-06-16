@@ -10,39 +10,58 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/styles.css">
+  <script data-goatcounter="https://lophysophy.goatcounter.com/count"
+          async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
 
-  <header class="site-header">
+  <!-- Name (left) and Showreel/About (right) stay fixed over the full-screen
+       intro; they merge into the bar once the category nav pins on scroll. -->
+  <div class="hero-corners">
+    <div class="corners-inner">
+      <a class="wordmark" href="/index.html">Lophy Sophy<span class="wordmark-sub">Sofia Lucarelli</span></a>
+      <nav class="site-nav corner-right" aria-label="Main navigation">
+        <a href="/html/showreel.html">Showreel</a>
+        <a href="/html/about.html">About</a>
+      </nav>
+      <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+
+  <nav class="mobile-menu" id="mobile-menu" aria-label="All sections">
+    <div class="mobile-menu-inner">
+      <a href="/html/concept-art.html">Visual Development</a>
+      <a href="/html/illustration.html">Illustration</a>
+      <a href="/html/animation.html">Animation</a>
+      <a href="/html/showreel.html">Showreel</a>
+      <a href="/html/about.html">About</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <video src="/images/intro.mp4" poster="/images/reel-frame.jpg" autoplay loop muted playsinline preload="metadata" aria-label="Looping intro animation by Sofia Lucarelli"></video>
+  </section>
+
+  <header class="site-header site-header--home">
     <div class="header-inner">
-      <div class="header-side">
-        <a class="wordmark" href="/index.html">Lophy Sophy<span class="wordmark-sub">Sofia Lucarelli</span></a>
-      </div>
+      <div class="header-side" aria-hidden="true"></div>
       <nav class="site-nav nav-center" aria-label="Work categories">
         <a href="/html/concept-art.html">Visual Development</a>
         <a href="/html/illustration.html">Illustration</a>
         <a href="/html/animation.html">Animation</a>
       </nav>
-      <nav class="site-nav header-side right" aria-label="Main navigation">
-        <a href="/html/showreel.html">Showreel</a>
-        <a href="/html/about.html">About</a>
-      </nav>
+      <div class="header-side right" aria-hidden="true"></div>
     </div>
   </header>
 
   <main>
 
-    <section class="hero">
-      <img src="/images/reel-frame.jpg" alt="Colored frame from the 2025 animation showreel of Sofia Lucarelli">
-      <a class="play-button" href="/html/showreel.html" aria-label="Go to the showreel page">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M8 5v14l11-7z"></path></svg>
-      </a>
-    </section>
-
     <section class="hello">
       <h1 class="greeting">Hello!</h1>
-      <p class="lead">I am Sofia Lucarelli, a visual development artist and character animation student.</p>
-      <p>I am currently training in Character Animation at Gobelins in Paris (CRFA, class of 2027), after earning a BA in Illustration and Animation at IED in Rome. I design characters and worlds through concept art, 2D animation and traditional media, and I take on freelance illustration work alongside my studies.</p>
+      <p class="lead">I am Sofia Lucarelli, a young artist working in visual development, concept art, character design and 2D animation.</p>
+      <p>I am currently studying for my Master Degree in Character Animation at Gobelins in Paris (CRFA, class of 2027). My work moves between digital and traditional media, I like to incorporate traditional techniques into my projects and sometimes challenge myself to achieve that look only through digital. I love painting and playing with colors!</p>
     </section>
 
     <section class="discipline">
@@ -50,13 +69,13 @@
         <h2 class="section-title">Visual Development</h2>
         <p class="kicker">Concept Art · BG Painting · Character Design</p>
       </div>
-      <div class="mosaic" data-portfolio-preview="visual-development" data-limit="3"></div>
+      <div class="mosaic" data-portfolio-preview="visual-development" data-limit="3" data-scale="1.1"></div>
     </section>
 
     <section class="discipline">
       <div class="discipline-head">
         <h2 class="section-title">Illustration</h2>
-        <p class="kicker">Watercolor · Etching · Colored Pencil</p>
+        <p class="kicker">Watercolor · Life Drawing · Colored Pencil</p>
       </div>
       <div class="mosaic" data-portfolio-preview="illustration" data-limit="3"></div>
     </section>
@@ -64,7 +83,7 @@
     <section class="discipline">
       <div class="discipline-head">
         <h2 class="section-title">Animation</h2>
-        <p class="kicker">2D Animation · Compositing</p>
+        <p class="kicker">2D Animation · Short Movies</p>
       </div>
       <div class="mosaic" data-portfolio-preview="animation" data-limit="3"></div>
     </section>

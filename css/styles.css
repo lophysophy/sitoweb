@@ -117,10 +117,10 @@ a:focus-visible {
 }
 
 .header-inner {
-  max-width: 1100px;
+  max-width: none;
   height: 100%;
-  margin: 0 auto;
-  padding: 0 24px;
+  margin: 0;
+  padding: 0 28px; /* full-width nav, edges matching the homepage corners */
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -191,19 +191,161 @@ a:focus-visible {
   color: var(--tiffany-deep);
 }
 
+/* Homepage only: the name (left) and Showreel/About (right) stay fixed over the
+   full-screen intro. The category bar (.site-header) lives just below the hero
+   and pins to the top on scroll — when it pins, these corners sit in the same
+   row, so they read as one merged nav bar. */
+.hero-corners {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  height: 60px;
+  pointer-events: none; /* only the links are interactive, not the empty middle */
+  transition: background-color 0.3s ease;
+}
+
+.corners-inner {
+  max-width: none;
+  height: 100%;
+  margin: 0;
+  padding: 0 28px; /* hug the screen edges, no centered max-width gutter */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.corners-inner .wordmark,
+.corners-inner .corner-right,
+.corners-inner .menu-toggle {
+  pointer-events: auto;
+}
+
+/* Over the video the corners are white for contrast; once the bar pins (or the
+   mobile menu opens) they return to the ink palette on a white background. */
+.hero-corners .wordmark {
+  color: var(--white);
+}
+
+.hero-corners .wordmark-sub {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.hero-corners .corner-right a,
+.hero-corners .menu-toggle {
+  color: var(--white);
+}
+
+body.nav-pinned .hero-corners .wordmark,
+body.menu-open .hero-corners .wordmark {
+  color: var(--ink);
+}
+
+body.nav-pinned .hero-corners .wordmark-sub,
+body.menu-open .hero-corners .wordmark-sub {
+  color: var(--aqua-gray);
+}
+
+body.nav-pinned .hero-corners .corner-right a,
+body.nav-pinned .hero-corners .menu-toggle,
+body.menu-open .hero-corners .menu-toggle {
+  color: var(--aqua-gray);
+}
+
+/* Hamburger (mobile only) */
+.menu-toggle {
+  display: none;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.menu-toggle span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.menu-toggle.open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.menu-toggle.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle.open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Dropdown menu holding every section (mobile only) */
+/* The menu and the top bar are one white sheet: it starts at the very top and
+   its reserved 60px header sits behind the fixed name/hamburger, so the bar
+   background and the dropdown grow and collapse together as a single element. */
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 19; /* below .hero-corners (20): name + hamburger sit on the sheet */
+  overflow: hidden; /* clips the inner panel so it rolls down/up cleanly */
+}
+
+.mobile-menu-inner {
+  display: flex;
+  flex-direction: column;
+  padding-top: 60px; /* the bar row the name/hamburger overlay */
+  background: var(--white);
+  border-bottom: 1px solid var(--aqua-mist);
+  box-shadow: 0 14px 28px rgba(16, 48, 46, 0.14);
+}
+
+.mobile-menu a {
+  padding: 15px 28px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.mobile-menu a:hover,
+.mobile-menu a:active {
+  color: var(--tiffany);
+  background: var(--aqua-mist);
+}
+
 /* --------------------------------------------------------------------------
    Hero and reel placeholder
    -------------------------------------------------------------------------- */
 
 .hero {
   position: relative;
+  height: 100vh;  /* fallback */
+  height: 100svh; /* full-screen intro; the nav sits just below and pins on scroll */
+  overflow: hidden;
 }
 
-.hero img {
+.hero img,
+.hero video {
   width: 100%;
-  height: auto;
-  max-height: 72vh;
-  object-fit: cover; /* allowed: the hero acts as a link thumbnail for the reel */
+  height: 100%;
+  /* Zoom to fill the whole banner, cropping top/bottom as needed — never
+     letterbox with empty space at the sides. */
+  object-fit: cover;
+  display: block;
 }
 
 .play-button {
@@ -275,7 +417,7 @@ a:focus-visible {
   max-width: 680px;
   margin: 0 auto;
   padding: 56px 24px 16px;
-  text-align: center;
+  text-align: left;
 }
 
 .hello .greeting {
@@ -287,9 +429,8 @@ a:focus-visible {
   margin-bottom: 12px;
 }
 
-/* Descriptions read as justified blocks */
 .hello p {
-  text-align: justify;
+  text-align: left;
 }
 
 /* --------------------------------------------------------------------------
@@ -382,7 +523,9 @@ a:focus-visible {
    -------------------------------------------------------------------------- */
 
 .page-head {
-  text-align: center;
+  max-width: 680px;
+  margin: 0 auto;
+  text-align: center; /* titles centered; the intro description stays left */
   padding: 56px 24px 0;
 }
 
@@ -397,7 +540,7 @@ a:focus-visible {
 }
 
 .intro p {
-  text-align: justify;
+  text-align: left;
 }
 
 /* Artwork is never cropped: full boards, single column, full bleed edge to edge */
@@ -491,34 +634,22 @@ a:focus-visible {
    About page
    -------------------------------------------------------------------------- */
 
+/* Two-column editorial layout: a designed portrait card on the left, the bio on
+   the right. The tanuki sits on a soft tiffany-tinted panel so it reads as an
+   intentional portrait, not a sketch dropped onto the page. */
 .about-layout {
-  max-width: 920px;
-  margin: 56px auto 0;
+  max-width: 980px;
+  margin: 64px auto 0;
   padding: 0 24px;
-  display: flex;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: 380px 1fr;
   gap: 56px;
-}
-
-.about-text {
-  flex: 1;
-}
-
-.about-text .greeting {
-  margin-bottom: 16px;
-}
-
-.about-text p {
-  margin-bottom: 18px;
-}
-
-.about-text .btn {
-  margin-top: 8px;
+  align-items: center;
 }
 
 .about-figure {
-  width: 280px;
-  flex-shrink: 0;
+  margin: 0;
+  text-align: center;
 }
 
 .about-figure img {
@@ -526,30 +657,74 @@ a:focus-visible {
   height: auto;
 }
 
+.about-text .kicker {
+  margin-bottom: 12px;
+}
+
+.about-text .greeting {
+  font-size: 30px;
+  margin-bottom: 20px;
+}
+
+.about-text p {
+  margin-bottom: 18px;
+}
+
+.about-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.btn--solid {
+  background: var(--tiffany);
+  border-color: var(--tiffany);
+  color: var(--white);
+}
+
+.btn--solid:hover {
+  background: var(--tiffany-deep);
+  border-color: var(--tiffany-deep);
+  color: var(--white);
+}
+
+/* Education: tidy cards with a tiffany accent rail, replacing the plain list. */
 .list-section {
-  text-align: center;
-  padding: 64px 24px 0;
+  max-width: 960px;
+  margin: 0 auto;
+  text-align: left;
+  padding: 72px 24px 0;
 }
 
 .list-section .kicker {
   margin-bottom: 20px;
 }
 
-.list-section ul {
-  list-style: none;
+.edu-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
 }
 
-.list-section li {
-  margin-bottom: 16px;
+.edu-card {
+  background: var(--aqua-mist);
+  border-left: 4px solid var(--tiffany);
+  border-radius: 14px;
+  padding: 20px 22px;
 }
 
-.list-item-title {
-  font-weight: 600;
+.edu-card .school {
+  font-family: 'Comfortaa', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--ink);
 }
 
-.list-item-detail {
+.edu-card .meta {
   color: var(--aqua-gray);
   font-size: 13px;
+  margin-top: 4px;
 }
 
 /* --------------------------------------------------------------------------
@@ -873,6 +1048,45 @@ a:focus-visible {
     justify-content: center;
   }
 
+  /* Homepage on mobile: the category bar is replaced by a dropdown menu, so only
+     the name (left) and the hamburger (right) sit over the intro. */
+  .site-header--home {
+    display: none;
+  }
+
+  .corner-right {
+    display: none;
+  }
+
+  .menu-toggle {
+    display: flex;
+  }
+
+  /* Apple-style slide: the panel rolls down/up via max-height alone — no
+     cross-fade. The exact open height is set in JS, so the close has no dead
+     time before the panel starts moving. */
+  .mobile-menu {
+    display: block;
+    max-height: 0;
+    pointer-events: none;
+    transition: max-height 0.45s cubic-bezier(0.4, 0, 0.6, 1);
+  }
+
+  .mobile-menu.open {
+    pointer-events: auto;
+  }
+
+  .corners-inner {
+    padding: 0 18px;
+  }
+
+  /* Once scrolled past the intro the corners get a solid bar so the name and
+     icon stay readable. (When the menu is open, the sheet itself is the bar.) */
+  body.nav-pinned .hero-corners {
+    background: var(--white);
+    border-bottom: 1px solid var(--aqua-mist);
+  }
+
   .wordmark {
     font-size: 16px;
   }
@@ -933,15 +1147,23 @@ a:focus-visible {
     right: 8px;
   }
 
+  .hero {
+    height: 100svh;
+  }
+
   .about-layout {
-    flex-direction: column;
-    gap: 40px;
+    grid-template-columns: 1fr;
+    gap: 36px;
   }
 
   .about-figure {
-    width: 280px;
-    max-width: 100%;
+    width: 100%;
+    max-width: 260px;
     margin: 0 auto;
+  }
+
+  .edu-grid {
+    grid-template-columns: 1fr;
   }
 }
 

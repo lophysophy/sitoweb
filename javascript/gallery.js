@@ -104,8 +104,10 @@
       rowH = Math.max(rowH, tileW / ar);
     }
     // Small margin over the just-fits height so images overflow their tiles a
-    // little (no white gap, and a touch of squeeze room on hover).
-    m.style.setProperty('--row-h', (rowH * 1.06) + 'px');
+    // little (no white gap, and a touch of squeeze room on hover). An optional
+    // per-mosaic data-scale enlarges one category's row (e.g. Visual Development).
+    var scale = parseFloat(m.getAttribute('data-scale')) || 1;
+    m.style.setProperty('--row-h', (rowH * 1.06 * scale) + 'px');
   }
 
   if (!window.__mosaicFit) {
