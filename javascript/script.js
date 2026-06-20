@@ -34,6 +34,16 @@
   update();
 })();
 
+// Homepage hero: phones get the portrait-friendly intro, larger screens the wide
+// one. Choosing the source in JS means only the file actually used is downloaded.
+(function () {
+  var v = document.querySelector('.hero video[data-src]');
+  if (!v) return;
+  var mobile = window.matchMedia('(max-width: 768px)').matches;
+  v.src = mobile && v.dataset.srcMobile ? v.dataset.srcMobile : v.dataset.src;
+  v.load();
+})();
+
 // Mobile dropdown menu (hamburger) holding every section.
 (function () {
   var btn = document.querySelector('.menu-toggle');

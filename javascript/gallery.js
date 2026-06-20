@@ -55,23 +55,73 @@
       + '</a>';
   }
 
+  // One cadence for every category so the grids feel the same: a frame every
+  // CYCLE_MS, whether the cells flip stills or cross-fade clips.
+  var CYCLE_MS = 700;
+
   function wireCycle(cell) {
-    var img = cell.querySelector('.grid-img');
-    if (img.tagName === 'VIDEO') return; // a video loops on its own; no frame cycling
+    var media = cell.querySelector('.grid-img');
     var srcs = (cell.getAttribute('data-srcs') || '').split('|').filter(Boolean);
     if (srcs.length < 2) return;
+    if (media.tagName === 'VIDEO') wireVideoCycle(cell, media, srcs);
+    else wireImageCycle(cell, media, srcs);
+  }
+
+  // Image cells (Visual Development, Illustration): flip the stills quickly by
+  // swapping the one element's src — images decode fast and the browser caches
+  // them after the first pass.
+  function wireImageCycle(cell, img, srcs) {
     var idx = 0, timer = null;
     function start() {
       if (timer) return;
-      timer = setInterval(function () {
-        idx = (idx + 1) % srcs.length;
-        img.src = srcs[idx];
-      }, 700);
+      timer = setInterval(function () { idx = (idx + 1) % srcs.length; img.src = srcs[idx]; }, CYCLE_MS);
     }
     function stop() {
       if (timer) { clearInterval(timer); timer = null; }
       idx = 0;
       img.src = srcs[0];
+    }
+    cell.addEventListener('mouseenter', start);
+    cell.addEventListener('mouseleave', stop);
+  }
+
+  // Video cells (Animation): stack one <video> per clip and switch between them
+  // with an instant opacity cut — the same snappy cadence as the image grids,
+  // with no black flash. All layers play while hovered so each always holds a
+  // live decoded frame, ready the instant it's shown. The extra layers are built
+  // on first hover, so the page only loads the cover clips up front.
+  function play(v) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+
+  function wireVideoCycle(cell, cover, srcs) {
+    var layers = null, idx = 0, timer = null;
+    function build() {
+      layers = [cover];
+      for (var i = 1; i < srcs.length; i++) {
+        var v = document.createElement('video');
+        v.className = 'grid-img';
+        v.muted = true; v.loop = true; v.playsInline = true; v.preload = 'auto';
+        v.setAttribute('muted', ''); v.setAttribute('playsinline', '');
+        v.style.opacity = '0';
+        v.src = srcs[i];
+        cell.insertBefore(v, cover.nextSibling); // above the cover, below the overlay
+        layers.push(v);
+      }
+    }
+    function show(i) {
+      idx = (i + layers.length) % layers.length;
+      for (var k = 0; k < layers.length; k++) layers[k].style.opacity = k === idx ? '1' : '0';
+    }
+    function start() {
+      if (!layers) build();
+      for (var k = 0; k < layers.length; k++) play(layers[k]); // keep every layer live and decoded
+      if (timer) return;
+      timer = setInterval(function () { show(idx + 1); }, CYCLE_MS);
+    }
+    function stop() {
+      if (timer) { clearInterval(timer); timer = null; }
+      if (!layers) return;
+      show(0); // back to the cover clip
+      for (var k = 1; k < layers.length; k++) layers[k].pause(); // let the off-screen clips rest
     }
     cell.addEventListener('mouseenter', start);
     cell.addEventListener('mouseleave', stop);

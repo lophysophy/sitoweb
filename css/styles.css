@@ -25,6 +25,20 @@ body {
   line-height: 1.7;
   color: var(--ink);
   background: var(--white);
+  /* Sticky footer: on short pages main grows to push the footer to the very
+     bottom of the viewport instead of leaving it floating mid-screen. */
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+.site-footer {
+  flex-shrink: 0;
 }
 
 img {
@@ -323,7 +337,7 @@ body.menu-open .hero-corners .menu-toggle {
 }
 
 .mobile-menu a {
-  padding: 15px 28px;
+  padding: 15px 24px; /* left edge matches the wordmark and the page content gutter */
   font-family: 'Montserrat', sans-serif;
   font-weight: 600;
   font-size: 15px;
@@ -793,7 +807,9 @@ body.menu-open .hero-corners .menu-toggle {
   background: var(--ink);
 }
 
-/* Fills the cell edge to edge; the full resolution lives on the project page. */
+/* Fills the cell edge to edge; the full resolution lives on the project page.
+   Video projects stack one layer per clip and switch with an instant opacity
+   cut (no transition) so the cadence matches the image grids exactly. */
 .grid-img {
   position: absolute;
   inset: 0;
@@ -1047,7 +1063,7 @@ body.menu-open .hero-corners .menu-toggle {
   }
 
   .header-inner {
-    padding: 0 18px;
+    padding: 0 24px; /* line the wordmark up with the page content gutter */
   }
 
   .nav-center,
@@ -1081,7 +1097,7 @@ body.menu-open .hero-corners .menu-toggle {
   }
 
   .corners-inner {
-    padding: 0 18px;
+    padding: 0 24px; /* keep the homepage wordmark aligned with the content too */
   }
 
   /* Once scrolled past the intro the corners get a solid bar so the name and
