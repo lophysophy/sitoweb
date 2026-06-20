@@ -270,6 +270,7 @@ body.menu-open .hero-corners .menu-toggle {
 /* Hamburger (mobile only) */
 .menu-toggle {
   display: none;
+  position: relative; /* the bars are absolutely positioned inside it */
   width: 40px;
   height: 40px;
   padding: 0;
@@ -277,23 +278,39 @@ body.menu-open .hero-corners .menu-toggle {
   border: 0;
   cursor: pointer;
   color: var(--aqua-gray); /* default on solid headers; white over the hero video */
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
 }
 
+/* The three bars are pinned by absolute `top` rather than a flex column + gap.
+   That way the open X collapses both diagonals onto the exact same center line
+   (top: 19px) instead of reconstructing it via two independent translateY
+   values — the latter relied on the rendered gap and rounded off-center on iOS,
+   leaving the strokes misaligned/blurry. */
 .menu-toggle span {
-  display: block;
+  position: absolute;
+  left: 8px; /* (40 - 24) / 2 */
   width: 24px;
   height: 2px;
   border-radius: 2px;
   background: currentColor;
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  transform-origin: center;
+  transition: transform 0.3s ease, top 0.3s ease, opacity 0.3s ease;
+}
+
+.menu-toggle span:nth-child(1) {
+  top: 13px;
+}
+
+.menu-toggle span:nth-child(2) {
+  top: 19px;
+}
+
+.menu-toggle span:nth-child(3) {
+  top: 25px;
 }
 
 .menu-toggle.open span:nth-child(1) {
-  transform: translateY(7px) rotate(45deg);
+  top: 19px;
+  transform: rotate(45deg);
 }
 
 .menu-toggle.open span:nth-child(2) {
@@ -301,7 +318,8 @@ body.menu-open .hero-corners .menu-toggle {
 }
 
 .menu-toggle.open span:nth-child(3) {
-  transform: translateY(-7px) rotate(-45deg);
+  top: 19px;
+  transform: rotate(-45deg);
 }
 
 /* Dropdown menu holding every section (mobile only) */
