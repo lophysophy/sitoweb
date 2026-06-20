@@ -1,7 +1,9 @@
 /* One-time media compression with ffmpeg. Run from project root:
        node javascript/compress-media.js
    - GIFs  -> MP4 (H.264, max 1280px, crf 22) — animations belong in video.
-   - PNG/JPG -> JPG (downscale to max 2560px, alpha flattened onto white, q3).
+   - PNG/JPG -> AVIF (downscale to max 2560px, alpha flattened onto white,
+     libaom-av1 still-picture, crf 28). AVIF is read by all current browsers
+     and the gallery uses the file directly via <img src>.
    Replaces originals in place (keep your master files elsewhere). Per file it
    writes the new file, checks it, then removes the source — a locked/failed
    file is skipped and reported, never lost.
@@ -42,12 +44,12 @@ for (const f of files) {
       if (fs.statSync(out).size > 0) { fs.unlinkSync(f); gif++; before += sz; after += fs.statSync(out).size; }
     } catch (e) { fails.push('GIF ' + path.relative(ROOT, f)); try { fs.unlinkSync(out); } catch {} }
   } else if (ext === '.png' || ext === '.jpg' || ext === '.jpeg') {
-    const out = f.slice(0, -ext.length) + '.jpg';
-    const tmp = f + '.__tmp.jpg';
+    const out = f.slice(0, -ext.length) + '.avif';
+    const tmp = f + '.__tmp.avif';
     try {
       ff(['-i', f, '-filter_complex',
-        `[0]scale='min(${IMG_DIM},iw)':-2:flags=lanczos,format=rgba[fg];color=c=white[bg];[bg][fg]scale2ref[bg2][fg2];[bg2][fg2]overlay=shortest=1,format=yuvj420p`,
-        '-q:v', '3', tmp]);
+        `[0]scale='min(${IMG_DIM},iw)':-2:flags=lanczos,format=rgba[fg];color=c=white[bg];[bg][fg]scale2ref[bg2][fg2];[bg2][fg2]overlay=shortest=1,format=yuv420p`,
+        '-c:v', 'libaom-av1', '-still-picture', '1', '-crf', '28', '-b:v', '0', '-cpu-used', '6', tmp]);
       if (fs.statSync(tmp).size > 0) {
         const osz = fs.statSync(tmp).size;
         fs.unlinkSync(f);
@@ -61,6 +63,6 @@ for (const f of files) {
   if (done % 15 === 0) console.log(`  ${done}/${total} …`);
 }
 
-console.log(`\nDone. gifs->mp4: ${gif}, images->jpg: ${img}, failures: ${fails.length}`);
+console.log(`\nDone. gifs->mp4: ${gif}, images->avif: ${img}, failures: ${fails.length}`);
 console.log(`size: ${mb(before)}MB -> ${mb(after)}MB`);
 if (fails.length) { console.log('FAILED (locked? re-run after closing the app):'); fails.forEach(x => console.log('  ' + x)); }

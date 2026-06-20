@@ -12,14 +12,15 @@
 
        images/<MACRO>/<N>. <PROJECT>/<index> <label>.<ext>
        images/<MACRO>/<N>. <PROJECT>/<subfolder>/<index> <label>.<ext>   (e.g. storyboard)
-       images/<MACRO>/preview/<N>. <PROJECT>/<curated images>            (home + grid previews)
+       images/<MACRO>/preview/<N>. <PROJECT>/<index> <label>.<ext>        (preview overrides)
 
    Naming: index leads the name, no parentheses. "<major>" is the gallery order;
    "<major>.<minor>" (minor > 0) is a variant/COMP shown next to its base. So
    "1 duel.gif" < "1.1 duel.gif" < "2 duel.gif" < "10 duel.gif".
-   The preview/ folder mirrors the projects with curated copies (croppable,
-   reorderable); when a project's preview folder is empty the build falls back
-   to the project's own pieces.
+   The home + grid previews default to the project's own pieces (for animation,
+   just the videos). The preview/ folder holds ONLY overrides: a file whose index
+   matches a default piece replaces it (a custom crop/version) — identical copies
+   don't go there, the default piece is reused in place so nothing is duplicated.
    ========================================================================== */
 
 const fs = require('fs');
@@ -155,16 +156,29 @@ for (const cat of CATEGORIES) {
       };
     }).filter(g => g.items.length > 0);
 
-    // Preview (home cover + grid cycling): curated copies in
-    // <category>/preview/<same folder name>/. Falls back to the project's own
-    // pieces (gifs first for animation) when that folder is empty.
+    // Preview (home cover + grid cycling). The default preview is the project's
+    // own pieces — for animation just the moving ones (videos). The preview/
+    // folder holds only *overrides*: a file whose leading index matches a default
+    // piece replaces it (a custom crop/version). Identical copies don't belong
+    // there, so the default piece is reused in place — no duplicated bytes.
+    const vids = items.filter(it => it.type === 'video');
+    const basePreview = (cat.slug === 'animation' && vids.length) ? vids : items;
+
     const previewAbs = path.join(catAbs, 'preview', projName);
-    let preview = fs.existsSync(previewAbs)
+    const overrides = fs.existsSync(previewAbs)
       ? buildItems(previewAbs, rel('', 'images', cat.dir, 'preview', projName))
       : [];
-    if (!preview.length) {
-      const vids = items.filter(it => it.type === 'video');
-      preview = (cat.slug === 'animation' && vids.length) ? vids : items;
+    const ovByIndex = {};
+    overrides.forEach(it => { ovByIndex[it.major + '.' + it.minor] = it; });
+
+    // Each default piece, swapped for its override when one shares its index.
+    const preview = basePreview.map(it => ovByIndex[it.major + '.' + it.minor] || it);
+    // An override with an index of its own (none in the default set) is added in
+    // index order, so the preview can also introduce extra curated pieces.
+    const extra = overrides.filter(o => !basePreview.some(b => b.major === o.major && b.minor === o.minor));
+    if (extra.length) {
+      preview.push(...extra);
+      preview.sort((a, b) => ((a.major || 0) - (b.major || 0)) || (a.minor - b.minor));
     }
 
     const count = items.length + groups.reduce((n, g) => n + g.items.length, 0);

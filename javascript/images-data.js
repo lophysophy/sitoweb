@@ -6,7 +6,7 @@ window.PORTFOLIO = {
       "slug": "visual-development",
       "title": "Visual Development",
       "page": "/html/concept-art.html",
-      "cover": "/images/VISUAL DEVELOPMENT/preview/1. YOKAI/1 YOKAI.jpg",
+      "cover": "/images/VISUAL DEVELOPMENT/1. YOKAI/1 YOKAI.avif",
       "projects": [
         {
           "slug": "yokai",
@@ -15,142 +15,142 @@ window.PORTFOLIO = {
           "dir": "/images/VISUAL DEVELOPMENT/1. YOKAI",
           "preview": [
             {
-              "src": "/images/VISUAL DEVELOPMENT/preview/1. YOKAI/1 YOKAI.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/1 YOKAI.avif",
               "type": "image",
-              "name": "1 YOKAI.jpg",
+              "name": "1 YOKAI.avif",
               "major": 1,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/preview/1. YOKAI/2 YOKAI.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/2 YOKAI.avif",
               "type": "image",
-              "name": "2 YOKAI.jpg",
+              "name": "2 YOKAI.avif",
               "major": 2,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/preview/1. YOKAI/3 YOKAI.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/3 YOKAI.avif",
               "type": "image",
-              "name": "3 YOKAI.jpg",
+              "name": "3 YOKAI.avif",
               "major": 3,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/preview/1. YOKAI/4 YOKAI.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/4 YOKAI.avif",
               "type": "image",
-              "name": "4 YOKAI.jpg",
+              "name": "4 YOKAI.avif",
               "major": 4,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/preview/1. YOKAI/5 YOKAI.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/5 YOKAI.avif",
               "type": "image",
-              "name": "5 YOKAI.jpg",
+              "name": "5 YOKAI.avif",
               "major": 5,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/preview/1. YOKAI/6 YOKAI.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/6 YOKAI.avif",
               "type": "image",
-              "name": "6 YOKAI.jpg",
+              "name": "6 YOKAI.avif",
               "major": 6,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/preview/1. YOKAI/7 YOKAI.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/7 YOKAI.avif",
               "type": "image",
-              "name": "7 YOKAI.jpg",
+              "name": "7 YOKAI.avif",
               "major": 7,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/preview/1. YOKAI/8 YOKAI.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/8 YOKAI.avif",
               "type": "image",
-              "name": "8 YOKAI.jpg",
+              "name": "8 YOKAI.avif",
               "major": 8,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/preview/1. YOKAI/9 YOKAI.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/9 YOKAI.avif",
               "type": "image",
-              "name": "9 YOKAI.jpg",
+              "name": "9 YOKAI.avif",
               "major": 9,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/preview/1. YOKAI/10 YOKAI.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/10 YOKAI.avif",
               "type": "image",
-              "name": "10 YOKAI.jpg",
+              "name": "10 YOKAI.avif",
               "major": 10,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/preview/1. YOKAI/11 YOKAI.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/11 YOKAI.avif",
               "type": "image",
-              "name": "11 YOKAI.jpg",
+              "name": "11 YOKAI.avif",
               "major": 11,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/preview/1. YOKAI/12 YOKAI.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/12 YOKAI.avif",
               "type": "image",
-              "name": "12 YOKAI.jpg",
+              "name": "12 YOKAI.avif",
               "major": 12,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/preview/1. YOKAI/13 YOKAI.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/13 YOKAI.avif",
               "type": "image",
-              "name": "13 YOKAI.jpg",
+              "name": "13 YOKAI.avif",
               "major": 13,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/preview/1. YOKAI/14 YOKAI.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/14 YOKAI.avif",
               "type": "image",
-              "name": "14 YOKAI.jpg",
+              "name": "14 YOKAI.avif",
               "major": 14,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/preview/1. YOKAI/15 YOKAI.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/15 YOKAI.avif",
               "type": "image",
-              "name": "15 YOKAI.jpg",
+              "name": "15 YOKAI.avif",
               "major": 15,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/preview/1. YOKAI/16 YOKAI.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/16 YOKAI.avif",
               "type": "image",
-              "name": "16 YOKAI.jpg",
+              "name": "16 YOKAI.avif",
               "major": 16,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/preview/1. YOKAI/17 YOKAI.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/17 YOKAI.avif",
               "type": "image",
-              "name": "17 YOKAI.jpg",
+              "name": "17 YOKAI.avif",
               "major": 17,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/preview/1. YOKAI/18 YOKAI.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/18 YOKAI.avif",
               "type": "image",
-              "name": "18 YOKAI.jpg",
+              "name": "18 YOKAI.avif",
               "major": 18,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/preview/1. YOKAI/19 YOKAI.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/19 YOKAI.avif",
               "type": "image",
-              "name": "19 YOKAI.jpg",
+              "name": "19 YOKAI.avif",
               "major": 19,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/preview/1. YOKAI/20 YOKAI.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/20 YOKAI.avif",
               "type": "image",
-              "name": "20 YOKAI.jpg",
+              "name": "20 YOKAI.avif",
               "major": 20,
               "minor": 0
             }
@@ -158,142 +158,142 @@ window.PORTFOLIO = {
           "count": 20,
           "items": [
             {
-              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/1 YOKAI.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/1 YOKAI.avif",
               "type": "image",
-              "name": "1 YOKAI.jpg",
+              "name": "1 YOKAI.avif",
               "major": 1,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/2 YOKAI.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/2 YOKAI.avif",
               "type": "image",
-              "name": "2 YOKAI.jpg",
+              "name": "2 YOKAI.avif",
               "major": 2,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/3 YOKAI.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/3 YOKAI.avif",
               "type": "image",
-              "name": "3 YOKAI.jpg",
+              "name": "3 YOKAI.avif",
               "major": 3,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/4 YOKAI.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/4 YOKAI.avif",
               "type": "image",
-              "name": "4 YOKAI.jpg",
+              "name": "4 YOKAI.avif",
               "major": 4,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/5 YOKAI.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/5 YOKAI.avif",
               "type": "image",
-              "name": "5 YOKAI.jpg",
+              "name": "5 YOKAI.avif",
               "major": 5,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/6 YOKAI.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/6 YOKAI.avif",
               "type": "image",
-              "name": "6 YOKAI.jpg",
+              "name": "6 YOKAI.avif",
               "major": 6,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/7 YOKAI.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/7 YOKAI.avif",
               "type": "image",
-              "name": "7 YOKAI.jpg",
+              "name": "7 YOKAI.avif",
               "major": 7,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/8 YOKAI.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/8 YOKAI.avif",
               "type": "image",
-              "name": "8 YOKAI.jpg",
+              "name": "8 YOKAI.avif",
               "major": 8,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/9 YOKAI.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/9 YOKAI.avif",
               "type": "image",
-              "name": "9 YOKAI.jpg",
+              "name": "9 YOKAI.avif",
               "major": 9,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/10 YOKAI.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/10 YOKAI.avif",
               "type": "image",
-              "name": "10 YOKAI.jpg",
+              "name": "10 YOKAI.avif",
               "major": 10,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/11 YOKAI.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/11 YOKAI.avif",
               "type": "image",
-              "name": "11 YOKAI.jpg",
+              "name": "11 YOKAI.avif",
               "major": 11,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/12 YOKAI.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/12 YOKAI.avif",
               "type": "image",
-              "name": "12 YOKAI.jpg",
+              "name": "12 YOKAI.avif",
               "major": 12,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/13 YOKAI.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/13 YOKAI.avif",
               "type": "image",
-              "name": "13 YOKAI.jpg",
+              "name": "13 YOKAI.avif",
               "major": 13,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/14 YOKAI.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/14 YOKAI.avif",
               "type": "image",
-              "name": "14 YOKAI.jpg",
+              "name": "14 YOKAI.avif",
               "major": 14,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/15 YOKAI.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/15 YOKAI.avif",
               "type": "image",
-              "name": "15 YOKAI.jpg",
+              "name": "15 YOKAI.avif",
               "major": 15,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/16 YOKAI.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/16 YOKAI.avif",
               "type": "image",
-              "name": "16 YOKAI.jpg",
+              "name": "16 YOKAI.avif",
               "major": 16,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/17 YOKAI.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/17 YOKAI.avif",
               "type": "image",
-              "name": "17 YOKAI.jpg",
+              "name": "17 YOKAI.avif",
               "major": 17,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/18 YOKAI.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/18 YOKAI.avif",
               "type": "image",
-              "name": "18 YOKAI.jpg",
+              "name": "18 YOKAI.avif",
               "major": 18,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/19 YOKAI.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/19 YOKAI.avif",
               "type": "image",
-              "name": "19 YOKAI.jpg",
+              "name": "19 YOKAI.avif",
               "major": 19,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/20 YOKAI.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/1. YOKAI/20 YOKAI.avif",
               "type": "image",
-              "name": "20 YOKAI.jpg",
+              "name": "20 YOKAI.avif",
               "major": 20,
               "minor": 0
             }
@@ -307,65 +307,65 @@ window.PORTFOLIO = {
           "dir": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO",
           "preview": [
             {
-              "src": "/images/VISUAL DEVELOPMENT/preview/2. A UN PASSO DAL CIELO/1 A un passo dal cielo.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/1 A un passo dal cielo.avif",
               "type": "image",
-              "name": "1 A un passo dal cielo.jpg",
+              "name": "1 A un passo dal cielo.avif",
               "major": 1,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/preview/2. A UN PASSO DAL CIELO/2 A un passo dal cielo.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/2 A un passo dal cielo.avif",
               "type": "image",
-              "name": "2 A un passo dal cielo.jpg",
+              "name": "2 A un passo dal cielo.avif",
               "major": 2,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/preview/2. A UN PASSO DAL CIELO/3 A un passo dal cielo.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/3 A un passo dal cielo.avif",
               "type": "image",
-              "name": "3 A un passo dal cielo.jpg",
+              "name": "3 A un passo dal cielo.avif",
               "major": 3,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/preview/2. A UN PASSO DAL CIELO/4 A un passo dal cielo.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/4 A un passo dal cielo.avif",
               "type": "image",
-              "name": "4 A un passo dal cielo.jpg",
+              "name": "4 A un passo dal cielo.avif",
               "major": 4,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/preview/2. A UN PASSO DAL CIELO/5 A un passo dal cielo.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/5 A un passo dal cielo.avif",
               "type": "image",
-              "name": "5 A un passo dal cielo.jpg",
+              "name": "5 A un passo dal cielo.avif",
               "major": 5,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/preview/2. A UN PASSO DAL CIELO/6 A un passo dal cielo.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/6 A un passo dal cielo.avif",
               "type": "image",
-              "name": "6 A un passo dal cielo.jpg",
+              "name": "6 A un passo dal cielo.avif",
               "major": 6,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/preview/2. A UN PASSO DAL CIELO/7 A un passo dal cielo.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/7 A un passo dal cielo.avif",
               "type": "image",
-              "name": "7 A un passo dal cielo.jpg",
+              "name": "7 A un passo dal cielo.avif",
               "major": 7,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/preview/2. A UN PASSO DAL CIELO/8 A un passo dal cielo.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/8 A un passo dal cielo.avif",
               "type": "image",
-              "name": "8 A un passo dal cielo.jpg",
+              "name": "8 A un passo dal cielo.avif",
               "major": 8,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/preview/2. A UN PASSO DAL CIELO/9 A un passo dal cielo.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/9 A un passo dal cielo.avif",
               "type": "image",
-              "name": "9 A un passo dal cielo.jpg",
+              "name": "9 A un passo dal cielo.avif",
               "major": 9,
               "minor": 0
             }
@@ -373,65 +373,65 @@ window.PORTFOLIO = {
           "count": 26,
           "items": [
             {
-              "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/1 A un passo dal cielo.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/1 A un passo dal cielo.avif",
               "type": "image",
-              "name": "1 A un passo dal cielo.jpg",
+              "name": "1 A un passo dal cielo.avif",
               "major": 1,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/2 A un passo dal cielo.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/2 A un passo dal cielo.avif",
               "type": "image",
-              "name": "2 A un passo dal cielo.jpg",
+              "name": "2 A un passo dal cielo.avif",
               "major": 2,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/3 A un passo dal cielo.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/3 A un passo dal cielo.avif",
               "type": "image",
-              "name": "3 A un passo dal cielo.jpg",
+              "name": "3 A un passo dal cielo.avif",
               "major": 3,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/4 A un passo dal cielo.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/4 A un passo dal cielo.avif",
               "type": "image",
-              "name": "4 A un passo dal cielo.jpg",
+              "name": "4 A un passo dal cielo.avif",
               "major": 4,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/5 A un passo dal cielo.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/5 A un passo dal cielo.avif",
               "type": "image",
-              "name": "5 A un passo dal cielo.jpg",
+              "name": "5 A un passo dal cielo.avif",
               "major": 5,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/6 A un passo dal cielo.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/6 A un passo dal cielo.avif",
               "type": "image",
-              "name": "6 A un passo dal cielo.jpg",
+              "name": "6 A un passo dal cielo.avif",
               "major": 6,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/7 A un passo dal cielo.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/7 A un passo dal cielo.avif",
               "type": "image",
-              "name": "7 A un passo dal cielo.jpg",
+              "name": "7 A un passo dal cielo.avif",
               "major": 7,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/8 A un passo dal cielo.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/8 A un passo dal cielo.avif",
               "type": "image",
-              "name": "8 A un passo dal cielo.jpg",
+              "name": "8 A un passo dal cielo.avif",
               "major": 8,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/9 A un passo dal cielo.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/9 A un passo dal cielo.avif",
               "type": "image",
-              "name": "9 A un passo dal cielo.jpg",
+              "name": "9 A un passo dal cielo.avif",
               "major": 9,
               "minor": 0
             }
@@ -442,121 +442,121 @@ window.PORTFOLIO = {
               "title": "Storyboard",
               "items": [
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/storyboard/1 a un passo dal cielo.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/storyboard/1 a un passo dal cielo.avif",
                   "type": "image",
-                  "name": "1 a un passo dal cielo.jpg",
+                  "name": "1 a un passo dal cielo.avif",
                   "major": 1,
                   "minor": 0
                 },
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/storyboard/2 a un passo dal cielo.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/storyboard/2 a un passo dal cielo.avif",
                   "type": "image",
-                  "name": "2 a un passo dal cielo.jpg",
+                  "name": "2 a un passo dal cielo.avif",
                   "major": 2,
                   "minor": 0
                 },
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/storyboard/3 a un passo dal cielo.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/storyboard/3 a un passo dal cielo.avif",
                   "type": "image",
-                  "name": "3 a un passo dal cielo.jpg",
+                  "name": "3 a un passo dal cielo.avif",
                   "major": 3,
                   "minor": 0
                 },
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/storyboard/4 a un passo dal cielo.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/storyboard/4 a un passo dal cielo.avif",
                   "type": "image",
-                  "name": "4 a un passo dal cielo.jpg",
+                  "name": "4 a un passo dal cielo.avif",
                   "major": 4,
                   "minor": 0
                 },
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/storyboard/5 a un passo dal cielo.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/storyboard/5 a un passo dal cielo.avif",
                   "type": "image",
-                  "name": "5 a un passo dal cielo.jpg",
+                  "name": "5 a un passo dal cielo.avif",
                   "major": 5,
                   "minor": 0
                 },
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/storyboard/6 a un passo dal cielo.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/storyboard/6 a un passo dal cielo.avif",
                   "type": "image",
-                  "name": "6 a un passo dal cielo.jpg",
+                  "name": "6 a un passo dal cielo.avif",
                   "major": 6,
                   "minor": 0
                 },
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/storyboard/7 a un passo dal cielo.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/storyboard/7 a un passo dal cielo.avif",
                   "type": "image",
-                  "name": "7 a un passo dal cielo.jpg",
+                  "name": "7 a un passo dal cielo.avif",
                   "major": 7,
                   "minor": 0
                 },
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/storyboard/8 a un passo dal cielo.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/storyboard/8 a un passo dal cielo.avif",
                   "type": "image",
-                  "name": "8 a un passo dal cielo.jpg",
+                  "name": "8 a un passo dal cielo.avif",
                   "major": 8,
                   "minor": 0
                 },
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/storyboard/9 a un passo dal cielo.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/storyboard/9 a un passo dal cielo.avif",
                   "type": "image",
-                  "name": "9 a un passo dal cielo.jpg",
+                  "name": "9 a un passo dal cielo.avif",
                   "major": 9,
                   "minor": 0
                 },
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/storyboard/10 a un passo dal cielo.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/storyboard/10 a un passo dal cielo.avif",
                   "type": "image",
-                  "name": "10 a un passo dal cielo.jpg",
+                  "name": "10 a un passo dal cielo.avif",
                   "major": 10,
                   "minor": 0
                 },
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/storyboard/11 a un passo dal cielo.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/storyboard/11 a un passo dal cielo.avif",
                   "type": "image",
-                  "name": "11 a un passo dal cielo.jpg",
+                  "name": "11 a un passo dal cielo.avif",
                   "major": 11,
                   "minor": 0
                 },
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/storyboard/12 a un passo dal cielo.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/storyboard/12 a un passo dal cielo.avif",
                   "type": "image",
-                  "name": "12 a un passo dal cielo.jpg",
+                  "name": "12 a un passo dal cielo.avif",
                   "major": 12,
                   "minor": 0
                 },
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/storyboard/13 a un passo dal cielo.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/storyboard/13 a un passo dal cielo.avif",
                   "type": "image",
-                  "name": "13 a un passo dal cielo.jpg",
+                  "name": "13 a un passo dal cielo.avif",
                   "major": 13,
                   "minor": 0
                 },
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/storyboard/14 a un passo dal cielo.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/storyboard/14 a un passo dal cielo.avif",
                   "type": "image",
-                  "name": "14 a un passo dal cielo.jpg",
+                  "name": "14 a un passo dal cielo.avif",
                   "major": 14,
                   "minor": 0
                 },
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/storyboard/15 a un passo dal cielo.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/storyboard/15 a un passo dal cielo.avif",
                   "type": "image",
-                  "name": "15 a un passo dal cielo.jpg",
+                  "name": "15 a un passo dal cielo.avif",
                   "major": 15,
                   "minor": 0
                 },
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/storyboard/16 a un passo dal cielo.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/storyboard/16 a un passo dal cielo.avif",
                   "type": "image",
-                  "name": "16 a un passo dal cielo.jpg",
+                  "name": "16 a un passo dal cielo.avif",
                   "major": 16,
                   "minor": 0
                 },
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/storyboard/17 a un passo dal cielo.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/2. A UN PASSO DAL CIELO/storyboard/17 a un passo dal cielo.avif",
                   "type": "image",
-                  "name": "17 a un passo dal cielo.jpg",
+                  "name": "17 a un passo dal cielo.avif",
                   "major": 17,
                   "minor": 0
                 }
@@ -571,42 +571,42 @@ window.PORTFOLIO = {
           "dir": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION",
           "preview": [
             {
-              "src": "/images/VISUAL DEVELOPMENT/preview/3. HANSEL AND GRETEL REINTERPRETATION/1 HANSEL AND GRETEL REINTERPRETATION.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/1 HANSEL AND GRETEL REINTERPRETATION.avif",
               "type": "image",
-              "name": "1 HANSEL AND GRETEL REINTERPRETATION.jpg",
+              "name": "1 HANSEL AND GRETEL REINTERPRETATION.avif",
               "major": 1,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/preview/3. HANSEL AND GRETEL REINTERPRETATION/2 HANSEL AND GRETEL REINTERPRETATION.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/2 HANSEL AND GRETEL REINTERPRETATION.avif",
               "type": "image",
-              "name": "2 HANSEL AND GRETEL REINTERPRETATION.jpg",
+              "name": "2 HANSEL AND GRETEL REINTERPRETATION.avif",
               "major": 2,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/preview/3. HANSEL AND GRETEL REINTERPRETATION/3 HANSEL AND GRETEL REINTERPRETATION.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/3 HANSEL AND GRETEL REINTERPRETATION.avif",
               "type": "image",
-              "name": "3 HANSEL AND GRETEL REINTERPRETATION.jpg",
+              "name": "3 HANSEL AND GRETEL REINTERPRETATION.avif",
               "major": 3,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/preview/3. HANSEL AND GRETEL REINTERPRETATION/4 HANSEL AND GRETEL REINTERPRETATION.mp4",
+              "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/4 HANSEL AND GRETEL REINTERPRETATION.mp4",
               "type": "video",
               "name": "4 HANSEL AND GRETEL REINTERPRETATION.mp4",
               "major": 4,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/preview/3. HANSEL AND GRETEL REINTERPRETATION/5 HANSEL AND GRETEL REINTERPRETATION.mp4",
+              "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/5 HANSEL AND GRETEL REINTERPRETATION.mp4",
               "type": "video",
               "name": "5 HANSEL AND GRETEL REINTERPRETATION.mp4",
               "major": 5,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/preview/3. HANSEL AND GRETEL REINTERPRETATION/6 HANSEL AND GRETEL REINTERPRETATION.mp4",
+              "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/6 HANSEL AND GRETEL REINTERPRETATION.mp4",
               "type": "video",
               "name": "6 HANSEL AND GRETEL REINTERPRETATION.mp4",
               "major": 6,
@@ -616,23 +616,23 @@ window.PORTFOLIO = {
           "count": 36,
           "items": [
             {
-              "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/1 HANSEL AND GRETEL REINTERPRETATION.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/1 HANSEL AND GRETEL REINTERPRETATION.avif",
               "type": "image",
-              "name": "1 HANSEL AND GRETEL REINTERPRETATION.jpg",
+              "name": "1 HANSEL AND GRETEL REINTERPRETATION.avif",
               "major": 1,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/2 HANSEL AND GRETEL REINTERPRETATION.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/2 HANSEL AND GRETEL REINTERPRETATION.avif",
               "type": "image",
-              "name": "2 HANSEL AND GRETEL REINTERPRETATION.jpg",
+              "name": "2 HANSEL AND GRETEL REINTERPRETATION.avif",
               "major": 2,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/3 HANSEL AND GRETEL REINTERPRETATION.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/3 HANSEL AND GRETEL REINTERPRETATION.avif",
               "type": "image",
-              "name": "3 HANSEL AND GRETEL REINTERPRETATION.jpg",
+              "name": "3 HANSEL AND GRETEL REINTERPRETATION.avif",
               "major": 3,
               "minor": 0
             },
@@ -664,212 +664,212 @@ window.PORTFOLIO = {
               "title": "Storyboard",
               "items": [
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/1 storyboard.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/1 storyboard.avif",
                   "type": "image",
-                  "name": "1 storyboard.jpg",
+                  "name": "1 storyboard.avif",
                   "major": 1,
                   "minor": 0
                 },
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/2 storyboard.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/2 storyboard.avif",
                   "type": "image",
-                  "name": "2 storyboard.jpg",
+                  "name": "2 storyboard.avif",
                   "major": 2,
                   "minor": 0
                 },
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/3 storyboard.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/3 storyboard.avif",
                   "type": "image",
-                  "name": "3 storyboard.jpg",
+                  "name": "3 storyboard.avif",
                   "major": 3,
                   "minor": 0
                 },
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/4 storyboard.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/4 storyboard.avif",
                   "type": "image",
-                  "name": "4 storyboard.jpg",
+                  "name": "4 storyboard.avif",
                   "major": 4,
                   "minor": 0
                 },
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/5 storyboard.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/5 storyboard.avif",
                   "type": "image",
-                  "name": "5 storyboard.jpg",
+                  "name": "5 storyboard.avif",
                   "major": 5,
                   "minor": 0
                 },
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/6 storyboard.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/6 storyboard.avif",
                   "type": "image",
-                  "name": "6 storyboard.jpg",
+                  "name": "6 storyboard.avif",
                   "major": 6,
                   "minor": 0
                 },
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/7 storyboard.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/7 storyboard.avif",
                   "type": "image",
-                  "name": "7 storyboard.jpg",
+                  "name": "7 storyboard.avif",
                   "major": 7,
                   "minor": 0
                 },
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/8 storyboard.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/8 storyboard.avif",
                   "type": "image",
-                  "name": "8 storyboard.jpg",
+                  "name": "8 storyboard.avif",
                   "major": 8,
                   "minor": 0
                 },
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/9 storyboard.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/9 storyboard.avif",
                   "type": "image",
-                  "name": "9 storyboard.jpg",
+                  "name": "9 storyboard.avif",
                   "major": 9,
                   "minor": 0
                 },
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/10 storyboard.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/10 storyboard.avif",
                   "type": "image",
-                  "name": "10 storyboard.jpg",
+                  "name": "10 storyboard.avif",
                   "major": 10,
                   "minor": 0
                 },
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/11 storyboard.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/11 storyboard.avif",
                   "type": "image",
-                  "name": "11 storyboard.jpg",
+                  "name": "11 storyboard.avif",
                   "major": 11,
                   "minor": 0
                 },
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/12 storyboard.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/12 storyboard.avif",
                   "type": "image",
-                  "name": "12 storyboard.jpg",
+                  "name": "12 storyboard.avif",
                   "major": 12,
                   "minor": 0
                 },
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/13 storyboard.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/13 storyboard.avif",
                   "type": "image",
-                  "name": "13 storyboard.jpg",
+                  "name": "13 storyboard.avif",
                   "major": 13,
                   "minor": 0
                 },
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/14 storyboard.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/14 storyboard.avif",
                   "type": "image",
-                  "name": "14 storyboard.jpg",
+                  "name": "14 storyboard.avif",
                   "major": 14,
                   "minor": 0
                 },
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/15 storyboard.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/15 storyboard.avif",
                   "type": "image",
-                  "name": "15 storyboard.jpg",
+                  "name": "15 storyboard.avif",
                   "major": 15,
                   "minor": 0
                 },
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/16 storyboard.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/16 storyboard.avif",
                   "type": "image",
-                  "name": "16 storyboard.jpg",
+                  "name": "16 storyboard.avif",
                   "major": 16,
                   "minor": 0
                 },
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/17 storyboard.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/17 storyboard.avif",
                   "type": "image",
-                  "name": "17 storyboard.jpg",
+                  "name": "17 storyboard.avif",
                   "major": 17,
                   "minor": 0
                 },
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/18 storyboard.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/18 storyboard.avif",
                   "type": "image",
-                  "name": "18 storyboard.jpg",
+                  "name": "18 storyboard.avif",
                   "major": 18,
                   "minor": 0
                 },
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/19 storyboard.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/19 storyboard.avif",
                   "type": "image",
-                  "name": "19 storyboard.jpg",
+                  "name": "19 storyboard.avif",
                   "major": 19,
                   "minor": 0
                 },
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/20 storyboard.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/20 storyboard.avif",
                   "type": "image",
-                  "name": "20 storyboard.jpg",
+                  "name": "20 storyboard.avif",
                   "major": 20,
                   "minor": 0
                 },
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/21 storyboard.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/21 storyboard.avif",
                   "type": "image",
-                  "name": "21 storyboard.jpg",
+                  "name": "21 storyboard.avif",
                   "major": 21,
                   "minor": 0
                 },
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/22 storyboard.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/22 storyboard.avif",
                   "type": "image",
-                  "name": "22 storyboard.jpg",
+                  "name": "22 storyboard.avif",
                   "major": 22,
                   "minor": 0
                 },
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/23 storyboard.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/23 storyboard.avif",
                   "type": "image",
-                  "name": "23 storyboard.jpg",
+                  "name": "23 storyboard.avif",
                   "major": 23,
                   "minor": 0
                 },
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/24 storyboard.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/24 storyboard.avif",
                   "type": "image",
-                  "name": "24 storyboard.jpg",
+                  "name": "24 storyboard.avif",
                   "major": 24,
                   "minor": 0
                 },
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/25 storyboard.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/25 storyboard.avif",
                   "type": "image",
-                  "name": "25 storyboard.jpg",
+                  "name": "25 storyboard.avif",
                   "major": 25,
                   "minor": 0
                 },
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/26 storyboard.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/26 storyboard.avif",
                   "type": "image",
-                  "name": "26 storyboard.jpg",
+                  "name": "26 storyboard.avif",
                   "major": 26,
                   "minor": 0
                 },
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/27 storyboard.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/27 storyboard.avif",
                   "type": "image",
-                  "name": "27 storyboard.jpg",
+                  "name": "27 storyboard.avif",
                   "major": 27,
                   "minor": 0
                 },
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/28 storyboard.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/28 storyboard.avif",
                   "type": "image",
-                  "name": "28 storyboard.jpg",
+                  "name": "28 storyboard.avif",
                   "major": 28,
                   "minor": 0
                 },
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/29 storyboard.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/29 storyboard.avif",
                   "type": "image",
-                  "name": "29 storyboard.jpg",
+                  "name": "29 storyboard.avif",
                   "major": 29,
                   "minor": 0
                 },
                 {
-                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/30 storyboard.jpg",
+                  "src": "/images/VISUAL DEVELOPMENT/3. HANSEL AND GRETEL REINTERPRETATION/storyboard/30 storyboard.avif",
                   "type": "image",
-                  "name": "30 storyboard.jpg",
+                  "name": "30 storyboard.avif",
                   "major": 30,
                   "minor": 0
                 }
@@ -884,44 +884,44 @@ window.PORTFOLIO = {
           "dir": "/images/VISUAL DEVELOPMENT/4. MISCELLANEOUS",
           "preview": [
             {
-              "src": "/images/VISUAL DEVELOPMENT/preview/4. MISCELLANEOUS/1 DETECTIVE SMOK.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/4. MISCELLANEOUS/1 DETECTIVE SMOK.avif",
               "type": "image",
-              "name": "1 DETECTIVE SMOK.jpg",
+              "name": "1 DETECTIVE SMOK.avif",
               "major": 1,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/preview/4. MISCELLANEOUS/2 DETECTIVE SMOK.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/4. MISCELLANEOUS/2 DETECTIVE SMOK.avif",
               "type": "image",
-              "name": "2 DETECTIVE SMOK.jpg",
+              "name": "2 DETECTIVE SMOK.avif",
               "major": 2,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/preview/4. MISCELLANEOUS/3 DETECTIVE SMOK.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/4. MISCELLANEOUS/3 DETECTIVE SMOK.avif",
               "type": "image",
-              "name": "3 DETECTIVE SMOK.jpg",
+              "name": "3 DETECTIVE SMOK.avif",
               "major": 3,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/preview/4. MISCELLANEOUS/4 BG STUDY.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/4. MISCELLANEOUS/4 BG STUDY.avif",
               "type": "image",
-              "name": "4 BG STUDY.jpg",
+              "name": "4 BG STUDY.avif",
               "major": 4,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/preview/4. MISCELLANEOUS/5 BG STUDY.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/4. MISCELLANEOUS/5 BG STUDY.avif",
               "type": "image",
-              "name": "5 BG STUDY.jpg",
+              "name": "5 BG STUDY.avif",
               "major": 5,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/preview/4. MISCELLANEOUS/6 PENCIL SKETCHES.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/4. MISCELLANEOUS/6 PENCIL SKETCHES.avif",
               "type": "image",
-              "name": "6 PENCIL SKETCHES.jpg",
+              "name": "6 PENCIL SKETCHES.avif",
               "major": 6,
               "minor": 0
             }
@@ -929,44 +929,44 @@ window.PORTFOLIO = {
           "count": 6,
           "items": [
             {
-              "src": "/images/VISUAL DEVELOPMENT/4. MISCELLANEOUS/1 DETECTIVE SMOK.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/4. MISCELLANEOUS/1 DETECTIVE SMOK.avif",
               "type": "image",
-              "name": "1 DETECTIVE SMOK.jpg",
+              "name": "1 DETECTIVE SMOK.avif",
               "major": 1,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/4. MISCELLANEOUS/2 DETECTIVE SMOK.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/4. MISCELLANEOUS/2 DETECTIVE SMOK.avif",
               "type": "image",
-              "name": "2 DETECTIVE SMOK.jpg",
+              "name": "2 DETECTIVE SMOK.avif",
               "major": 2,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/4. MISCELLANEOUS/3 DETECTIVE SMOK.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/4. MISCELLANEOUS/3 DETECTIVE SMOK.avif",
               "type": "image",
-              "name": "3 DETECTIVE SMOK.jpg",
+              "name": "3 DETECTIVE SMOK.avif",
               "major": 3,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/4. MISCELLANEOUS/4 BG STUDY.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/4. MISCELLANEOUS/4 BG STUDY.avif",
               "type": "image",
-              "name": "4 BG STUDY.jpg",
+              "name": "4 BG STUDY.avif",
               "major": 4,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/4. MISCELLANEOUS/5 BG STUDY.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/4. MISCELLANEOUS/5 BG STUDY.avif",
               "type": "image",
-              "name": "5 BG STUDY.jpg",
+              "name": "5 BG STUDY.avif",
               "major": 5,
               "minor": 0
             },
             {
-              "src": "/images/VISUAL DEVELOPMENT/4. MISCELLANEOUS/6 PENCIL SKETCHES.jpg",
+              "src": "/images/VISUAL DEVELOPMENT/4. MISCELLANEOUS/6 PENCIL SKETCHES.avif",
               "type": "image",
-              "name": "6 PENCIL SKETCHES.jpg",
+              "name": "6 PENCIL SKETCHES.avif",
               "major": 6,
               "minor": 0
             }
@@ -979,7 +979,7 @@ window.PORTFOLIO = {
       "slug": "illustration",
       "title": "Illustration",
       "page": "/html/illustration.html",
-      "cover": "/images/ILLUSTRATION/preview/1. LIFE DRAWING/1 life drawing.jpg",
+      "cover": "/images/ILLUSTRATION/1. LIFE DRAWING/1 life drawing.avif",
       "projects": [
         {
           "slug": "life-drawing",
@@ -988,30 +988,30 @@ window.PORTFOLIO = {
           "dir": "/images/ILLUSTRATION/1. LIFE DRAWING",
           "preview": [
             {
-              "src": "/images/ILLUSTRATION/preview/1. LIFE DRAWING/1 life drawing.jpg",
+              "src": "/images/ILLUSTRATION/1. LIFE DRAWING/1 life drawing.avif",
               "type": "image",
-              "name": "1 life drawing.jpg",
+              "name": "1 life drawing.avif",
               "major": 1,
               "minor": 0
             },
             {
-              "src": "/images/ILLUSTRATION/preview/1. LIFE DRAWING/2 life drawing.jpg",
+              "src": "/images/ILLUSTRATION/1. LIFE DRAWING/2 life drawing.avif",
               "type": "image",
-              "name": "2 life drawing.jpg",
+              "name": "2 life drawing.avif",
               "major": 2,
               "minor": 0
             },
             {
-              "src": "/images/ILLUSTRATION/preview/1. LIFE DRAWING/3 life drawing.jpg",
+              "src": "/images/ILLUSTRATION/1. LIFE DRAWING/3 life drawing.avif",
               "type": "image",
-              "name": "3 life drawing.jpg",
+              "name": "3 life drawing.avif",
               "major": 3,
               "minor": 0
             },
             {
-              "src": "/images/ILLUSTRATION/preview/1. LIFE DRAWING/4 life drawing.jpg",
+              "src": "/images/ILLUSTRATION/1. LIFE DRAWING/4 life drawing.avif",
               "type": "image",
-              "name": "4 life drawing.jpg",
+              "name": "4 life drawing.avif",
               "major": 4,
               "minor": 0
             }
@@ -1019,30 +1019,30 @@ window.PORTFOLIO = {
           "count": 4,
           "items": [
             {
-              "src": "/images/ILLUSTRATION/1. LIFE DRAWING/1 life drawing.jpg",
+              "src": "/images/ILLUSTRATION/1. LIFE DRAWING/1 life drawing.avif",
               "type": "image",
-              "name": "1 life drawing.jpg",
+              "name": "1 life drawing.avif",
               "major": 1,
               "minor": 0
             },
             {
-              "src": "/images/ILLUSTRATION/1. LIFE DRAWING/2 life drawing.jpg",
+              "src": "/images/ILLUSTRATION/1. LIFE DRAWING/2 life drawing.avif",
               "type": "image",
-              "name": "2 life drawing.jpg",
+              "name": "2 life drawing.avif",
               "major": 2,
               "minor": 0
             },
             {
-              "src": "/images/ILLUSTRATION/1. LIFE DRAWING/3 life drawing.jpg",
+              "src": "/images/ILLUSTRATION/1. LIFE DRAWING/3 life drawing.avif",
               "type": "image",
-              "name": "3 life drawing.jpg",
+              "name": "3 life drawing.avif",
               "major": 3,
               "minor": 0
             },
             {
-              "src": "/images/ILLUSTRATION/1. LIFE DRAWING/4 life drawing.jpg",
+              "src": "/images/ILLUSTRATION/1. LIFE DRAWING/4 life drawing.avif",
               "type": "image",
-              "name": "4 life drawing.jpg",
+              "name": "4 life drawing.avif",
               "major": 4,
               "minor": 0
             }
@@ -1056,58 +1056,58 @@ window.PORTFOLIO = {
           "dir": "/images/ILLUSTRATION/2. TRADITIONAL MEDIA",
           "preview": [
             {
-              "src": "/images/ILLUSTRATION/preview/2. TRADITIONAL MEDIA/1 illustrazione.jpg",
+              "src": "/images/ILLUSTRATION/preview/2. TRADITIONAL MEDIA/1 illustrazione.avif",
               "type": "image",
-              "name": "1 illustrazione.jpg",
+              "name": "1 illustrazione.avif",
               "major": 1,
               "minor": 0
             },
             {
-              "src": "/images/ILLUSTRATION/preview/2. TRADITIONAL MEDIA/2 illustrazione.jpg",
+              "src": "/images/ILLUSTRATION/2. TRADITIONAL MEDIA/2 illustrazione.avif",
               "type": "image",
-              "name": "2 illustrazione.jpg",
+              "name": "2 illustrazione.avif",
               "major": 2,
               "minor": 0
             },
             {
-              "src": "/images/ILLUSTRATION/preview/2. TRADITIONAL MEDIA/3 illustrazione.jpg",
+              "src": "/images/ILLUSTRATION/2. TRADITIONAL MEDIA/3 illustrazione.avif",
               "type": "image",
-              "name": "3 illustrazione.jpg",
+              "name": "3 illustrazione.avif",
               "major": 3,
               "minor": 0
             },
             {
-              "src": "/images/ILLUSTRATION/preview/2. TRADITIONAL MEDIA/4 illustrazione.jpg",
+              "src": "/images/ILLUSTRATION/2. TRADITIONAL MEDIA/4 illustrazione.avif",
               "type": "image",
-              "name": "4 illustrazione.jpg",
+              "name": "4 illustrazione.avif",
               "major": 4,
               "minor": 0
             },
             {
-              "src": "/images/ILLUSTRATION/preview/2. TRADITIONAL MEDIA/5 illustrazione.jpg",
+              "src": "/images/ILLUSTRATION/2. TRADITIONAL MEDIA/5 illustrazione.avif",
               "type": "image",
-              "name": "5 illustrazione.jpg",
+              "name": "5 illustrazione.avif",
               "major": 5,
               "minor": 0
             },
             {
-              "src": "/images/ILLUSTRATION/preview/2. TRADITIONAL MEDIA/6 illustrazione.jpg",
+              "src": "/images/ILLUSTRATION/2. TRADITIONAL MEDIA/6 illustrazione.avif",
               "type": "image",
-              "name": "6 illustrazione.jpg",
+              "name": "6 illustrazione.avif",
               "major": 6,
               "minor": 0
             },
             {
-              "src": "/images/ILLUSTRATION/preview/2. TRADITIONAL MEDIA/7 illustrazione.jpg",
+              "src": "/images/ILLUSTRATION/2. TRADITIONAL MEDIA/7 illustrazione.avif",
               "type": "image",
-              "name": "7 illustrazione.jpg",
+              "name": "7 illustrazione.avif",
               "major": 7,
               "minor": 0
             },
             {
-              "src": "/images/ILLUSTRATION/preview/2. TRADITIONAL MEDIA/8 illustrazione.jpg",
+              "src": "/images/ILLUSTRATION/2. TRADITIONAL MEDIA/8 illustrazione.avif",
               "type": "image",
-              "name": "8 illustrazione.jpg",
+              "name": "8 illustrazione.avif",
               "major": 8,
               "minor": 0
             }
@@ -1115,58 +1115,58 @@ window.PORTFOLIO = {
           "count": 8,
           "items": [
             {
-              "src": "/images/ILLUSTRATION/2. TRADITIONAL MEDIA/1 illustrazione.jpg",
+              "src": "/images/ILLUSTRATION/2. TRADITIONAL MEDIA/1 illustrazione.avif",
               "type": "image",
-              "name": "1 illustrazione.jpg",
+              "name": "1 illustrazione.avif",
               "major": 1,
               "minor": 0
             },
             {
-              "src": "/images/ILLUSTRATION/2. TRADITIONAL MEDIA/2 illustrazione.jpg",
+              "src": "/images/ILLUSTRATION/2. TRADITIONAL MEDIA/2 illustrazione.avif",
               "type": "image",
-              "name": "2 illustrazione.jpg",
+              "name": "2 illustrazione.avif",
               "major": 2,
               "minor": 0
             },
             {
-              "src": "/images/ILLUSTRATION/2. TRADITIONAL MEDIA/3 illustrazione.jpg",
+              "src": "/images/ILLUSTRATION/2. TRADITIONAL MEDIA/3 illustrazione.avif",
               "type": "image",
-              "name": "3 illustrazione.jpg",
+              "name": "3 illustrazione.avif",
               "major": 3,
               "minor": 0
             },
             {
-              "src": "/images/ILLUSTRATION/2. TRADITIONAL MEDIA/4 illustrazione.jpg",
+              "src": "/images/ILLUSTRATION/2. TRADITIONAL MEDIA/4 illustrazione.avif",
               "type": "image",
-              "name": "4 illustrazione.jpg",
+              "name": "4 illustrazione.avif",
               "major": 4,
               "minor": 0
             },
             {
-              "src": "/images/ILLUSTRATION/2. TRADITIONAL MEDIA/5 illustrazione.jpg",
+              "src": "/images/ILLUSTRATION/2. TRADITIONAL MEDIA/5 illustrazione.avif",
               "type": "image",
-              "name": "5 illustrazione.jpg",
+              "name": "5 illustrazione.avif",
               "major": 5,
               "minor": 0
             },
             {
-              "src": "/images/ILLUSTRATION/2. TRADITIONAL MEDIA/6 illustrazione.jpg",
+              "src": "/images/ILLUSTRATION/2. TRADITIONAL MEDIA/6 illustrazione.avif",
               "type": "image",
-              "name": "6 illustrazione.jpg",
+              "name": "6 illustrazione.avif",
               "major": 6,
               "minor": 0
             },
             {
-              "src": "/images/ILLUSTRATION/2. TRADITIONAL MEDIA/7 illustrazione.jpg",
+              "src": "/images/ILLUSTRATION/2. TRADITIONAL MEDIA/7 illustrazione.avif",
               "type": "image",
-              "name": "7 illustrazione.jpg",
+              "name": "7 illustrazione.avif",
               "major": 7,
               "minor": 0
             },
             {
-              "src": "/images/ILLUSTRATION/2. TRADITIONAL MEDIA/8 illustrazione.jpg",
+              "src": "/images/ILLUSTRATION/2. TRADITIONAL MEDIA/8 illustrazione.avif",
               "type": "image",
-              "name": "8 illustrazione.jpg",
+              "name": "8 illustrazione.avif",
               "major": 8,
               "minor": 0
             }
@@ -1179,7 +1179,7 @@ window.PORTFOLIO = {
       "slug": "animation",
       "title": "Animation",
       "page": "/html/animation.html",
-      "cover": "/images/ANIMATION/preview/1. DUEL/1 DUEL.mp4",
+      "cover": "/images/ANIMATION/1. DUEL/1 DUEL.mp4",
       "projects": [
         {
           "slug": "duel",
@@ -1188,28 +1188,28 @@ window.PORTFOLIO = {
           "dir": "/images/ANIMATION/1. DUEL",
           "preview": [
             {
-              "src": "/images/ANIMATION/preview/1. DUEL/1 DUEL.mp4",
+              "src": "/images/ANIMATION/1. DUEL/1 DUEL.mp4",
               "type": "video",
               "name": "1 DUEL.mp4",
               "major": 1,
               "minor": 0
             },
             {
-              "src": "/images/ANIMATION/preview/1. DUEL/1.1 DUEL.mp4",
+              "src": "/images/ANIMATION/1. DUEL/1.1 DUEL.mp4",
               "type": "video",
               "name": "1.1 DUEL.mp4",
               "major": 1,
               "minor": 1
             },
             {
-              "src": "/images/ANIMATION/preview/1. DUEL/2 DUEL.mp4",
+              "src": "/images/ANIMATION/1. DUEL/2 DUEL.mp4",
               "type": "video",
               "name": "2 DUEL.mp4",
               "major": 2,
               "minor": 0
             },
             {
-              "src": "/images/ANIMATION/preview/1. DUEL/2.1 DUEL.mp4",
+              "src": "/images/ANIMATION/1. DUEL/2.1 DUEL.mp4",
               "type": "video",
               "name": "2.1 DUEL.mp4",
               "major": 2,
@@ -1247,16 +1247,16 @@ window.PORTFOLIO = {
               "minor": 1
             },
             {
-              "src": "/images/ANIMATION/1. DUEL/3 DUEL colorscript.jpg",
+              "src": "/images/ANIMATION/1. DUEL/3 DUEL colorscript.avif",
               "type": "image",
-              "name": "3 DUEL colorscript.jpg",
+              "name": "3 DUEL colorscript.avif",
               "major": 3,
               "minor": 0
             },
             {
-              "src": "/images/ANIMATION/1. DUEL/4 DUEL character design.jpg",
+              "src": "/images/ANIMATION/1. DUEL/4 DUEL character design.avif",
               "type": "image",
-              "name": "4 DUEL character design.jpg",
+              "name": "4 DUEL character design.avif",
               "major": 4,
               "minor": 0
             }
@@ -1284,14 +1284,14 @@ window.PORTFOLIO = {
               "minor": 1
             },
             {
-              "src": "/images/ANIMATION/preview/2. LES LÉGENDAIRES/4 LES LÉGENDAIRES.mp4",
+              "src": "/images/ANIMATION/2. LES LÉGENDAIRES/4 LES LÉGENDAIRES.mp4",
               "type": "video",
               "name": "4 LES LÉGENDAIRES.mp4",
               "major": 4,
               "minor": 0
             },
             {
-              "src": "/images/ANIMATION/preview/2. LES LÉGENDAIRES/6 LES LÉGENDAIRES.mp4",
+              "src": "/images/ANIMATION/2. LES LÉGENDAIRES/6 LES LÉGENDAIRES.mp4",
               "type": "video",
               "name": "6 LES LÉGENDAIRES.mp4",
               "major": 6,
@@ -1301,9 +1301,9 @@ window.PORTFOLIO = {
           "count": 7,
           "items": [
             {
-              "src": "/images/ANIMATION/2. LES LÉGENDAIRES/1 LES LÉGENDAIRES.jpg",
+              "src": "/images/ANIMATION/2. LES LÉGENDAIRES/1 LES LÉGENDAIRES.avif",
               "type": "image",
-              "name": "1 LES LÉGENDAIRES.jpg",
+              "name": "1 LES LÉGENDAIRES.avif",
               "major": 1,
               "minor": 0
             },
@@ -1322,9 +1322,9 @@ window.PORTFOLIO = {
               "minor": 1
             },
             {
-              "src": "/images/ANIMATION/2. LES LÉGENDAIRES/3 LES LÉGENDAIRES.jpg",
+              "src": "/images/ANIMATION/2. LES LÉGENDAIRES/3 LES LÉGENDAIRES.avif",
               "type": "image",
-              "name": "3 LES LÉGENDAIRES.jpg",
+              "name": "3 LES LÉGENDAIRES.avif",
               "major": 3,
               "minor": 0
             },
@@ -1336,9 +1336,9 @@ window.PORTFOLIO = {
               "minor": 0
             },
             {
-              "src": "/images/ANIMATION/2. LES LÉGENDAIRES/5 LES LÉGENDAIRES.jpg",
+              "src": "/images/ANIMATION/2. LES LÉGENDAIRES/5 LES LÉGENDAIRES.avif",
               "type": "image",
-              "name": "5 LES LÉGENDAIRES.jpg",
+              "name": "5 LES LÉGENDAIRES.avif",
               "major": 5,
               "minor": 0
             },
@@ -1373,28 +1373,28 @@ window.PORTFOLIO = {
               "minor": 1
             },
             {
-              "src": "/images/ANIMATION/preview/3. RAINY DAY/2 RAINY DAY.mp4",
+              "src": "/images/ANIMATION/3. RAINY DAY/2 RAINY DAY.mp4",
               "type": "video",
               "name": "2 RAINY DAY.mp4",
               "major": 2,
               "minor": 0
             },
             {
-              "src": "/images/ANIMATION/preview/3. RAINY DAY/2.1 RAINY DAY.mp4",
+              "src": "/images/ANIMATION/3. RAINY DAY/2.1 RAINY DAY.mp4",
               "type": "video",
               "name": "2.1 RAINY DAY.mp4",
               "major": 2,
               "minor": 1
             },
             {
-              "src": "/images/ANIMATION/preview/3. RAINY DAY/3 RAINY DAY.mp4",
+              "src": "/images/ANIMATION/3. RAINY DAY/3 RAINY DAY.mp4",
               "type": "video",
               "name": "3 RAINY DAY.mp4",
               "major": 3,
               "minor": 0
             },
             {
-              "src": "/images/ANIMATION/preview/3. RAINY DAY/3.1 RAINY DAY.mp4",
+              "src": "/images/ANIMATION/3. RAINY DAY/3.1 RAINY DAY.mp4",
               "type": "video",
               "name": "3.1 RAINY DAY.mp4",
               "major": 3,
@@ -1446,30 +1446,30 @@ window.PORTFOLIO = {
               "minor": 1
             },
             {
-              "src": "/images/ANIMATION/3. RAINY DAY/4 RAINY DAY.jpg",
+              "src": "/images/ANIMATION/3. RAINY DAY/4 RAINY DAY.avif",
               "type": "image",
-              "name": "4 RAINY DAY.jpg",
+              "name": "4 RAINY DAY.avif",
               "major": 4,
               "minor": 0
             },
             {
-              "src": "/images/ANIMATION/3. RAINY DAY/5 RAINY DAY.jpg",
+              "src": "/images/ANIMATION/3. RAINY DAY/5 RAINY DAY.avif",
               "type": "image",
-              "name": "5 RAINY DAY.jpg",
+              "name": "5 RAINY DAY.avif",
               "major": 5,
               "minor": 0
             },
             {
-              "src": "/images/ANIMATION/3. RAINY DAY/6 RAINY DAY.jpg",
+              "src": "/images/ANIMATION/3. RAINY DAY/6 RAINY DAY.avif",
               "type": "image",
-              "name": "6 RAINY DAY.jpg",
+              "name": "6 RAINY DAY.avif",
               "major": 6,
               "minor": 0
             },
             {
-              "src": "/images/ANIMATION/3. RAINY DAY/7 RAINY DAY.jpg",
+              "src": "/images/ANIMATION/3. RAINY DAY/7 RAINY DAY.avif",
               "type": "image",
-              "name": "7 RAINY DAY.jpg",
+              "name": "7 RAINY DAY.avif",
               "major": 7,
               "minor": 0
             }
@@ -1500,9 +1500,9 @@ window.PORTFOLIO = {
           "count": 5,
           "items": [
             {
-              "src": "/images/ANIMATION/4. SKECHY NOTES/1 SKETCHY NOTES.jpg",
+              "src": "/images/ANIMATION/4. SKECHY NOTES/1 SKETCHY NOTES.avif",
               "type": "image",
-              "name": "1 SKETCHY NOTES.jpg",
+              "name": "1 SKETCHY NOTES.avif",
               "major": 1,
               "minor": 0
             },
@@ -1521,16 +1521,16 @@ window.PORTFOLIO = {
               "minor": 1
             },
             {
-              "src": "/images/ANIMATION/4. SKECHY NOTES/3 SKETCHY NOTES.jpg",
+              "src": "/images/ANIMATION/4. SKECHY NOTES/3 SKETCHY NOTES.avif",
               "type": "image",
-              "name": "3 SKETCHY NOTES.jpg",
+              "name": "3 SKETCHY NOTES.avif",
               "major": 3,
               "minor": 0
             },
             {
-              "src": "/images/ANIMATION/4. SKECHY NOTES/4 SKETCHY NOTES.jpg",
+              "src": "/images/ANIMATION/4. SKECHY NOTES/4 SKETCHY NOTES.avif",
               "type": "image",
-              "name": "4 SKETCHY NOTES.jpg",
+              "name": "4 SKETCHY NOTES.avif",
               "major": 4,
               "minor": 0
             }
