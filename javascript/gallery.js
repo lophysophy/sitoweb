@@ -254,6 +254,46 @@
     return rows;
   }
 
+  // Side-by-side clips in a pair-row (a base piece and its variant/COMP) must
+  // start together. Left to their own `autoplay` each begins the moment its own
+  // file is ready, so the faster-loading one runs ahead. Instead we take manual
+  // control: hold every clip in the row until all are buffered, start them on the
+  // same tick, and drive the loop from one "master" so they stay locked cycle to
+  // cycle even if a clip drifts a few frames.
+  function syncGroup(vids) {
+    for (var i = 0; i < vids.length; i++) {
+      var v = vids[i];
+      v.autoplay = false; v.removeAttribute('autoplay');
+      v.loop = false; v.removeAttribute('loop'); // the master drives the loop
+      v.preload = 'auto';
+      try { v.pause(); } catch (e) {}
+    }
+    var master = vids[0], ready = 0, started = false;
+    function startAll() {
+      for (var i = 0; i < vids.length; i++) { try { vids[i].currentTime = 0; } catch (e) {} }
+      for (var j = 0; j < vids.length; j++) play(vids[j]);
+    }
+    function onReady() {
+      if (++ready < vids.length || started) return;
+      started = true;
+      startAll();
+    }
+    // Restart the whole row when the master ends, so the loop re-syncs each pass.
+    master.addEventListener('ended', startAll);
+    for (var k = 0; k < vids.length; k++) {
+      if (vids[k].readyState >= 3) onReady(); // HAVE_FUTURE_DATA — enough to play
+      else vids[k].addEventListener('canplay', onReady, { once: true });
+    }
+  }
+
+  function wirePairSync(root) {
+    var rows = root.querySelectorAll('.pair-row');
+    for (var r = 0; r < rows.length; r++) {
+      var vids = rows[r].querySelectorAll('video');
+      if (vids.length >= 2) syncGroup(Array.prototype.slice.call(vids));
+    }
+  }
+
   function renderProject(el) {
     var params = new URLSearchParams(window.location.search);
     var cat = findCat(params.get('cat'));
@@ -322,6 +362,7 @@
 
     el.innerHTML = html;
     wireStoryLightbox(el);
+    wirePairSync(el);
     window.scrollTo(0, 0);
   }
 

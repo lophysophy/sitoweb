@@ -35,6 +35,10 @@ body {
 
 main {
   flex: 1 0 auto;
+  /* Contain full-bleed children (e.g. the edu timeline rail) to the visible
+     width, so 100vw elements reach both page edges without adding a horizontal
+     scrollbar. clip (unlike hidden) creates no scroll container. */
+  overflow-x: clip;
 }
 
 .site-footer {
@@ -731,39 +735,97 @@ body.menu-open .hero-corners .menu-toggle {
   color: var(--white);
 }
 
-/* Education: tidy cards with a tiffany accent rail, replacing the plain list. */
+/* Education: tidy cards, replacing the plain list. */
 .list-section {
   max-width: 960px;
   margin: 0 auto;
   text-align: left;
-  padding: 72px 24px 0;
+  padding: 0 24px;
 }
 
-.list-section .kicker {
-  margin-bottom: 20px;
+/* The Education heading sits directly in <main> (full page width), so its
+   28px left padding lines it up exactly with the header wordmark. */
+.edu-heading {
+  padding: 72px 28px 0;
+  margin: 0 0 20px;
+  box-sizing: border-box;
 }
 
-.edu-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
+/* Timeline of study, earliest first. Horizontal on desktop: a rail across the
+   full width of the section, with the two nodes balanced over equal-height
+   cards; it folds to a vertical rail on narrow screens (see the mobile query). */
+.edu-timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  display: flex;
+  align-items: stretch; /* items share the tallest height */
+  gap: 24px;
 }
 
-.edu-card {
+/* The rail: one continuous line running edge to edge of the page (full-bleed),
+   behind the nodes. The timeline sits centred in the viewport, so a viewport-wide
+   line centred on it reaches both page edges. */
+.edu-timeline::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  width: 100vw;
+  transform: translateX(-50%);
+  top: 6px; /* node centre */
+  height: 2px;
+  background: rgba(10, 186, 181, 0.35); /* soft tiffany rail */
+}
+
+.edu-item {
+  position: relative;
+  flex: 1; /* equal share of the width, so the nodes sit balanced at 1/4 and 3/4 */
+  display: flex;
+  flex-direction: column;
+  padding-top: 30px; /* room above for the node */
+}
+
+/* The node, centred over its card so the pair reads balanced across the row. */
+.edu-item::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--tiffany);
+  box-shadow: 0 0 0 4px var(--aqua-mist); /* halo masks the rail behind the node */
+}
+
+.edu-time {
+  display: block;
+  text-align: center;
+  font-family: 'Comfortaa', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  color: var(--tiffany-deep);
+  margin-bottom: 10px;
+}
+
+.edu-body {
+  flex: 1; /* both cards stretch to the tallest — equal heights */
   background: var(--aqua-mist);
-  border-left: 4px solid var(--tiffany);
   border-radius: 14px;
-  padding: 20px 22px;
+  padding: 16px 20px;
 }
 
-.edu-card .school {
+.edu-body .school {
   font-family: 'Comfortaa', sans-serif;
   font-weight: 700;
   font-size: 16px;
   color: var(--ink);
 }
 
-.edu-card .meta {
+.edu-body .meta {
   color: var(--aqua-gray);
   font-size: 13px;
   margin-top: 4px;
@@ -1154,6 +1216,56 @@ body.menu-open .hero-corners .menu-toggle {
     height: auto;
   }
 
+  /* Match the mobile header gutter (24px) so the heading stays aligned. */
+  .edu-heading {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  /* Education timeline folds to a vertical rail on narrow screens. */
+  .edu-timeline {
+    display: block;
+    max-width: 620px;
+  }
+
+  .edu-timeline::before {
+    display: none; /* the full-width horizontal rail is desktop-only */
+  }
+
+  .edu-item {
+    display: block;
+    padding: 0 0 30px 34px;
+  }
+
+  .edu-item:last-child {
+    padding-bottom: 0;
+  }
+
+  /* Per-item vertical rail, running down into the next entry. */
+  .edu-item::before {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 8px;
+    width: 2px;
+    height: 100%;
+    background: rgba(10, 186, 181, 0.35);
+  }
+
+  .edu-item:last-child::before {
+    display: none;
+  }
+
+  .edu-item::after {
+    left: 0;
+    top: 3px;
+    transform: none;
+  }
+
+  .edu-time {
+    text-align: left;
+  }
+
   /* Folders become a single-column list on mobile */
   .work-grid {
     grid-template-columns: 1fr;
@@ -1200,9 +1312,6 @@ body.menu-open .hero-corners .menu-toggle {
     margin: 0 auto;
   }
 
-  .edu-grid {
-    grid-template-columns: 1fr;
-  }
 }
 
 @media (max-width: 480px) {
