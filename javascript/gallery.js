@@ -268,22 +268,35 @@
       v.preload = 'auto';
       try { v.pause(); } catch (e) {}
     }
-    var master = vids[0], ready = 0, started = false;
+    var master = vids[0], started = false, seen = [];
     function startAll() {
       for (var i = 0; i < vids.length; i++) { try { vids[i].currentTime = 0; } catch (e) {} }
       for (var j = 0; j < vids.length; j++) play(vids[j]);
     }
-    function onReady() {
-      if (++ready < vids.length || started) return;
+    function markReady(idx) {
+      if (seen[idx]) return; // each clip counts once (canplay/loadeddata may both fire)
+      seen[idx] = true;
+      if (started) return;
+      for (var i = 0; i < vids.length; i++) { if (!seen[i]) return; }
       started = true;
       startAll();
     }
     // Restart the whole row when the master ends, so the loop re-syncs each pass.
     master.addEventListener('ended', startAll);
     for (var k = 0; k < vids.length; k++) {
-      if (vids[k].readyState >= 3) onReady(); // HAVE_FUTURE_DATA — enough to play
-      else vids[k].addEventListener('canplay', onReady, { once: true });
+      (function (idx) {
+        var v = vids[idx];
+        if (v.readyState >= 3) { markReady(idx); return; } // HAVE_FUTURE_DATA — enough to play
+        var on = function () { markReady(idx); };
+        v.addEventListener('canplay', on);
+        v.addEventListener('loadeddata', on); // iOS often reaches this but not canplay
+        try { v.load(); } catch (e) {} // iOS won't buffer a paused clip until asked to
+      })(k);
     }
+    // Safety net: iOS may never fire canplay for a paused muted clip, which would
+    // leave the whole row blank forever. Start regardless once the wait is clearly
+    // long enough that "in sync" no longer matters more than "actually playing".
+    setTimeout(function () { if (!started) { started = true; startAll(); } }, 3000);
   }
 
   function wirePairSync(root) {
