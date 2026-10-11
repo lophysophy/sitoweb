@@ -1,0 +1,50 @@
+---
+import Base from '../layouts/Base.astro';
+import { Image } from 'astro:assets';
+import tanuki from '../assets/tanuki.png';
+import { SITE } from '../lib/site';
+---
+<Base title="About" description="About Sofia Lucarelli, alias Lophy Sophy. Character Animation student at Gobelins Paris, BA in Illustration and Animation at IED Rome." current="about">
+  <section class="about-layout">
+    <figure class="about-figure">
+      <Image src={tanuki} alt="Pencil sketch of a tanuki by Sofia Lucarelli" widths={[380, 760]} sizes="(max-width: 768px) 260px, 380px" format="webp" />
+    </figure>
+    <div class="about-text">
+      <h1 class="greeting">Hi!</h1>
+      <p class="about-lead">Visual development artist and 2D animator, currently studying Character Animation at Gobelins Paris.</p>
+      <p>I am Sofia Lucarelli, <a class="text-link" href={SITE.instagram} target="_blank" rel="noopener">lophy.sophy</a> on Instagram. I'm a creative, dynamic, and proactive young artist. I am passionate about investing my full dedication into everything I do. I love caring for every project down to its details, to ensure it resonates with its intended audience. My goal is to convey emotions through drawing, touching the hearts of those around me.</p>
+      <p>My work moves between digital and traditional media, I like to incorporate traditional techniques into my projects and sometimes challenge myself to achieve that look only through digital. I love painting and playing with colors!</p>
+      <p>Currently I am studying for my Master Degree in Character Animation and Animated Filmmaking at Gobelins Paris (CRFA, class of 2027). Before that I earned a BA in Illustration and Animation at IED Rome.</p>
+
+      <div class="contact-card">
+        <p class="kicker">Want to work together?</p>
+        <a class="contact-email" href={`mailto:${SITE.email}`}>{SITE.email}</a>
+        <p class="about-actions">
+          <a class="btn btn--solid" href={SITE.cv} download>Download CV (PDF)</a>
+          <a class="btn" href={SITE.cv} target="_blank" rel="noopener">View CV</a>
+          <a class="btn" href={SITE.instagram} target="_blank" rel="noopener">Instagram</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <h2 class="kicker edu-heading">Education</h2>
+  <section class="list-section">
+    <ol class="edu-timeline">
+      <li class="edu-item">
+        <span class="edu-time">2021 – 2024</span>
+        <div class="edu-body">
+          <div class="school">IED Rome</div>
+          <div class="meta">BA in Illustration and Animation</div>
+        </div>
+      </li>
+      <li class="edu-item">
+        <span class="edu-time">2025 – 2027</span>
+        <div class="edu-body">
+          <div class="school">Gobelins Paris</div>
+          <div class="meta">MA Character Animation &amp; Animated Filmmaking · CRFA</div>
+        </div>
+      </li>
+    </ol>
+  </section>
+</Base>

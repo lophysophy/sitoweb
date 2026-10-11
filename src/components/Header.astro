@@ -1,0 +1,54 @@
+---
+// Two layouts share this component:
+// - Inner pages: a sticky white bar (name, categories, Showreel/About).
+// - Homepage: the name (left) and Showreel/About (right) float fixed over the
+//   full-screen intro; the category bar lives below the hero (HomeCategoryBar)
+//   and when it pins on scroll, the corners merge with it into one bar.
+import { CATEGORIES } from '../lib/site';
+
+interface Props { home?: boolean; current?: string }
+const { home = false, current } = Astro.props;
+
+const cats = CATEGORIES.map((c) => ({ href: `/${c.slug}/`, label: c.title, key: c.slug }));
+const main = [
+  { href: '/showreel/', label: 'Showreel', key: 'showreel' },
+  { href: '/about/', label: 'About', key: 'about' },
+];
+const aria = (key: string) => (key === current ? 'page' : undefined);
+---
+{home ? (
+  <div class="hero-corners">
+    <div class="corners-inner">
+      <a class="wordmark" href="/">Lophy Sophy<span class="wordmark-sub">Sofia Lucarelli</span></a>
+      <nav class="site-nav corner-right" aria-label="Main navigation">
+        {main.map((l) => <a href={l.href} aria-current={aria(l.key)}>{l.label}</a>)}
+      </nav>
+      <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+) : (
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="header-side">
+        <a class="wordmark" href="/">Lophy Sophy<span class="wordmark-sub">Sofia Lucarelli</span></a>
+      </div>
+      <nav class="site-nav nav-center" aria-label="Work categories">
+        {cats.map((l) => <a href={l.href} aria-current={aria(l.key)}>{l.label}</a>)}
+      </nav>
+      <nav class="site-nav header-side right" aria-label="Main navigation">
+        {main.map((l) => <a href={l.href} aria-current={aria(l.key)}>{l.label}</a>)}
+      </nav>
+      <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+)}
+
+<nav class:list={['mobile-menu', { 'mobile-menu--hero': home }]} id="mobile-menu" aria-label="All sections" inert>
+  <div class="mobile-menu-inner">
+    {[...cats, ...main].map((l) => <a href={l.href} aria-current={aria(l.key)}>{l.label}</a>)}
+  </div>
+</nav>

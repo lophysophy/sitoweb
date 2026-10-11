@@ -1,0 +1,135 @@
+---
+import Base from '../../layouts/Base.astro';
+import Artwork from '../../components/Artwork.astro';
+import { categories, pairRows, projectUrl, type Project } from '../../lib/portfolio';
+import { responsive } from '../../lib/images';
+
+export function getStaticPaths() {
+  return categories.flatMap((category) =>
+    category.projects.map((project, i) => {
+      const list = category.projects;
+      return {
+        params: { category: category.slug, project: project.slug },
+        props: {
+          project,
+          prev: list.length > 1 ? list[(i - 1 + list.length) % list.length] : undefined,
+          next: list.length > 1 ? list[(i + 1) % list.length] : undefined,
+        },
+      };
+    }),
+  );
+}
+
+const { project, prev, next } = Astro.props as { project: Project; prev?: Project; next?: Project };
+const cat = project.category;
+const info = project.info;
+const Content = project.Content;
+
+const meta = [
+  ['Year', info.year],
+  ['Role', info.role],
+  ['Team', info.team],
+  ['Tools', info.tools],
+].filter(([, v]) => v != null && v !== '') as [string, string | number][];
+
+const rows = pairRows(project.items);
+// Animation projects get a gap between rows (clips read as separate shots).
+const spaced = cat.slug === 'animation';
+
+const description =
+  info.description ||
+  `${project.title}: ${cat.title.toLowerCase()} by Sofia Lucarelli, alias Lophy Sophy.`;
+
+async function thumb(p?: Project) {
+  if (!p) return null;
+  const piece = p.preview.find((x) => x.image) || p.items.find((x) => x.image);
+  return piece?.image ? await responsive(piece.image, [480, 800]) : null;
+}
+const pager = await Promise.all(
+  [
+    prev && { dir: 'Previous', p: prev },
+    next && next !== prev && { dir: 'Next', p: next },
+  ]
+    .filter(Boolean)
+    .map(async (x: any) => ({ ...x, img: await thumb(x.p) })),
+);
+if (next && next === prev) pager[0].dir = 'Next';
+---
+<Base title={project.title} description={description} current={cat.slug} image={project.coverImage}>
+  <article data-project>
+    <header class="page-head project-head">
+      <p class="kicker"><a class="crumb" href={cat.url}>{cat.title}</a></p>
+      <h1 class="page-title">{project.title}</h1>
+      {meta.length > 0 && (
+        <dl class="project-meta">
+          {meta.map(([k, v]) => (
+            <div><dt>{k}</dt><dd>{v}</dd></div>
+          ))}
+        </dl>
+      )}
+      {project.hasBody && Content && (
+        <div class="project-text"><Content /></div>
+      )}
+    </header>
+
+    {rows.length > 0 && (
+      <section class:list={['gallery', 'project-gallery', { 'project-gallery--spaced': spaced }]} aria-label={project.title} data-zoom-group>
+        {rows.map((row, n) =>
+          row.variants.length ? (
+            <div class="pair-row">
+              <Artwork piece={row.base} alt={`${project.title}, piece ${n + 1}`} sizes={`${Math.round(100 / (row.variants.length + 1))}vw`} zoom />
+              {row.variants.map((v, k) => (
+                <Artwork piece={v} alt={`${project.title}, piece ${n + 1}, variant ${k + 1}`} sizes={`${Math.round(100 / (row.variants.length + 1))}vw`} zoom />
+              ))}
+            </div>
+          ) : (
+            <Artwork piece={row.base} alt={`${project.title}, piece ${n + 1}`} zoom eager={n === 0} />
+          ),
+        )}
+      </section>
+    )}
+
+    {project.groups.map((group) => (
+      <section class="group-block">
+        <h2 class="kicker group-title">{group.title}</h2>
+        <div class="story-grid" data-zoom-group>
+          {group.items.map((it, n) => (
+            <Artwork piece={it} alt={`${group.title} ${n + 1}`} sizes="(max-width: 768px) 45vw, 320px" widths={[400, 800]} zoom />
+          ))}
+        </div>
+      </section>
+    ))}
+
+    {info.youtube && (
+      <section class="video-block">
+        <h2 class="kicker video-heading">Watch the full film</h2>
+        <div class="video-frame">
+          <button class="yt-facade" type="button" data-youtube={info.youtube} data-title={`${project.title}, film`} aria-label={`Play ${project.title}, full film`}>
+            <img src={`https://i.ytimg.com/vi/${info.youtube}/maxresdefault.jpg`} alt="" loading="lazy" onerror={`this.onerror=null;this.src='https://i.ytimg.com/vi/${info.youtube}/hqdefault.jpg'`} />
+            <span class="yt-play" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M4 2.5v11l9-5.5z" /></svg></span>
+          </button>
+        </div>
+      </section>
+    )}
+
+    <nav class="pager" aria-label="More projects">
+      <p class="kicker pager-heading">More in {cat.title}</p>
+      <div class="pager-grid">
+        {pager.map(({ dir, p, img }) => (
+          <a class:list={['pager-link', `pager-link--${dir.toLowerCase()}`]} href={projectUrl(p)}>
+            {img && <img src={img.src} srcset={img.srcset} sizes="(max-width: 768px) 100vw, 50vw" width={img.width} height={img.height} alt="" loading="lazy" decoding="async" />}
+            <span class="pager-label">
+              <span class="pager-dir">{dir === 'Previous' ? '← Previous' : 'Next →'}</span>
+              <span class="pager-title">{p.title}</span>
+            </span>
+          </a>
+        ))}
+      </div>
+      <p class="back-row"><a class="btn" href={cat.url}>All of {cat.title}</a></p>
+    </nav>
+  </article>
+</Base>
+
+<script>
+  import '../../scripts/gallery';
+</script>

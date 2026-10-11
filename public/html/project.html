@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Lophy Sophy</title>
+<meta name="robots" content="noindex">
+<script>
+  // Old project links looked like /html/project.html?cat=animation&project=duel.
+  var q = new URLSearchParams(location.search);
+  var cat = (q.get('cat') || '').replace(/[^a-z0-9-]/g, '');
+  var proj = (q.get('project') || '').replace(/[^a-z0-9-]/g, '');
+  var renamed = { 'skechy-notes': 'sketchy-notes' };
+  proj = renamed[proj] || proj;
+  location.replace(cat ? '/' + cat + '/' + (proj ? proj + '/' : '') : '/');
+</script>
+</head><body><a href="/">This page has moved.</a></body></html>

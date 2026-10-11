@@ -1,0 +1,23 @@
+---
+// Homepage "squeeze mosaic": tiles share a row and crop at rest; hovering one
+// expands it to its image's full width (--ar) so the whole image shows.
+import type { Category } from '../lib/portfolio';
+import { projectUrl } from '../lib/portfolio';
+import Artwork from './Artwork.astro';
+
+interface Props { category: Category }
+const { category } = Astro.props;
+const projects = category.projects.slice(0, category.homeLimit);
+---
+<div class="mosaic" data-mosaic data-scale={category.homeScale}>
+  {projects.map((proj) => {
+    const cover = proj.preview[0] || proj.items[0];
+    const ar = cover.width && cover.height ? (cover.width / cover.height).toFixed(4) : undefined;
+    return (
+      <a class="tile" href={projectUrl(proj)} style={ar ? `--ar:${ar}` : undefined}>
+        <Artwork piece={cover} alt="" sizes="(max-width: 768px) 100vw, 800px" widths={[800, 1280]} />
+        <span class="tile-overlay"><span class="tile-label">{proj.title}</span></span>
+      </a>
+    );
+  })}
+</div>

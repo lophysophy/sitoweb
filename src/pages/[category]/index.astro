@@ -1,0 +1,28 @@
+---
+import Base from '../../layouts/Base.astro';
+import WorkGrid from '../../components/WorkGrid.astro';
+import { categories, type Category } from '../../lib/portfolio';
+
+export function getStaticPaths() {
+  return categories.map((category) => ({ params: { category: category.slug }, props: { category } }));
+}
+
+const { category } = Astro.props as { category: Category };
+const cover = category.projects[0]?.coverImage;
+---
+<Base title={category.title} description={category.description} current={category.slug} image={cover}>
+  <section class="page-head">
+    <h1 class="page-title">{category.title}</h1>
+    <p class="chip-row">{category.tags.map((t) => <span class="chip">{t}</span>)}</p>
+  </section>
+
+  <section class="intro">
+    <p set:html={category.intro} />
+  </section>
+
+  <WorkGrid category={category} />
+</Base>
+
+<script>
+  import '../../scripts/gallery';
+</script>

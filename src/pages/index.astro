@@ -1,0 +1,91 @@
+---
+import Base from '../layouts/Base.astro';
+import Mosaic from '../components/Mosaic.astro';
+import { categories } from '../lib/portfolio';
+import { CATEGORIES, SITE } from '../lib/site';
+
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: SITE.author,
+  alternateName: SITE.name,
+  url: SITE.url,
+  email: `mailto:${SITE.email}`,
+  jobTitle: 'Visual Development Artist and 2D Animator',
+  alumniOf: [
+    { '@type': 'CollegeOrUniversity', name: 'IED Rome' },
+    { '@type': 'CollegeOrUniversity', name: 'Gobelins Paris' },
+  ],
+  sameAs: [SITE.instagram],
+};
+---
+<Base home jsonLd={person}>
+  <Fragment slot="head">
+    <link rel="preload" as="image" href="/media/intro-poster.webp" media="(min-width: 769px)" fetchpriority="high">
+    <link rel="preload" as="image" href="/media/intro-mobile-poster.webp" media="(max-width: 768px)" fetchpriority="high">
+  </Fragment>
+
+  <section class="hero" aria-label="Intro">
+    <picture class="hero-poster">
+      <source media="(max-width: 768px)" srcset="/media/intro-mobile-poster.webp">
+      <img src="/media/intro-poster.webp" alt="" fetchpriority="high">
+    </picture>
+    <video
+      class="hero-video"
+      data-desktop="/media/intro.mp4"
+      data-desktop-av1="/media/intro.av1.mp4"
+      data-mobile="/media/intro-mobile.mp4"
+      data-mobile-av1="/media/intro-mobile.av1.mp4"
+      loop muted playsinline preload="none"
+      aria-label="Looping intro animation by Sofia Lucarelli"></video>
+
+    <div class="hero-intro">
+      <h1 class="hero-name">Sofia Lucarelli</h1>
+      <p class="hero-role">{SITE.role}</p>
+      <p class="hero-school">{SITE.school}</p>
+      <p class="hero-actions">
+        <a class="btn btn--light" href="/showreel/">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l9-5.5z" /></svg>
+          Watch the reel
+        </a>
+        <a class="btn btn--ghost-light" href="#work">See the work</a>
+        <button class="hero-toggle" type="button" aria-label="Pause intro animation" aria-pressed="false">
+          <svg class="i-pause" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 3h3v10H4zM9 3h3v10H9z" /></svg>
+          <svg class="i-play" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l9-5.5z" /></svg>
+        </button>
+      </p>
+    </div>
+  </section>
+
+  <header class="site-header site-header--home">
+    <div class="header-inner">
+      <div class="header-side" aria-hidden="true"></div>
+      <nav class="site-nav nav-center" aria-label="Work categories">
+        {CATEGORIES.map((c) => <a href={`/${c.slug}/`}>{c.title}</a>)}
+      </nav>
+      <div class="header-side right" aria-hidden="true"></div>
+    </div>
+  </header>
+
+  <section class="hello" id="work">
+    <h2 class="greeting">Hello!</h2>
+    <p class="lead">I am Sofia Lucarelli, a young artist working in visual development, concept art, character design and 2D animation.</p>
+    <p>I am currently studying for my Master Degree in Character Animation at Gobelins in Paris (CRFA, class of 2027). My work moves between digital and traditional media, I like to incorporate traditional techniques into my projects and sometimes challenge myself to achieve that look only through digital. I love painting and playing with colors!</p>
+  </section>
+
+  {categories.map((cat) => (
+    <section class="discipline">
+      <div class="discipline-head">
+        <h2 class="section-title"><a href={cat.url}>{cat.title}</a></h2>
+        <p class="kicker">{cat.tags.join(' · ')}</p>
+      </div>
+      <Mosaic category={cat} />
+      <p class="discipline-more"><a class="more-link" href={cat.url}>All {cat.title.toLowerCase()} <span aria-hidden="true">→</span></a></p>
+    </section>
+  ))}
+</Base>
+
+<script>
+  import '../scripts/gallery';
+  import '../scripts/hero';
+</script>

@@ -1,0 +1,60 @@
+---
+// One piece of artwork: a responsive <img>, or a silent looping <video>.
+// Images are never cropped here; layout classes decide how they sit.
+import type { Piece } from '../lib/portfolio';
+import { responsive } from '../lib/images';
+
+interface Props {
+  piece: Piece;
+  alt: string;
+  sizes?: string;
+  widths?: number[];
+  class?: string;
+  /** Lets the image open full screen in the lightbox. */
+  zoom?: boolean;
+  eager?: boolean;
+  /** Extra attributes for <video> (e.g. no autoplay). */
+  autoplay?: boolean;
+}
+
+const {
+  piece,
+  alt,
+  sizes = '100vw',
+  widths = [640, 1280, 1920],
+  class: cls,
+  zoom = false,
+  eager = false,
+  autoplay = true,
+} = Astro.props;
+
+const r = piece.image ? await responsive(piece.image, widths) : null;
+---
+{r ? (
+  <img
+    class={cls}
+    src={r.src}
+    srcset={r.srcset}
+    sizes={sizes}
+    width={r.width}
+    height={r.height}
+    alt={alt}
+    loading={eager ? 'eager' : 'lazy'}
+    decoding="async"
+    data-zoom={zoom ? r.src : undefined}
+    tabindex={zoom ? 0 : undefined}
+  />
+) : (
+  <video
+    class={cls}
+    src={piece.src}
+    width={piece.width}
+    height={piece.height}
+    autoplay={autoplay}
+    loop
+    muted
+    playsinline
+    preload="metadata"
+    aria-label={alt}
+  ></video>
+)}

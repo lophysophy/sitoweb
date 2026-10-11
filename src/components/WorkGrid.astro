@@ -1,0 +1,28 @@
+---
+// Category page: a full-bleed grid, one cell per project. On hover a cell
+// cycles through the project's preview pieces in order.
+import type { Category } from '../lib/portfolio';
+import { projectUrl } from '../lib/portfolio';
+import { resized } from '../lib/images';
+import Artwork from './Artwork.astro';
+
+interface Props { category: Category }
+const { category } = Astro.props;
+
+const cells = await Promise.all(
+  category.projects.map(async (proj) => {
+    const list = proj.preview.length ? proj.preview : proj.items;
+    // Hover frames use one mid-size copy each: enough for a half-screen cell.
+    const frames = await Promise.all(list.map((p) => (p.image ? resized(p.image, 1280) : Promise.resolve(p.src))));
+    return { proj, cover: list[0], frames };
+  }),
+);
+---
+<section class="work-grid" aria-label={`${category.title} projects`}>
+  {cells.map(({ proj, cover, frames }) => (
+    <a class="grid-cell" href={projectUrl(proj)} data-frames={JSON.stringify(frames)}>
+      <Artwork piece={cover} alt="" class="grid-img" sizes="(max-width: 768px) 100vw, 50vw" widths={[800, 1280]} />
+      <span class="grid-overlay"><span class="grid-label">{proj.title}</span></span>
+    </a>
+  ))}
+</section>
