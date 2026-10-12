@@ -3,14 +3,7 @@ import { SITE } from '../lib/site';
 const year = new Date().getFullYear();
 ---
 <footer class="site-footer">
-  <div class="footer-cta">
-    <p class="footer-title">Want to work together?</p>
-    <p class="footer-actions">
-      <a class="btn btn--solid" href={`mailto:${SITE.email}`}>Write me</a>
-      <a class="btn" href={SITE.cv} download>Download CV</a>
-    </p>
-  </div>
-  <p class="footer-meta">
+  <p>
     © {year} {SITE.author} · <a href={`mailto:${SITE.email}`}>{SITE.email}</a> · <a href={SITE.instagram} target="_blank" rel="noopener">Instagram</a>
   </p>
 </footer>

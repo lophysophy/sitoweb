@@ -30,6 +30,9 @@
 }
 
 html {
+  /* Reserve the scrollbar's space on every page, so short and long pages lay
+     out the same and the nav doesn't jump sideways between them. */
+  scrollbar-gutter: stable;
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
 }
@@ -1456,41 +1459,21 @@ html.lightbox-open {
 
 .site-footer {
   flex-shrink: 0;
-  margin-top: 96px;
-  padding: 56px 24px 36px;
+  margin-top: 80px;
+  padding: 48px 24px;
   text-align: center;
+  font-size: 12px;
   background: var(--aqua-mist);
   color: var(--aqua-gray);
 }
 
-.footer-title {
-  font-family: var(--font-display);
-  font-optical-sizing: auto;
-  font-size: clamp(26px, 3vw, 36px);
-  line-height: 1.2;
-  color: var(--ink);
-}
-
-.footer-actions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-.footer-meta {
-  margin-top: 40px;
-  font-size: 12px;
-}
-
-.footer-meta a {
+.site-footer a {
   color: var(--aqua-gray);
   text-decoration: none;
-  padding: 12px 2px;
+  padding: 12px 2px; /* comfortable tap targets */
 }
 
-.footer-meta a:hover {
+.site-footer a:hover {
   color: var(--tiffany-deep);
 }
 
