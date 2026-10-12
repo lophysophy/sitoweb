@@ -1,6 +1,8 @@
 ---
 import Base from '../../layouts/Base.astro';
 import Artwork from '../../components/Artwork.astro';
+import FilmFacade from '../../components/FilmFacade.astro';
+import ClipToggle from '../../components/ClipToggle.astro';
 import { categories, pairRows, projectUrl, type Project } from '../../lib/portfolio';
 import { responsive } from '../../lib/images';
 
@@ -37,6 +39,8 @@ const rows = pairRows(project.items);
 // (syncGroup), so their clips must not autoplay on their own.
 const synced = (row: { base: { type: string }; variants: { type: string }[] }) =>
   [row.base, ...row.variants].filter((p) => p.type === 'video').length >= 2;
+const hasClip = (row: { base: { type: string }; variants: { type: string }[] }) =>
+  [row.base, ...row.variants].some((p) => p.type === 'video');
 // Animation projects get a gap between rows (clips read as separate shots).
 const spaced = cat.slug === 'animation';
 
@@ -60,6 +64,9 @@ const pager = await Promise.all(
 if (next && next === prev) pager[0].dir = 'Next';
 ---
 <Base title={project.title} description={description} current={cat.slug} image={project.coverImage}>
+  <Fragment slot="head">
+    {[next, prev].filter(Boolean).map((p) => <link rel="prefetch" href={projectUrl(p!)} />)}
+  </Fragment>
   <article data-project>
     <header class="page-head project-head">
       <p class="kicker"><a class="crumb" href={cat.url}>{cat.title}</a></p>
@@ -85,6 +92,12 @@ if (next && next === prev) pager[0].dir = 'Next';
               {row.variants.map((v, k) => (
                 <Artwork piece={v} alt={`${project.title}, piece ${n + 1}, variant ${k + 1}`} sizes={`${Math.round(100 / (row.variants.length + 1))}vw`} zoom autoplay={!synced(row)} loop={!synced(row)} />
               ))}
+              {hasClip(row) && <ClipToggle />}
+            </div>
+          ) : row.base.type === 'video' ? (
+            <div class="clip">
+              <Artwork piece={row.base} alt={`${project.title}, piece ${n + 1}`} />
+              <ClipToggle />
             </div>
           ) : (
             <Artwork piece={row.base} alt={`${project.title}, piece ${n + 1}`} zoom eager={n === 0} />
@@ -107,12 +120,7 @@ if (next && next === prev) pager[0].dir = 'Next';
     {info.youtube && (
       <section class="video-block">
         <h2 class="kicker video-heading">Watch the full film</h2>
-        <div class="video-frame">
-          <button class="yt-facade" type="button" data-youtube={info.youtube} data-title={`${project.title}, film`} aria-label={`Play ${project.title}, full film`}>
-            <img src={`https://i.ytimg.com/vi/${info.youtube}/maxresdefault.jpg`} alt="" loading="lazy" onload={`if(this.naturalWidth<=120&&!this.dataset.fb){this.dataset.fb=1;this.src='https://i.ytimg.com/vi/${info.youtube}/sddefault.jpg'}`} onerror={`this.onerror=null;this.src='https://i.ytimg.com/vi/${info.youtube}/sddefault.jpg'`} />
-            <span class="yt-play" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M4 2.5v11l9-5.5z" /></svg></span>
-          </button>
-        </div>
+        <FilmFacade id={info.youtube} title={`${project.title}, film`} label={`Play ${project.title}, full film`} />
       </section>
     )}
 

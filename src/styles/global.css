@@ -1807,3 +1807,89 @@ html.lightbox-open {
     display: none;
   }
 }
+
+/* Pause / play over project clips: quiet until the pointer or focus is on the
+   clip, and kept visible while paused so it's easy to resume. */
+.clip,
+.pair-row {
+  position: relative;
+}
+
+.pair-row > .clip-toggle,
+.clip-toggle {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  z-index: 1;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(16, 48, 46, 0.55);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  color: var(--white);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s ease, background-color 0.3s ease;
+}
+
+.clip-toggle svg {
+  width: 12px;
+  height: 12px;
+  fill: currentColor;
+}
+
+.clip-toggle .i-play,
+.clip-toggle.is-paused .i-pause {
+  display: none;
+}
+
+.clip-toggle.is-paused .i-play {
+  display: block;
+}
+
+.clip:hover .clip-toggle,
+.pair-row:hover .clip-toggle,
+.clip-toggle:focus-visible,
+.clip-toggle.is-paused {
+  opacity: 1;
+}
+
+.clip-toggle:hover {
+  background: var(--ink);
+}
+
+@media (hover: none) {
+  .clip-toggle {
+    opacity: 0.85;
+  }
+}
+
+/* Soft placeholder while a piece loads, instead of an empty white gap. */
+.gallery img,
+.story-grid img {
+  background: var(--aqua-mist);
+}
+
+/* Home rhythm: more air between categories, each title close to its work. */
+.discipline {
+  padding-top: 112px;
+}
+
+.discipline-head {
+  margin-bottom: 24px;
+}
+
+.mosaic {
+  margin-top: 0;
+}
+
+/* The film follows the pieces closely, so the page doesn't seem to end. */
+.video-block {
+  margin-top: 48px;
+}

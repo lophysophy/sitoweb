@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import FilmFacade from '../components/FilmFacade.astro';
 import { SITE } from '../lib/site';
 ---
 <Base title="Showreel" description="2025 animation showreel by Sofia Lucarelli, alias Lophy Sophy. 2D character animation demo reel." current="showreel">
@@ -9,14 +10,7 @@ import { SITE } from '../lib/site';
   </section>
 
   <section class="reel-stage">
-    <div class="video-frame">
-      <iframe
-        src={`https://www.youtube-nocookie.com/embed/${SITE.showreelId}?autoplay=1&mute=1&rel=0&playsinline=1`}
-        title="2025 showreel by Sofia Lucarelli"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        referrerpolicy="strict-origin-when-cross-origin"
-        allowfullscreen></iframe>
-    </div>
+    <FilmFacade id={SITE.showreelId} title="2025 showreel by Sofia Lucarelli" label="Play the 2025 showreel" eager />
   </section>
 
   <section class="intro reel-notes">
@@ -25,4 +19,8 @@ import { SITE } from '../lib/site';
       <a class="btn" href="/animation/">See the animation projects</a>
     </p>
   </section>
+
+  <script>
+    import '../scripts/gallery';
+  </script>
 </Base>

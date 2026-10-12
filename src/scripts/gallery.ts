@@ -149,8 +149,9 @@ function syncGroup(vids: HTMLVideoElement[]) {
   const master = vids[0];
   let started = false, visible = true;
   const seen: boolean[] = [];
+  const box = master.parentElement as HTMLElement;
   function startAll() {
-    if (!visible) return;
+    if (!visible || box.dataset.paused === 'true') return;
     vids.forEach((v) => { try { v.currentTime = 0; } catch {} });
     vids.forEach(play);
   }
@@ -161,6 +162,9 @@ function syncGroup(vids: HTMLVideoElement[]) {
     if (vids.every((_v, i) => seen[i])) { started = true; startAll(); }
   }
   master.addEventListener('ended', startAll);
+  // The row's pause button resumes through here, so the clips restart together.
+  box.dataset.synced = 'true';
+  box.addEventListener('clip-resume', () => { if (started) startAll(); });
   vids.forEach((v, idx) => {
     if (v.readyState >= 3) { markReady(idx); return; }
     const on = () => markReady(idx);
@@ -188,10 +192,29 @@ function wireSoloClips(root: HTMLElement) {
   const io = new IntersectionObserver((entries) => {
     entries.forEach((e) => {
       const v = e.target as HTMLVideoElement;
-      if (e.isIntersecting) play(v); else v.pause();
+      if (!e.isIntersecting) v.pause();
+      else if ((v.parentElement as HTMLElement).dataset.paused !== 'true') play(v);
     });
   }, { rootMargin: '200px 0px' });
-  root.querySelectorAll<HTMLVideoElement>('.project-gallery > video').forEach((v) => io.observe(v));
+  root.querySelectorAll<HTMLVideoElement>('.clip > video').forEach((v) => io.observe(v));
+}
+
+// Pause / play buttons: one per clip, one per side-by-side row (the row's clips
+// pause together, so they stay in sync when they resume).
+function wireClipToggles(root: HTMLElement) {
+  root.querySelectorAll<HTMLButtonElement>('.clip-toggle').forEach((btn) => {
+    const box = btn.parentElement as HTMLElement;
+    const vids = Array.from(box.querySelectorAll('video'));
+    btn.addEventListener('click', () => {
+      const paused = box.dataset.paused !== 'true';
+      box.dataset.paused = String(paused);
+      btn.setAttribute('aria-pressed', String(paused));
+      btn.classList.toggle('is-paused', paused);
+      if (paused) vids.forEach((v) => v.pause());
+      else if (box.dataset.synced === 'true') box.dispatchEvent(new Event('clip-resume'));
+      else vids.forEach(play);
+    });
+  });
 }
 
 // ---- Lightbox --------------------------------------------------------------
@@ -295,6 +318,7 @@ if (project && reduceMotion) {
     v.controls = true;
     v.preload = 'metadata';
   });
+  project.querySelectorAll('.clip-toggle').forEach((b) => b.remove()); // native controls instead
   wireLightbox(project);
 } else if (project) {
   project.querySelectorAll('.pair-row').forEach((row) => {
@@ -302,6 +326,7 @@ if (project && reduceMotion) {
     if (vids.length >= 2) syncGroup(vids);
   });
   wireSoloClips(project);
+  wireClipToggles(project);
   wireLightbox(project);
 }
 wireFilms(document);

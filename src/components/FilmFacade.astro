@@ -1,0 +1,19 @@
+---
+// A YouTube film that loads only when asked for: a still and a play button
+// until clicked, then the player starts (with sound, since the click allows it).
+interface Props { id: string; title: string; label?: string; eager?: boolean }
+const { id, title, label = `Play ${title}`, eager = false } = Astro.props;
+const still = (q: string) => `https://i.ytimg.com/vi/${id}/${q}.jpg`;
+---
+<div class="video-frame">
+  <button class="yt-facade" type="button" data-youtube={id} data-title={title} aria-label={label}>
+    <img
+      src={still('maxresdefault')}
+      alt=""
+      loading={eager ? 'eager' : 'lazy'}
+      onload={`if(this.naturalWidth<=120&&!this.dataset.fb){this.dataset.fb=1;this.src='${still('sddefault')}'}`}
+      onerror={`this.onerror=null;this.src='${still('sddefault')}'`}
+    />
+    <span class="yt-play" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M4 2.5v11l9-5.5z" /></svg></span>
+  </button>
+</div>
