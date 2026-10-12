@@ -14,7 +14,9 @@
   v.src = (av1 && (mobile ? d.mobileAv1 : d.desktopAv1)) || h264;
   // If the AV1 file can't be played after all, fall back to H.264 once.
   v.addEventListener('error', () => {
-    if (v.getAttribute('src') !== h264) { v.src = h264; v.play().catch(() => {}); }
+    if (v.getAttribute('src') === h264) return;
+    v.src = h264;
+    if (!toggle?.classList.contains('is-paused')) v.play().catch(() => {});
   });
 
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -24,7 +26,6 @@
     if (paused) v!.pause();
     else { const p = v!.play(); if (p && p.catch) p.catch(() => {}); }
     toggle?.setAttribute('aria-pressed', paused ? 'true' : 'false');
-    toggle?.setAttribute('aria-label', paused ? 'Play intro animation' : 'Pause intro animation');
     toggle?.classList.toggle('is-paused', paused);
   }
 

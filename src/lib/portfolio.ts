@@ -83,7 +83,7 @@ export interface Category extends CategoryConfig {
 
 const ROOT = '/src/work/';
 
-const imageFiles = import.meta.glob<ImageMetadata>('/src/work/**/*.{avif,AVIF,png,PNG,jpg,JPG,jpeg,JPEG,webp,WEBP}', {
+const imageFiles = import.meta.glob<ImageMetadata>('/src/work/**/*.{avif,AVIF,png,PNG,jpg,JPG,jpeg,JPEG,webp,WEBP,gif,GIF}', {
   eager: true,
   import: 'default',
 });

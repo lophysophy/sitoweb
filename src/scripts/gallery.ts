@@ -214,6 +214,7 @@ function wireLightbox(root: HTMLElement) {
     big.src = group[idx].dataset.zoom!;
     big.alt = group[idx].alt;
     count.textContent = group.length > 1 ? `${idx + 1} / ${group.length}` : '';
+    dlg.classList.toggle('is-single', group.length < 2);
   }
   function open(img: HTMLImageElement) {
     // Navigate within the block the image belongs to (the main gallery or one

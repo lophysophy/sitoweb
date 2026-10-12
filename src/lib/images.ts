@@ -15,6 +15,8 @@ const url = (s: string) => encodeURI(decodeURI(s));
 // Smaller copies are generated for phones and grids; the largest entry is always
 // the original file, served untouched, so full-screen views keep every detail.
 export async function responsive(img: ImageMetadata, widths: number[]): Promise<Responsive> {
+  // Animated GIFs would lose their motion if resized: serve them as they are.
+  if (img.format === 'gif') return { src: url(img.src), srcset: '', width: img.width, height: img.height };
   const ws = widths.filter((w) => w < img.width * 0.9);
   const variants = await Promise.all(
     ws.map((w) => getImage({ src: img, width: w, format: 'avif', quality: 62 })),
@@ -25,7 +27,7 @@ export async function responsive(img: ImageMetadata, widths: number[]): Promise<
 
 /** A single resized copy (used where a plain src is needed, e.g. hover cycling). */
 export async function resized(img: ImageMetadata, width: number) {
-  if (width >= img.width * 0.9) return url(img.src);
+  if (width >= img.width * 0.9 || img.format === 'gif') return url(img.src);
   return url((await getImage({ src: img, width, format: 'avif', quality: 62 })).src);
 }
 

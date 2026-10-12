@@ -33,6 +33,10 @@ const meta = [
 ].filter(([, v]) => v != null && v !== '') as [string, string | number][];
 
 const rows = pairRows(project.items);
+// Rows with two or more clips are started together by the page script
+// (syncGroup), so their clips must not autoplay on their own.
+const synced = (row: { base: { type: string }; variants: { type: string }[] }) =>
+  [row.base, ...row.variants].filter((p) => p.type === 'video').length >= 2;
 // Animation projects get a gap between rows (clips read as separate shots).
 const spaced = cat.slug === 'animation';
 
@@ -77,9 +81,9 @@ if (next && next === prev) pager[0].dir = 'Next';
         {rows.map((row, n) =>
           row.variants.length ? (
             <div class="pair-row">
-              <Artwork piece={row.base} alt={`${project.title}, piece ${n + 1}`} sizes={`${Math.round(100 / (row.variants.length + 1))}vw`} zoom />
+              <Artwork piece={row.base} alt={`${project.title}, piece ${n + 1}`} sizes={`${Math.round(100 / (row.variants.length + 1))}vw`} zoom autoplay={!synced(row)} loop={!synced(row)} />
               {row.variants.map((v, k) => (
-                <Artwork piece={v} alt={`${project.title}, piece ${n + 1}, variant ${k + 1}`} sizes={`${Math.round(100 / (row.variants.length + 1))}vw`} zoom />
+                <Artwork piece={v} alt={`${project.title}, piece ${n + 1}, variant ${k + 1}`} sizes={`${Math.round(100 / (row.variants.length + 1))}vw`} zoom autoplay={!synced(row)} loop={!synced(row)} />
               ))}
             </div>
           ) : (
@@ -105,7 +109,7 @@ if (next && next === prev) pager[0].dir = 'Next';
         <h2 class="kicker video-heading">Watch the full film</h2>
         <div class="video-frame">
           <button class="yt-facade" type="button" data-youtube={info.youtube} data-title={`${project.title}, film`} aria-label={`Play ${project.title}, full film`}>
-            <img src={`https://i.ytimg.com/vi/${info.youtube}/maxresdefault.jpg`} alt="" loading="lazy" onerror={`this.onerror=null;this.src='https://i.ytimg.com/vi/${info.youtube}/hqdefault.jpg'`} />
+            <img src={`https://i.ytimg.com/vi/${info.youtube}/maxresdefault.jpg`} alt="" loading="lazy" onload={`if(this.naturalWidth<=120&&!this.dataset.fb){this.dataset.fb=1;this.src='https://i.ytimg.com/vi/${info.youtube}/sddefault.jpg'}`} onerror={`this.onerror=null;this.src='https://i.ytimg.com/vi/${info.youtube}/sddefault.jpg'`} />
             <span class="yt-play" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M4 2.5v11l9-5.5z" /></svg></span>
           </button>
         </div>
@@ -128,8 +132,8 @@ if (next && next === prev) pager[0].dir = 'Next';
       <p class="back-row"><a class="btn" href={cat.url}>All of {cat.title}</a></p>
     </nav>
   </article>
-</Base>
 
-<script>
-  import '../../scripts/gallery';
-</script>
+  <script>
+    import '../../scripts/gallery';
+  </script>
+</Base>

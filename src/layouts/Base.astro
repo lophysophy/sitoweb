@@ -17,9 +17,10 @@ interface Props {
   current?: string;
   home?: boolean;
   jsonLd?: object;
+  noindex?: boolean;
 }
 
-const { title, description = SITE.description, image, current, home = false, jsonLd } = Astro.props;
+const { title, description = SITE.description, image, current, home = false, jsonLd, noindex = false } = Astro.props;
 const fullTitle = title ? `${title} · ${SITE.name}` : SITE.name;
 const canonical = new URL(Astro.url.pathname, SITE.url).href;
 const ogImage = image ? new URL(await socialImage(image), SITE.url).href : new URL('/media/og.jpg', SITE.url).href;
@@ -33,7 +34,7 @@ const icon180 = await getImage({ src: favicon, width: 180, height: 180, format: 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{fullTitle}</title>
   <meta name="description" content={description}>
-  <link rel="canonical" href={canonical}>
+  {noindex ? <meta name="robots" content="noindex"> : <link rel="canonical" href={canonical}>}
   <link rel="icon" type="image/png" sizes="32x32" href={icon32.src}>
   <link rel="apple-touch-icon" href={icon180.src}>
   <meta name="theme-color" content="#ffffff">

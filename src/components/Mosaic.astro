@@ -15,7 +15,7 @@ const projects = category.projects.slice(0, category.homeLimit);
     const ar = cover.width && cover.height ? (cover.width / cover.height).toFixed(4) : undefined;
     return (
       <a class="tile" href={projectUrl(proj)} style={ar ? `--ar:${ar}` : undefined}>
-        <Artwork piece={cover} alt="" sizes="(max-width: 768px) 100vw, 800px" widths={[800, 1280]} />
+        <Artwork piece={cover} alt="" sizes="(max-width: 768px) 100vw, 42vw" widths={[800, 1280, 1920]} />
         <span class="tile-overlay"><span class="tile-label">{proj.title}</span></span>
       </a>
     );

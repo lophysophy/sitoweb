@@ -11,7 +11,10 @@ const { category } = Astro.props;
 
 const cells = await Promise.all(
   category.projects.map(async (proj) => {
-    const list = proj.preview.length ? proj.preview : proj.items;
+    const all = proj.preview.length ? proj.preview : proj.items;
+    // A cell cycles pieces of the same kind as its cover: stills swap in one
+    // <img>, clips stack as <video> layers (a clip can't play inside an <img>).
+    const list = all.filter((p) => p.type === all[0].type);
     // Hover frames use one mid-size copy each: enough for a half-screen cell.
     const frames = await Promise.all(list.map((p) => (p.image ? resized(p.image, 1280) : Promise.resolve(p.src))));
     return { proj, cover: list[0], frames };

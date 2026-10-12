@@ -1133,6 +1133,15 @@ body.nav-pinned .hero-corners .corner-right a:hover {
 }
 
 .lightbox-prev { left: 20px; }
+
+.lightbox.is-single .lightbox-prev,
+.lightbox.is-single .lightbox-next {
+  display: none;
+}
+
+.lightbox-img:focus {
+  outline: none;
+}
 .lightbox-next { right: 20px; }
 
 .lightbox-close {

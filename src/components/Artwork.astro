@@ -13,8 +13,9 @@ interface Props {
   /** Lets the image open full screen in the lightbox. */
   zoom?: boolean;
   eager?: boolean;
-  /** Extra attributes for <video> (e.g. no autoplay). */
+  /** <video> only: synced pair rows start paused and let the script loop them. */
   autoplay?: boolean;
+  loop?: boolean;
 }
 
 const {
@@ -26,6 +27,7 @@ const {
   zoom = false,
   eager = false,
   autoplay = true,
+  loop = true,
 } = Astro.props;
 
 const r = piece.image ? await responsive(piece.image, widths) : null;
@@ -34,8 +36,8 @@ const r = piece.image ? await responsive(piece.image, widths) : null;
   <img
     class={cls}
     src={r.src}
-    srcset={r.srcset}
-    sizes={sizes}
+    srcset={r.srcset || undefined}
+    sizes={r.srcset ? sizes : undefined}
     width={r.width}
     height={r.height}
     alt={alt}
@@ -51,10 +53,11 @@ const r = piece.image ? await responsive(piece.image, widths) : null;
     width={piece.width}
     height={piece.height}
     autoplay={autoplay}
-    loop
+    loop={loop}
     muted
     playsinline
     preload="metadata"
-    aria-label={alt}
+    aria-label={alt || undefined}
+    aria-hidden={alt ? undefined : 'true'}
   ></video>
 )}
