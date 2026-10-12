@@ -1,9 +1,9 @@
 ---
-// Two layouts share this component:
-// - Inner pages: a sticky white bar (name, categories, Showreel/About).
-// - Homepage: the name (left) and Showreel/About (right) float fixed over the
-//   full-screen intro; the category bar lives below the hero (HomeCategoryBar)
-//   and when it pins on scroll, the corners merge with it into one bar.
+// Floating nav: one glass pill holding the name and every section. A soft
+// indicator glides to the hovered link and settles back on the current page.
+// It steps aside while scrolling down through the work and returns on the way
+// up. Over the homepage intro it turns to dark glass. On phones the links fold
+// into a floating card behind the hamburger.
 import { CATEGORIES } from '../lib/site';
 
 interface Props { home?: boolean; current?: string }
@@ -16,39 +16,23 @@ const main = [
 ];
 const aria = (key: string) => (key === current ? 'page' : undefined);
 ---
-{home ? (
-  <div class="hero-corners">
-    <div class="corners-inner">
-      <a class="wordmark" href="/">Lophy Sophy<span class="wordmark-sub">Sofia Lucarelli</span></a>
-      <nav class="site-nav corner-right" aria-label="Main navigation">
-        {main.map((l) => <a href={l.href} aria-current={aria(l.key)}>{l.label}</a>)}
-      </nav>
-      <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
+<header class:list={['nav', { 'nav--hero': home }]} data-nav>
+  <div class="nav-pill">
+    <a class="wordmark" href="/">Lophy Sophy<span class="wordmark-sub">Sofia Lucarelli</span></a>
+    <nav class="nav-links" aria-label="Main navigation">
+      <span class="nav-indicator" aria-hidden="true"></span>
+      {cats.map((l) => <a href={l.href} aria-current={aria(l.key)}>{l.label}</a>)}
+      <span class="nav-divider" aria-hidden="true"></span>
+      {main.map((l) => <a href={l.href} aria-current={aria(l.key)}>{l.label}</a>)}
+    </nav>
+    <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+      <span></span><span></span><span></span>
+    </button>
   </div>
-) : (
-  <header class="site-header">
-    <div class="header-inner">
-      <div class="header-side">
-        <a class="wordmark" href="/">Lophy Sophy<span class="wordmark-sub">Sofia Lucarelli</span></a>
-      </div>
-      <nav class="site-nav nav-center" aria-label="Work categories">
-        {cats.map((l) => <a href={l.href} aria-current={aria(l.key)}>{l.label}</a>)}
-      </nav>
-      <nav class="site-nav header-side right" aria-label="Main navigation">
-        {main.map((l) => <a href={l.href} aria-current={aria(l.key)}>{l.label}</a>)}
-      </nav>
-      <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </header>
-)}
+</header>
 
-<nav class:list={['mobile-menu', { 'mobile-menu--hero': home }]} id="mobile-menu" aria-label="All sections" inert>
-  <div class="mobile-menu-inner">
-    {[...cats, ...main].map((l) => <a href={l.href} aria-current={aria(l.key)}>{l.label}</a>)}
-  </div>
+<nav class="mobile-menu" id="mobile-menu" aria-label="All sections" inert>
+  {[...cats, ...main].map((l, i) => (
+    <a href={l.href} aria-current={aria(l.key)} style={`--i:${i}`}>{l.label}</a>
+  ))}
 </nav>

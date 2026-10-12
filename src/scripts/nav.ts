@@ -1,51 +1,68 @@
-// Homepage: once the category bar reaches the top, mark the page as pinned so the
-// fixed corners (name + Showreel/About) gain a solid background and read as one
-// bar with the categories. On mobile this also gives the name a solid bar.
+// Floating nav behaviour: the gliding indicator, hide-on-scroll-down, the dark
+// glass over the homepage intro, and the phone menu card.
 (function () {
-  const hero = document.querySelector<HTMLElement>('.hero');
-  const corners = document.querySelector<HTMLElement>('.hero-corners');
-  if (!hero || !corners) return;
-  let ticking = false;
-  function update() {
-    ticking = false;
-    const threshold = hero!.offsetHeight - corners!.offsetHeight;
-    document.body.classList.toggle('nav-pinned', window.scrollY >= threshold);
-  }
-  window.addEventListener('scroll', () => {
-    if (!ticking) { ticking = true; requestAnimationFrame(update); }
-  }, { passive: true });
-  window.addEventListener('resize', update);
-  update();
-})();
-
-// Mobile dropdown menu (hamburger) holding every section.
-(function () {
-  const btn = document.querySelector<HTMLButtonElement>('.menu-toggle');
+  const nav = document.querySelector<HTMLElement>('[data-nav]');
+  if (!nav) return;
+  const links = nav.querySelector<HTMLElement>('.nav-links');
+  const indicator = nav.querySelector<HTMLElement>('.nav-indicator');
+  const btn = nav.querySelector<HTMLButtonElement>('.menu-toggle');
   const menu = document.getElementById('mobile-menu');
-  if (!btn || !menu) return;
-  const inner = menu.querySelector<HTMLElement>('.mobile-menu-inner') || menu;
-  const isOpen = () => menu.classList.contains('open');
 
+  // ---- Indicator: glides to the hovered/focused link, rests on the current one.
+  if (links && indicator) {
+    const current = links.querySelector<HTMLElement>('a[aria-current="page"]');
+    const moveTo = (a: HTMLElement | null, instant = false) => {
+      if (!a) { indicator.style.opacity = '0'; return; }
+      if (instant) indicator.style.transition = 'none';
+      indicator.style.opacity = '1';
+      indicator.style.width = a.offsetWidth + 'px';
+      indicator.style.transform = `translateX(${a.offsetLeft}px)`;
+      if (instant) { void indicator.offsetWidth; indicator.style.transition = ''; }
+    };
+    const rest = () => moveTo(current);
+    links.querySelectorAll<HTMLElement>('a').forEach((a) => {
+      a.addEventListener('mouseenter', () => moveTo(a));
+      a.addEventListener('focus', () => moveTo(a));
+    });
+    links.addEventListener('mouseleave', rest);
+    links.addEventListener('focusout', (e) => { if (!links.contains(e.relatedTarget as Node)) rest(); });
+    // Place it once fonts have settled the link widths, without animating in.
+    const place = () => moveTo(current, true);
+    place();
+    document.fonts?.ready.then(place);
+    window.addEventListener('resize', place);
+  }
+
+  // ---- Scroll: step aside going down, come back going up. -------------------
+  const hero = document.querySelector<HTMLElement>('.hero');
+  let lastY = window.scrollY;
+  function onScroll() {
+    const y = window.scrollY;
+    const menuOpen = menu?.classList.contains('open');
+    const focused = nav!.contains(document.activeElement);
+    if (!menuOpen && !focused && y > 160 && y - lastY > 6) nav!.classList.add('nav--hidden');
+    else if (lastY - y > 6 || y <= 160) nav!.classList.remove('nav--hidden');
+    nav!.classList.toggle('nav--scrolled', y > 8);
+    if (hero) nav!.classList.toggle('nav--hero', y < hero.offsetHeight - nav!.offsetHeight - 24);
+    if (Math.abs(y - lastY) > 6) lastY = y;
+  }
+  // Only class toggles happen here, so running on every scroll event is cheap.
+  window.addEventListener('scroll', onScroll, { passive: true });
+  nav.addEventListener('focusin', () => nav.classList.remove('nav--hidden'));
+  onScroll();
+
+  // ---- Phone menu card -------------------------------------------------------
+  if (!btn || !menu) return;
+  const isOpen = () => menu.classList.contains('open');
   function setOpen(open: boolean, restoreFocus = false) {
     btn!.classList.toggle('open', open);
     menu!.classList.toggle('open', open);
+    nav!.classList.toggle('nav--menu', open);
     btn!.setAttribute('aria-expanded', open ? 'true' : 'false');
     btn!.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
     menu!.inert = !open; // closed links stay out of the tab order
-    if (open) {
-      document.body.classList.add('menu-open');
-      // Animate to the panel's exact height (plus room for its shadow).
-      menu!.style.maxHeight = inner.scrollHeight + 36 + 'px';
-    } else {
-      menu!.style.maxHeight = '0px';
-      // Keep .menu-open (white sheet + dark name) until the sheet finishes
-      // rolling up, so the bar and dropdown collapse as one continuous piece.
-      if (restoreFocus) btn!.focus();
-    }
+    if (!open && restoreFocus) btn!.focus();
   }
-  menu.addEventListener('transitionend', (e) => {
-    if (e.propertyName === 'max-height' && !isOpen()) document.body.classList.remove('menu-open');
-  });
   btn.addEventListener('click', (e) => {
     e.stopPropagation();
     setOpen(!isOpen());
@@ -57,4 +74,5 @@
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && isOpen()) setOpen(false, true);
   });
+  window.matchMedia('(min-width: 769px)').addEventListener('change', (m) => { if (m.matches) setOpen(false); });
 })();
