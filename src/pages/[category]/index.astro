@@ -13,7 +13,7 @@ const cover = category.projects[0]?.coverImage;
 <Base title={category.title} description={category.description} current={category.slug} image={cover}>
   <section class="page-head">
     <h1 class="page-title">{category.title}</h1>
-    <p class="chip-row">{category.tags.map((t) => <span class="chip">{t}</span>)}</p>
+    <p class="kicker tag-line">{category.tags.map((t, i, all) => <><span>{t}{i < all.length - 1 && ' ·'}</span>{i < all.length - 1 && ' '}</>)}</p>
   </section>
 
   <section class="intro">

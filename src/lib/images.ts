@@ -10,7 +10,8 @@ export interface Responsive {
 
 // File names keep their spaces and accents; URLs must be encoded, above all
 // inside srcset, where a raw space would split the entry.
-const url = (s: string) => encodeURI(decodeURI(s));
+// (Dev-server /_image URLs come already encoded and are left alone.)
+const url = (s: string) => (s.startsWith('/_image') ? s : encodeURI(decodeURI(s)));
 
 // Smaller copies are generated for phones and grids; the largest entry is always
 // the original file, served untouched, so full-screen views keep every detail.

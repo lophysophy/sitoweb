@@ -41,14 +41,18 @@ function wireMosaic(m: HTMLElement) {
     }
     // On hover grow to max(current width, full image width): reveals the whole
     // image and never shrinks a tile that already has room.
-    tile.addEventListener('mouseenter', () => {
+    const grow = () => {
       if (getComputedStyle(m).flexDirection !== 'row') return;
       const ar = parseFloat(tile.style.getPropertyValue('--ar')) || 1.5;
       const rowH = parseFloat(getComputedStyle(m).height) || 0;
       const target = Math.max(tile.getBoundingClientRect().width, rowH * ar);
       if (target > 0) tile.style.flex = '0 0 ' + target + 'px';
-    });
-    tile.addEventListener('mouseleave', () => { tile.style.flex = ''; });
+    };
+    const rest = () => { tile.style.flex = ''; };
+    tile.addEventListener('mouseenter', grow);
+    tile.addEventListener('mouseleave', rest);
+    tile.addEventListener('focus', grow); // keyboard users get the same reveal
+    tile.addEventListener('blur', rest);
   });
   fitMosaic(m);
 }
@@ -280,8 +284,19 @@ document.querySelectorAll<HTMLElement>('[data-mosaic]').forEach(wireMosaic);
 window.addEventListener('resize', () => document.querySelectorAll<HTMLElement>('[data-mosaic]').forEach(fitMosaic));
 document.querySelectorAll<HTMLElement>('.grid-cell').forEach(wireCycle);
 
+// Reduced motion: project clips start paused with their own controls.
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 const project = document.querySelector<HTMLElement>('[data-project]');
-if (project) {
+if (project && reduceMotion) {
+  project.querySelectorAll<HTMLVideoElement>('video').forEach((v) => {
+    v.autoplay = false;
+    v.pause();
+    v.controls = true;
+    v.preload = 'metadata';
+  });
+  wireLightbox(project);
+} else if (project) {
   project.querySelectorAll('.pair-row').forEach((row) => {
     const vids = Array.from(row.querySelectorAll('video'));
     if (vids.length >= 2) syncGroup(vids);
