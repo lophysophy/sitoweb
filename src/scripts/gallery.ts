@@ -219,52 +219,165 @@ function wireClipToggles(root: HTMLElement) {
 
 // ---- Lightbox --------------------------------------------------------------
 // Every still on a project page opens full screen; arrows, swipe and Esc work.
+// Opening is a shared-element zoom: the piece lifts off the page from exactly
+// where it sits and grows to full screen; closing sets it back in its place.
+// The thumbnail already on screen is shown first (no blank frame), and the
+// full-resolution file replaces it as soon as it's decoded.
 function wireLightbox(root: HTMLElement) {
   const imgs = Array.from(root.querySelectorAll<HTMLImageElement>('img[data-zoom]'));
   if (!imgs.length) return;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const EASE = 'cubic-bezier(0.2, 0.8, 0.2, 1)';
+
   const dlg = document.createElement('dialog');
   dlg.className = 'lightbox';
   dlg.setAttribute('aria-label', 'Image viewer');
   dlg.innerHTML =
+    '<div class="lightbox-scrim"></div>' +
     '<img class="lightbox-img" alt="" tabindex="-1" autofocus>' +
     '<button class="lightbox-btn lightbox-close" type="button" aria-label="Close">×</button>' +
     '<button class="lightbox-btn lightbox-prev" type="button" aria-label="Previous image">‹</button>' +
     '<button class="lightbox-btn lightbox-next" type="button" aria-label="Next image">›</button>' +
     '<p class="lightbox-count" aria-live="polite"></p>';
   document.body.appendChild(dlg);
+  const scrim = dlg.querySelector<HTMLElement>('.lightbox-scrim')!;
   const big = dlg.querySelector<HTMLImageElement>('.lightbox-img')!;
   const count = dlg.querySelector<HTMLElement>('.lightbox-count')!;
-  let group: HTMLImageElement[] = [], idx = 0, opener: HTMLElement | null = null;
+  const chrome = Array.from(dlg.querySelectorAll<HTMLElement>('.lightbox-btn, .lightbox-count'));
+  let group: HTMLImageElement[] = [], idx = 0, opener: HTMLElement | null = null, busy = false;
 
-  function show(i: number) {
-    idx = (i + group.length) % group.length;
-    big.src = group[idx].dataset.zoom!;
-    big.alt = group[idx].alt;
+  // Size the full view from the original's dimensions (the width/height
+  // attributes), never upscaling past the original.
+  function fit(img: HTMLImageElement) {
+    const w = Number(img.getAttribute('width')) || img.naturalWidth;
+    const h = Number(img.getAttribute('height')) || img.naturalHeight;
+    const desktop = window.innerWidth > 768;
+    const maxW = desktop ? Math.min(window.innerWidth * 0.92, window.innerWidth - 160) : window.innerWidth - 16;
+    const maxH = desktop ? window.innerHeight * 0.88 : window.innerHeight - 128;
+    const k = Math.min(maxW / w, maxH / h, 1);
+    return [Math.round(w * k), Math.round(h * k)];
+  }
+
+  function setImage(img: HTMLImageElement) {
+    const [w, h] = fit(img);
+    big.style.width = w + 'px';
+    big.style.height = h + 'px';
+    big.alt = img.alt;
+    big.src = img.currentSrc || img.src; // already decoded: appears instantly
+    const full = new URL(img.dataset.zoom!, location.href).href;
+    if (full !== big.src) {
+      const pre = new Image();
+      pre.src = full;
+      pre.decode().then(() => { if (group[idx] === img) big.src = full; }).catch(() => {});
+    }
     count.textContent = group.length > 1 ? `${idx + 1} / ${group.length}` : '';
     dlg.classList.toggle('is-single', group.length < 2);
   }
+
+  // The transform that places the full view exactly over the thumbnail. When
+  // the thumbnail is a crop (object-fit: cover), the full view is scaled to
+  // cover the same box and clipped to it, so the motion starts from the crop.
+  function fromThumb(thumb: HTMLImageElement) {
+    const a = thumb.getBoundingClientRect();
+    const b = big.getBoundingClientRect();
+    const k = Math.max(a.width / b.width, a.height / b.height);
+    const dx = a.left + a.width / 2 - (b.left + b.width / 2);
+    const dy = a.top + a.height / 2 - (b.top + b.height / 2);
+    const ix = Math.max(0, (b.width - a.width / k) / 2);
+    const iy = Math.max(0, (b.height - a.height / k) / 2);
+    return [
+      { transform: `translate(${dx}px, ${dy}px) scale(${k})`, clipPath: `inset(${iy}px ${ix}px)`, boxShadow: '0 0 0 rgba(0,0,0,0)' },
+      { transform: 'none', clipPath: 'inset(0px 0px)', boxShadow: '0 20px 60px rgba(0,0,0,0.5)' },
+    ];
+  }
+
+  const inView = (el: Element) => {
+    const r = el.getBoundingClientRect();
+    return r.bottom > 0 && r.top < window.innerHeight && r.width > 0;
+  };
+
   function open(img: HTMLImageElement) {
+    if (busy || dlg.open) return;
     // Navigate within the block the image belongs to (the main gallery or one
     // storyboard grid), in page order.
     const scope = img.closest('[data-zoom-group]') || root;
     group = imgs.filter((i) => scope.contains(i));
+    idx = group.indexOf(img);
     opener = img;
-    show(group.indexOf(img));
+    setImage(img);
     dlg.showModal();
     document.documentElement.classList.add('lightbox-open');
+    if (reduce) return;
+
+    busy = true;
+    img.style.visibility = 'hidden'; // the piece "lifts off" the page
+    scrim.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 420, easing: 'ease', fill: 'both' });
+    chrome.forEach((el) => el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 260, delay: 300, fill: 'both' }));
+    const anim = big.animate(fromThumb(img), { duration: 520, easing: EASE, fill: 'both' });
+    anim.finished.then(() => { img.style.visibility = ''; busy = false; }, () => { img.style.visibility = ''; busy = false; });
   }
+
+  function close() {
+    if (!dlg.open || busy) return;
+    const thumb = group[idx];
+    if (reduce) { dlg.close(); return; }
+
+    busy = true;
+    big.getAnimations().forEach((a) => a.cancel());
+    const back = thumb && inView(thumb);
+    if (back) thumb.style.visibility = 'hidden';
+    scrim.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 380, easing: 'ease', fill: 'both' });
+    chrome.forEach((el) => el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 140, fill: 'both' }));
+    const anim = back
+      ? big.animate(fromThumb(thumb).reverse(), { duration: 440, easing: EASE, fill: 'both' })
+      : big.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'scale(0.96)' }], { duration: 260, easing: 'ease', fill: 'both' });
+    const done = () => {
+      if (thumb) thumb.style.visibility = '';
+      busy = false;
+      dlg.close();
+    };
+    anim.finished.then(done, done);
+  }
+
+  function show(i: number, dir: number) {
+    if (busy) return;
+    idx = (i + group.length) % group.length;
+    const img = group[idx];
+    // Keep the page behind in step, so closing lands on the right piece.
+    img.scrollIntoView({ block: 'center', behavior: 'instant' as ScrollBehavior });
+    setImage(img);
+    if (!reduce) {
+      big.getAnimations().forEach((a) => a.cancel());
+      big.animate(
+        [{ opacity: 0, transform: `translateX(${dir * 28}px)` }, { opacity: 1, transform: 'none' }],
+        { duration: 320, easing: EASE },
+      );
+    }
+  }
+
   dlg.addEventListener('close', () => {
+    dlg.getAnimations({ subtree: true }).forEach((a) => a.cancel());
     document.documentElement.classList.remove('lightbox-open');
     big.removeAttribute('src');
-    opener?.focus({ preventScroll: true });
+    (group[idx] || opener)?.focus({ preventScroll: true }); // the piece last viewed
   });
-  dlg.querySelector('.lightbox-close')!.addEventListener('click', () => dlg.close());
-  dlg.querySelector('.lightbox-prev')!.addEventListener('click', () => show(idx - 1));
-  dlg.querySelector('.lightbox-next')!.addEventListener('click', () => show(idx + 1));
-  dlg.addEventListener('click', (e) => { if (e.target === dlg || e.target === big) dlg.close(); });
+  // Esc runs the same animated close.
+  dlg.addEventListener('cancel', (e) => { e.preventDefault(); close(); });
+  dlg.querySelector('.lightbox-close')!.addEventListener('click', close);
+  dlg.querySelector('.lightbox-prev')!.addEventListener('click', () => show(idx - 1, -1));
+  dlg.querySelector('.lightbox-next')!.addEventListener('click', () => show(idx + 1, 1));
+  dlg.addEventListener('click', (e) => {
+    if (e.target === dlg || e.target === scrim || e.target === big) close();
+  });
   dlg.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowRight') show(idx + 1);
-    else if (e.key === 'ArrowLeft') show(idx - 1);
+    if (e.key === 'ArrowRight') show(idx + 1, 1);
+    else if (e.key === 'ArrowLeft') show(idx - 1, -1);
+  });
+  window.addEventListener('resize', () => {
+    if (!dlg.open) return;
+    const [w, h] = fit(group[idx]);
+    big.style.width = w + 'px';
+    big.style.height = h + 'px';
   });
   let x0: number | null = null;
   dlg.addEventListener('touchstart', (e) => { x0 = e.touches.length === 1 ? e.touches[0].clientX : null; }, { passive: true });
@@ -272,7 +385,7 @@ function wireLightbox(root: HTMLElement) {
     if (x0 == null) return;
     const dx = e.changedTouches[0].clientX - x0;
     x0 = null;
-    if (Math.abs(dx) > 50) show(dx < 0 ? idx + 1 : idx - 1);
+    if (Math.abs(dx) > 50) show(dx < 0 ? idx + 1 : idx - 1, dx < 0 ? 1 : -1);
   });
 
   imgs.forEach((img) => {
