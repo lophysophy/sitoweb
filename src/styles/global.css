@@ -1975,3 +1975,66 @@ html.lightbox-open {
 .video-block {
   margin-top: 48px;
 }
+
+/* --------------------------------------------------------------------------
+   Nav contrast
+   -------------------------------------------------------------------------- */
+
+:root {
+  --nav-text: #2A4D4A; /* 9:1 on white: links read clearly without being loud */
+}
+
+.site-header {
+  background: var(--white);
+  border-bottom-color: #D3EAE8;
+}
+
+.site-nav a,
+body.nav-pinned .hero-corners .corner-right a,
+body.nav-pinned .hero-corners .menu-toggle,
+body.menu-open .hero-corners .menu-toggle,
+.menu-toggle {
+  color: var(--nav-text);
+}
+
+.site-nav a:hover,
+body.nav-pinned .hero-corners .corner-right a:hover {
+  color: var(--tiffany-deep);
+}
+
+.site-nav a[aria-current="page"] {
+  color: var(--ink);
+}
+
+/* The current section is underlined by a short tiffany stroke. */
+.site-nav a[aria-current="page"]::after {
+  left: 8px;
+  right: 8px;
+  bottom: 5px;
+  width: auto;
+  height: 2px;
+  margin-left: 0;
+  border-radius: 2px;
+}
+
+/* Over the intro: a soft shade along the top keeps the white name and links
+   readable on bright skies, without a visible bar. */
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  z-index: 1;
+  height: 180px;
+  background: linear-gradient(to bottom, rgba(10, 30, 29, 0.5), rgba(10, 30, 29, 0));
+  pointer-events: none;
+}
+
+.hero-corners .wordmark,
+.hero-corners .corner-right a,
+.hero-corners .menu-toggle {
+  text-shadow: 0 1px 2px rgba(10, 30, 29, 0.35), 0 1px 14px rgba(10, 30, 29, 0.4);
+}
+
+.hero-corners .wordmark-sub {
+  color: var(--white);
+}
