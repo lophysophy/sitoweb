@@ -49,41 +49,9 @@ const icon180 = await getImage({ src: favicon, width: 180, height: 180, format: 
 
   {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
   <slot name="head" />
-  <script is:inline>
-    // Arriving through a project "portal" (see scripts/portal.ts): mark the page
-    // before first paint, and skip the regular page cross-fade for this visit.
-    (function () {
-      try {
-        var p = JSON.parse(sessionStorage.getItem('portal') || 'null');
-        if (!p || p.path !== location.pathname || Date.now() - p.t > 8000) return;
-        sessionStorage.removeItem('portal');
-        if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-        document.documentElement.classList.add('portal-in');
-        window.__portalSrc = p.src || '';
-        addEventListener('pagereveal', function (e) { if (e.viewTransition) e.viewTransition.skipTransition(); });
-      } catch (e) {}
-    })();
-  </script>
   <script is:inline data-goatcounter="https://lophysophy.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </head>
 <body class:list={[{ 'is-home': home }]}>
-  <script is:inline>
-    // The project cover, full screen, waiting to dissolve as the page arrives.
-    if (document.documentElement.classList.contains('portal-in')) {
-      var portal = document.createElement('div');
-      portal.className = 'portal portal--in';
-      if (window.__portalSrc) portal.style.backgroundImage = 'url("' + window.__portalSrc + '")';
-      document.body.appendChild(portal);
-      var reveal = function () {
-        var a = portal.animate(
-          [{ opacity: 1, transform: 'scale(1)' }, { opacity: 0, transform: 'scale(1.08)' }],
-          { duration: 760, easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)', fill: 'both' }
-        );
-        a.finished.then(function () { portal.remove(); });
-      };
-      document.addEventListener('DOMContentLoaded', function () { requestAnimationFrame(function () { setTimeout(reveal, 60); }); });
-    }
-  </script>
   <a class="skip-link" href="#content">Skip to content</a>
   <Header home={home} current={current} />
   <main id="content">
