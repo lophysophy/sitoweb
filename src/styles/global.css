@@ -42,6 +42,32 @@ html {
   navigation: auto;
 }
 
+/* Changing section: the page settles in with a short rise while the header
+   bar stays put, so only the content changes. */
+::view-transition-old(root) {
+  animation: page-out 0.22s ease both;
+}
+
+::view-transition-new(root) {
+  animation: page-in 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+.site-header:not(.site-header--home) {
+  view-transition-name: site-header;
+}
+
+::view-transition-group(site-header) {
+  animation: none;
+}
+
+@keyframes page-out {
+  to { opacity: 0; transform: translateY(-6px); }
+}
+
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(14px); }
+}
+
 body {
   font-family: var(--font-ui);
   font-weight: 400;
@@ -545,14 +571,22 @@ body.nav-pinned .hero-corners .corner-right a:hover {
   margin-top: 22px;
 }
 
+/* The two buttons and the pause square share one height and the same corners. */
+.hero-actions .btn {
+  height: 48px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
 .hero-toggle {
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
+  padding: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(255, 255, 255, 0.55);
-  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 5px;
   background: transparent;
   color: var(--white);
   cursor: pointer;
