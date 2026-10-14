@@ -93,6 +93,8 @@ function wireImageCycle(cell: HTMLElement, img: HTMLImageElement, frames: string
   }
   cell.addEventListener('mouseenter', start);
   cell.addEventListener('mouseleave', stop);
+  cell.addEventListener('focus', start); // keyboard users see the cycle too
+  cell.addEventListener('blur', stop);
 }
 
 // Video cells: stack one <video> per clip and switch with an instant opacity
@@ -131,6 +133,8 @@ function wireVideoCycle(cell: HTMLElement, cover: HTMLVideoElement, srcs: string
   }
   cell.addEventListener('mouseenter', start);
   cell.addEventListener('mouseleave', stop);
+  cell.addEventListener('focus', start);
+  cell.addEventListener('blur', stop);
 }
 
 // ---- Project page: synced side-by-side clips --------------------------------
@@ -139,15 +143,16 @@ function wireVideoCycle(cell: HTMLElement, cover: HTMLVideoElement, srcs: string
 // loop from one "master" so they stay locked cycle to cycle.
 // iOS details matter here: listen to loadeddata as well as canplay, call load()
 // on paused clips, and start anyway after 3s so a row never stays blank.
+// Rows only start buffering when they come near the screen, so a long project
+// doesn't download every clip up front.
 function syncGroup(vids: HTMLVideoElement[]) {
   vids.forEach((v) => {
     v.autoplay = false; v.removeAttribute('autoplay');
     v.loop = false; v.removeAttribute('loop'); // the master drives the loop
-    v.preload = 'auto';
     try { v.pause(); } catch {}
   });
   const master = vids[0];
-  let started = false, visible = true;
+  let started = false, visible = false, armed = false;
   const seen: boolean[] = [];
   const box = master.parentElement as HTMLElement;
   function startAll() {
@@ -165,24 +170,33 @@ function syncGroup(vids: HTMLVideoElement[]) {
   // The row's pause button resumes through here, so the clips restart together.
   box.dataset.synced = 'true';
   box.addEventListener('clip-resume', () => { if (started) startAll(); });
-  vids.forEach((v, idx) => {
-    if (v.readyState >= 3) { markReady(idx); return; }
-    const on = () => markReady(idx);
-    v.addEventListener('canplay', on);
-    v.addEventListener('loadeddata', on);
-    try { v.load(); } catch {}
-  });
-  setTimeout(() => { if (!started) { started = true; startAll(); } }, 3000);
+  function arm() {
+    if (armed) return;
+    armed = true;
+    vids.forEach((v, idx) => {
+      v.preload = 'auto';
+      if (v.readyState >= 3) { markReady(idx); return; }
+      const on = () => markReady(idx);
+      v.addEventListener('canplay', on);
+      v.addEventListener('loadeddata', on);
+      try { v.load(); } catch {}
+    });
+    setTimeout(() => { if (!started) { started = true; startAll(); } }, 3000);
+  }
 
   // Rows scrolled out of view rest, and restart together when they come back.
   if ('IntersectionObserver' in window) {
     new IntersectionObserver((entries) => {
       const now = entries[entries.length - 1].isIntersecting;
+      if (now) arm();
       if (now === visible) return;
       visible = now;
       if (!started) return;
       if (visible) startAll(); else vids.forEach((v) => v.pause());
-    }, { rootMargin: '200px 0px' }).observe(master.parentElement || master);
+    }, { rootMargin: '400px 0px' }).observe(box);
+  } else {
+    visible = true;
+    arm();
   }
 }
 
@@ -193,10 +207,10 @@ function wireSoloClips(root: HTMLElement) {
     entries.forEach((e) => {
       const v = e.target as HTMLVideoElement;
       if (!e.isIntersecting) v.pause();
-      else if ((v.parentElement as HTMLElement).dataset.paused !== 'true') play(v);
+      else if ((v.closest('.clip, .pair-row') as HTMLElement).dataset.paused !== 'true') play(v);
     });
   }, { rootMargin: '200px 0px' });
-  root.querySelectorAll<HTMLVideoElement>('.clip > video').forEach((v) => io.observe(v));
+  root.querySelectorAll<HTMLVideoElement>('.clip > video, .pair-row:not([data-synced]) > video').forEach((v) => io.observe(v));
 }
 
 // Pause / play buttons: one per clip, one per side-by-side row (the row's clips
@@ -411,18 +425,58 @@ function wireFilms(root: ParentNode) {
       f.referrerPolicy = 'strict-origin-when-cross-origin';
       f.allowFullscreen = true;
       btn.replaceWith(f);
+      f.focus(); // keyboard focus follows into the player
     });
   });
 }
 
-// ---- Wire up -----------------------------------------------------------------
-document.querySelectorAll<HTMLElement>('[data-mosaic]').forEach(wireMosaic);
-window.addEventListener('resize', () => document.querySelectorAll<HTMLElement>('[data-mosaic]').forEach(fitMosaic));
-document.querySelectorAll<HTMLElement>('.grid-cell').forEach(wireCycle);
+// ---- Cover clips (homepage mosaic, category grid) ---------------------------
+// They loop only while on screen; under reduced motion they stay still and
+// play only while hovered or focused.
+function wireCoverClips(reduce: boolean) {
+  const clips = Array.from(document.querySelectorAll<HTMLVideoElement>('.tile video, .grid-cell video'));
+  if (!clips.length) return;
+  if (reduce) {
+    clips.forEach((v) => {
+      v.autoplay = false; v.removeAttribute('autoplay');
+      v.pause();
+      const box = v.closest<HTMLElement>('.tile, .grid-cell')!;
+      if (box.classList.contains('tile')) {
+        box.addEventListener('mouseenter', () => play(v));
+        box.addEventListener('mouseleave', () => v.pause());
+        box.addEventListener('focus', () => play(v));
+        box.addEventListener('blur', () => v.pause());
+      }
+    });
+    return;
+  }
+  if (!('IntersectionObserver' in window)) return;
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      const v = e.target as HTMLVideoElement;
+      if (e.isIntersecting) play(v); else v.pause();
+    });
+  }, { rootMargin: '200px 0px' });
+  clips.forEach((v) => io.observe(v));
+}
 
-// Reduced motion: project clips start paused with their own controls.
+// ---- Wire up -----------------------------------------------------------------
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+document.querySelectorAll<HTMLElement>('[data-mosaic]').forEach(wireMosaic);
+let fitQueued = false;
+window.addEventListener('resize', () => {
+  if (fitQueued) return;
+  fitQueued = true;
+  requestAnimationFrame(() => {
+    fitQueued = false;
+    document.querySelectorAll<HTMLElement>('[data-mosaic]').forEach(fitMosaic);
+  });
+});
+document.querySelectorAll<HTMLElement>('.grid-cell').forEach(wireCycle);
+wireCoverClips(reduceMotion);
+
+// Reduced motion: project clips start paused with their own controls.
 const project = document.querySelector<HTMLElement>('[data-project]');
 if (project && reduceMotion) {
   project.querySelectorAll<HTMLVideoElement>('video').forEach((v) => {

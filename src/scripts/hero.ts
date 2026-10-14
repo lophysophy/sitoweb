@@ -16,33 +16,50 @@
   v.addEventListener('error', () => {
     if (v.getAttribute('src') === h264) return;
     v.src = h264;
-    if (!toggle?.classList.contains('is-paused')) v.play().catch(() => {});
+    if (!wantPaused) v.play().catch(() => {});
   });
 
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const conn = (navigator as any).connection;
+  const saveData = !!(conn && (conn.saveData || /(^|-)2g$/.test(conn.effectiveType || '')));
   v.addEventListener('playing', () => v.classList.add('is-playing'), { once: true });
 
-  function setPaused(paused: boolean) {
-    if (paused) v!.pause();
-    else { const p = v!.play(); if (p && p.catch) p.catch(() => {}); }
-    toggle?.setAttribute('aria-pressed', paused ? 'true' : 'false');
-    toggle?.classList.toggle('is-paused', paused);
-  }
+  // The button shows what the video is actually doing (a refused play(), e.g.
+  // in iOS Low Power Mode, leaves it paused and the button says so).
+  let wantPaused = reduce || saveData;
+  const sync = () => {
+    toggle?.setAttribute('aria-pressed', v.paused ? 'true' : 'false');
+    toggle?.classList.toggle('is-paused', v.paused);
+  };
+  v.addEventListener('play', sync);
+  v.addEventListener('pause', sync);
+  const start = () => { const p = v.play(); if (p && p.catch) p.catch(sync); };
 
-  if (reduce) {
-    v.preload = 'metadata';
-    setPaused(true);
-  } else {
+  toggle?.addEventListener('click', () => {
+    wantPaused = !v.paused;
+    if (wantPaused) v.pause();
+    else { v.preload = 'auto'; start(); }
+  });
+  sync();
+
+  // Start once the page itself has loaded, so the film doesn't compete with the
+  // poster, fonts and first images. Reduced motion and data saving start paused.
+  let begun = false, onScreen = true;
+  const begin = () => {
+    begun = true;
+    if (wantPaused) { v.preload = 'metadata'; return; }
     v.preload = 'auto';
-    setPaused(false);
-  }
-  toggle?.addEventListener('click', () => setPaused(!v.paused));
+    if (onScreen) start();
+  };
+  if (document.readyState === 'complete') begin();
+  else window.addEventListener('load', begin, { once: true });
 
   // Off screen the loop rests (saves battery while browsing the work below).
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(([e]) => {
-      if (toggle?.classList.contains('is-paused')) return;
-      if (e.isIntersecting) { const p = v.play(); if (p && p.catch) p.catch(() => {}); }
+      onScreen = e.isIntersecting;
+      if (!begun || wantPaused) return;
+      if (onScreen) start();
       else v.pause();
     }).observe(v);
   }

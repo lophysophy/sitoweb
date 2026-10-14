@@ -734,7 +734,7 @@ body.nav-pinned .hero-corners .corner-right a:hover {
 
 .tile:hover .tile-overlay,
 .tile:focus-visible .tile-overlay {
-  background: rgba(16, 48, 46, 0.55);
+  background: rgba(16, 48, 46, 0.68);
 }
 
 .tile:hover .tile-label,
@@ -838,7 +838,7 @@ body.nav-pinned .hero-corners .corner-right a:hover {
   inset: 0;
   display: flex;
   align-items: flex-end;
-  background: linear-gradient(to top, rgba(16, 48, 46, 0.62), rgba(16, 48, 46, 0) 55%);
+  background: linear-gradient(to top, rgba(16, 48, 46, 0.74), rgba(16, 48, 46, 0) 60%);
   opacity: 0;
   transition: opacity 0.4s ease;
 }
@@ -1805,9 +1805,6 @@ html.lightbox-open {
 
 /* Focus on dark surfaces (art, grid cells, lightbox): a white ring inset over
    an ink halo reads on any image and isn't clipped at the screen edges. */
-.grid-cell:focus-visible,
-.tile:focus-visible,
-.pager-link:focus-visible,
 [data-zoom]:focus-visible,
 .yt-facade:focus-visible,
 .lightbox-btn:focus-visible {
@@ -2037,4 +2034,48 @@ body.nav-pinned .hero-corners .corner-right a:hover {
 
 .hero-corners .wordmark-sub {
   color: var(--white);
+}
+
+/* --------------------------------------------------------------------------
+   Focus on covers and over the intro
+   -------------------------------------------------------------------------- */
+
+/* Covers are filled by absolutely placed pictures that would paint over an
+   outline on the link itself, so the ring is drawn on the top layer. */
+.grid-cell:focus-visible,
+.tile:focus-visible,
+.pager-link:focus-visible {
+  outline: none;
+}
+
+.grid-cell:focus-visible .grid-overlay,
+.tile:focus-visible .tile-overlay,
+.pager-link:focus-visible .pager-label {
+  box-shadow: inset 0 0 0 2px var(--white), inset 0 0 0 6px var(--ink);
+}
+
+.grid-cell:focus-visible .grid-overlay {
+  opacity: 1;
+}
+
+/* Over the dark intro the ring is white. */
+.hero :focus-visible,
+.hero-corners :focus-visible {
+  outline-color: var(--white);
+}
+
+/* Touch tablets wider than the phone layout have no hover either: keep the
+   project names on the homepage tiles visible. */
+@media (hover: none) and (min-width: 769px) {
+  .tile-overlay {
+    align-items: flex-end;
+    justify-content: flex-start;
+    background: linear-gradient(to top, rgba(16, 48, 46, 0.7), rgba(16, 48, 46, 0) 55%);
+  }
+
+  .tile-label {
+    opacity: 1;
+    transform: none;
+    padding: 14px 18px;
+  }
 }

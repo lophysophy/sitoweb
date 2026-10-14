@@ -57,4 +57,21 @@
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && isOpen()) setOpen(false, true);
   });
+  // Tabbing out of the open menu closes it.
+  menu.addEventListener('focusout', (e) => {
+    const to = e.relatedTarget as Node | null;
+    if (isOpen() && to && !menu.contains(to) && !btn.contains(to)) setOpen(false);
+  });
+  // Widening past the phone layout hides the menu without a transition, so
+  // its end event never fires: reset the open state straight away. Same when
+  // the page comes back from the Back/Forward cache.
+  function reset() {
+    setOpen(false);
+    document.body.classList.remove('menu-open');
+  }
+  const phone = window.matchMedia('(max-width: 768px)');
+  const check = () => { if (!phone.matches && (isOpen() || document.body.classList.contains('menu-open'))) reset(); };
+  phone.addEventListener('change', check);
+  window.addEventListener('resize', check);
+  window.addEventListener('pageshow', (e) => { if (e.persisted) reset(); });
 })();
