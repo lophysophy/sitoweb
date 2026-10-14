@@ -6,7 +6,8 @@
      and the gallery uses the file directly via <img src>.
    Replaces originals in place (keep your master files elsewhere). Per file it
    writes the new file, checks it, then removes the source — a locked/failed
-   file is skipped and reported, never lost.
+   file is skipped and reported, never lost. A file whose converted name is
+   already taken (x.png next to x.jpg or x.avif) is skipped, never overwritten.
 */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -41,6 +42,7 @@ for (const f of files) {
 
   if (ext === '.gif') {
     const out = f.slice(0, -4) + '.mp4';
+    if (fs.existsSync(out)) { fails.push('SKIPPED (an .mp4 with this name exists) ' + path.relative(ROOT, f)); continue; }
     try {
       ff(['-i', f, '-movflags', '+faststart', '-pix_fmt', 'yuv420p',
         '-vf', `scale='min(${VIDEO_W},iw)':-2:flags=lanczos`, '-c:v', 'libx264', '-crf', '22', '-an', out]);
@@ -49,6 +51,8 @@ for (const f of files) {
   } else if (ext === '.png' || ext === '.jpg' || ext === '.jpeg') {
     const out = f.slice(0, -ext.length) + '.avif';
     const tmp = f + '.__tmp.avif';
+    // x.png and x.jpg would both become x.avif: never overwrite, keep the source.
+    if (fs.existsSync(out)) { fails.push('SKIPPED (an .avif with this name exists) ' + path.relative(ROOT, f)); continue; }
     try {
       ff(['-i', f, '-filter_complex',
         `[0]scale='min(${IMG_DIM},iw)':-2:flags=lanczos,format=rgba[fg];color=c=white[bg];[bg][fg]scale2ref[bg2][fg2];[bg2][fg2]overlay=shortest=1,format=yuv420p`,
@@ -68,4 +72,4 @@ for (const f of files) {
 
 console.log(`\nDone. gifs->mp4: ${gif}, images->avif: ${img}, failures: ${fails.length}`);
 console.log(`size: ${mb(before)}MB -> ${mb(after)}MB`);
-if (fails.length) { console.log('FAILED (locked? re-run after closing the app):'); fails.forEach(x => console.log('  ' + x)); }
+if (fails.length) { console.log('NOT CONVERTED (locked files: close the app and re-run; name clashes: rename one):'); fails.forEach(x => console.log('  ' + x)); }

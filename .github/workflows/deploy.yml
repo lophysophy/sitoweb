@@ -1,16 +1,12 @@
 # Builds the site with Astro and publishes it to GitHub Pages on every push to
-# main. One-time setup: repo Settings → Pages → Source: "GitHub Actions".
+# main. One-time setup: repo Settings → Pages → Source: "GitHub Actions", then
+# confirm the custom domain lophysophy.com there and tick "Enforce HTTPS".
 name: Deploy
 
 on:
   push:
     branches: [main]
   workflow_dispatch:
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
 
 concurrency:
   group: pages
@@ -19,15 +15,24 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v7
-      # ffprobe reads clip sizes so the pages reserve their space while loading.
+      # ffprobe reads clip sizes so the pages reserve their space while loading
+      # (the build stops if it is missing).
       - run: sudo apt-get update && sudo apt-get install -y --no-install-recommends ffmpeg
+      # Also caches the optimised images between runs (node_modules/.astro).
       - uses: withastro/action@v6
+        with:
+          node-version: 24
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

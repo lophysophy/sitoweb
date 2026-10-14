@@ -137,8 +137,9 @@ function titleCase(s: string) {
 
 // ---- Video dimensions --------------------------------------------------------
 // Knowing a clip's size at build time lets the page reserve its space (no jump
-// while loading). ffprobe is optional: without it the browser sizes the clip
-// once it loads, exactly like before.
+// while loading). Locally ffprobe is optional (a warning, and the browser sizes
+// the clip once it loads); on the deploy server it is required, so a broken
+// install can't quietly bring the layout jumps back.
 
 const probeCache = new Map<string, { width: number; height: number } | null>();
 let ffprobeMissing = false;
@@ -156,7 +157,13 @@ function probeVideo(file: string) {
     const [w, h] = out.trim().split(',').map(Number);
     if (w && h) dims = { width: w, height: h };
   } catch (e: any) {
-    if (e && e.code === 'ENOENT') ffprobeMissing = true;
+    if (e && e.code === 'ENOENT') {
+      if (process.env.CI) throw new Error('ffprobe is missing on the build server: install ffmpeg before building.');
+      ffprobeMissing = true;
+      console.warn('[portfolio] ffprobe not found: clip sizes are measured in the browser instead (install ffmpeg to fix).');
+    } else {
+      console.warn(`[portfolio] could not read the size of ${path.basename(file)}`);
+    }
   }
   probeCache.set(file, dims);
   return dims;
@@ -239,6 +246,40 @@ function buildPreview(cat: CategoryConfig, folder: string, items: Piece[], info:
   return preview;
 }
 
+// ---- project.md checks --------------------------------------------------------
+// Mistakes in project.md stop the build with a message that names the file,
+// instead of quietly showing the wrong film or ignoring a setting.
+
+function fail(where: string, msg: string): never {
+  throw new Error(`[portfolio] ${where}: ${msg}`);
+}
+
+function checkInfo(info: ProjectInfo, where: string) {
+  const s = (v: unknown) => typeof v === 'string';
+  if (info.youtube != null && !(s(info.youtube) && /^[\w-]{11}$/.test(info.youtube as string))) {
+    fail(where, `youtube must be the 11-character video id in quotes, e.g. youtube: "2AmUoiHabYk" (got ${JSON.stringify(info.youtube)})`);
+  }
+  if (info.preview != null) {
+    if (!Array.isArray(info.preview)) fail(where, 'preview must be a list, e.g. preview: ["2.1", "2"]');
+    for (const v of info.preview) {
+      if (!s(v)) fail(where, `write each preview index in quotes, e.g. "2.10" (got ${JSON.stringify(v)})`);
+    }
+  }
+  if (info.slug != null && !(s(info.slug) && /^[a-z0-9-]+$/.test(info.slug as string))) {
+    fail(where, 'slug may only use lowercase letters, digits and dashes');
+  }
+  for (const k of ['title', 'description', 'role', 'team', 'tools'] as const) {
+    if (info[k] != null && !s(info[k])) fail(where, `${k} must be text`);
+  }
+}
+
+// Folders under src/work that no category uses are ignored by the site:
+// say so, so a new folder doesn't silently go missing.
+const known = new Set(CATEGORIES.map((c) => c.dir));
+for (const top of foldersIn([])) {
+  if (!known.has(top)) console.warn(`[portfolio] src/work/${top} is not listed in CATEGORIES (src/lib/site.ts), so it is not on the site.`);
+}
+
 function build(): Category[] {
   return CATEGORIES.map((cfg) => {
     const category: Category = { ...cfg, url: `/${cfg.slug}/`, projects: [] };
@@ -247,6 +288,7 @@ function build(): Category[] {
     for (const folder of folders) {
       const infoMod = infoFiles[`${ROOT}${cfg.dir}/${folder}/project.md`];
       const info: ProjectInfo = (infoMod && infoMod.frontmatter) || {};
+      checkInfo(info, `src/work/${cfg.dir}/${folder}/project.md`);
       if (info.draft) continue;
 
       const items = filesIn([cfg.dir, folder]);
@@ -260,8 +302,16 @@ function build(): Category[] {
       const preview = buildPreview(cfg, folder, items.length ? items : groups[0].items, info);
       const body = infoMod && infoMod.rawContent ? infoMod.rawContent().trim() : '';
 
+      // A name with no Latin letters or digits ("★", "東京") still gets an
+      // address, from its number; two projects can't share one.
+      const slug = info.slug || slugify(display) || `project-${indexKey(folder).major}`;
+      const twin = category.projects.find((p) => p.slug === slug);
+      if (twin) {
+        fail(`src/work/${cfg.dir}`, `"${folder}" and "${twin.folder}" would have the same address /${cfg.slug}/${slug}/. Rename one folder, or set slug: in its project.md.`);
+      }
+
       category.projects.push({
-        slug: info.slug || slugify(display),
+        slug,
         folder,
         title: info.title || titleCase(display),
         info,
