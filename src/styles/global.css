@@ -1936,3 +1936,35 @@ html.lightbox-open {
 .video-block {
   margin-top: 48px;
 }
+
+/* --------------------------------------------------------------------------
+   Project portal (scripts/portal.ts)
+   -------------------------------------------------------------------------- */
+
+.portal {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 200;
+  background: var(--ink) center / cover no-repeat;
+  pointer-events: none;
+  will-change: left, top, width, height, opacity, transform;
+}
+
+/* On arrival the page content settles in, one block after another, as the
+   cover dissolves. */
+.portal-in [data-project] > * {
+  animation: portal-rise 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.portal-in [data-project] > :nth-child(1) { animation-delay: 0.18s; }
+.portal-in [data-project] > :nth-child(2) { animation-delay: 0.28s; }
+.portal-in [data-project] > :nth-child(3) { animation-delay: 0.38s; }
+.portal-in [data-project] > :nth-child(n + 4) { animation-delay: 0.46s; }
+
+@keyframes portal-rise {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: none; }
+}
