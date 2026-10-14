@@ -51,7 +51,7 @@ const description =
 async function thumb(p?: Project) {
   if (!p) return null;
   const piece = p.preview.find((x) => x.image) || p.items.find((x) => x.image);
-  return piece?.image ? await responsive(piece.image, [480, 800]) : null;
+  return piece?.image ? await responsive(piece.image, [480, 800, 1280]) : null;
 }
 const pager = await Promise.all(
   [
@@ -88,9 +88,9 @@ if (next && next === prev) pager[0].dir = 'Next';
         {rows.map((row, n) =>
           row.variants.length ? (
             <div class="pair-row">
-              <Artwork piece={row.base} alt={`${project.title}, piece ${n + 1}`} sizes={`${Math.round(100 / (row.variants.length + 1))}vw`} zoom autoplay={!synced(row)} loop={!synced(row)} />
+              <Artwork piece={row.base} alt={`${project.title}, piece ${n + 1}`} sizes={`${Math.round(100 / (row.variants.length + 1))}vw`} zoom loop={!synced(row)} />
               {row.variants.map((v, k) => (
-                <Artwork piece={v} alt={`${project.title}, piece ${n + 1}, variant ${k + 1}`} sizes={`${Math.round(100 / (row.variants.length + 1))}vw`} zoom autoplay={!synced(row)} loop={!synced(row)} />
+                <Artwork piece={v} alt={`${project.title}, piece ${n + 1}, variant ${k + 1}`} sizes={`${Math.round(100 / (row.variants.length + 1))}vw`} zoom loop={!synced(row)} />
               ))}
               {hasClip(row) && <ClipToggle />}
             </div>

@@ -34,6 +34,8 @@ export interface Piece {
   minor: number;
   /** Set for images (the optimiser needs the import). */
   image?: ImageMetadata;
+  /** Clips: a still of the first frame ("<name>.poster.avif", made by npm run media). */
+  poster?: ImageMetadata;
   width?: number;
   height?: number;
 }
@@ -185,13 +187,17 @@ function toPiece(absKey: string, name: string): Piece | null {
   const vid = videoFiles[absKey];
   if (vid) {
     const dims = probeVideo(path.join(process.cwd(), absKey));
-    return { ...base, src: vid, type: 'video', ...(dims || {}) };
+    const poster = imageFiles[absKey.replace(/\.(mp4|webm)$/i, '.poster.avif')];
+    if (!poster) console.warn(`[portfolio] no poster for ${name}: run "npm run media" to make one.`);
+    return { ...base, src: vid, type: 'video', poster, ...(dims || {}) };
   }
   return null;
 }
 
 const entries: FileEntry[] = [];
+const isPoster = (key: string) => /\.poster\.avif$/i.test(key);
 for (const key of [...Object.keys(imageFiles), ...Object.keys(videoFiles)]) {
+  if (isPoster(key)) continue; // a clip's poster, not a piece of its own
   const parts = key.slice(ROOT.length).split('/');
   const piece = toPiece(key, parts[parts.length - 1]);
   if (piece) entries.push({ parts, piece });

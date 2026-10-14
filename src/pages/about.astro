@@ -7,7 +7,7 @@ import { SITE } from '../lib/site';
 <Base title="About" description="About Sofia Lucarelli, alias Lophy Sophy. Character Animation student at Gobelins Paris, BA in Illustration and Animation at IED Rome." current="about">
   <section class="about-layout">
     <figure class="about-figure">
-      <Image src={tanuki} alt="Pencil sketch of a tanuki by Sofia Lucarelli" widths={[380, 760]} sizes="(max-width: 768px) 260px, 380px" format="webp" />
+      <Image src={tanuki} alt="Pencil sketch of a tanuki by Sofia Lucarelli" widths={[380, 760]} sizes="(max-width: 768px) 260px, 380px" format="webp" loading="eager" fetchpriority="high" />
     </figure>
     <div class="about-text">
       <h1 class="greeting">Hi! <span class="visually-hidden">I am Sofia Lucarelli</span></h1>

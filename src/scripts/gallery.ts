@@ -202,7 +202,8 @@ function syncGroup(vids: HTMLVideoElement[]) {
 
 // Single clips also pause while off screen.
 function wireSoloClips(root: HTMLElement) {
-  if (!('IntersectionObserver' in window)) return;
+  const solo = root.querySelectorAll<HTMLVideoElement>('.clip > video, .pair-row:not([data-synced]) > video');
+  if (!('IntersectionObserver' in window)) { solo.forEach(play); return; }
   const io = new IntersectionObserver((entries) => {
     entries.forEach((e) => {
       const v = e.target as HTMLVideoElement;
@@ -210,7 +211,7 @@ function wireSoloClips(root: HTMLElement) {
       else if ((v.closest('.clip, .pair-row') as HTMLElement).dataset.paused !== 'true') play(v);
     });
   }, { rootMargin: '200px 0px' });
-  root.querySelectorAll<HTMLVideoElement>('.clip > video, .pair-row:not([data-synced]) > video').forEach((v) => io.observe(v));
+  solo.forEach((v) => io.observe(v));
 }
 
 // Pause / play buttons: one per clip, one per side-by-side row (the row's clips
@@ -231,6 +232,12 @@ function wireClipToggles(root: HTMLElement) {
   });
 }
 
+// Rounded-stroke icons, drawn like the site's arrows (text glyphs sit
+// off-centre in the button).
+function icon(d: string) {
+  return `<svg viewBox="0 0 16 16" aria-hidden="true"><path d="${d}" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+}
+
 // ---- Lightbox --------------------------------------------------------------
 // Every still on a project page opens full screen; arrows, swipe and Esc work.
 // Opening is a shared-element zoom: the piece lifts off the page from exactly
@@ -249,9 +256,9 @@ function wireLightbox(root: HTMLElement) {
   dlg.innerHTML =
     '<div class="lightbox-scrim"></div>' +
     '<img class="lightbox-img" alt="" tabindex="-1" autofocus>' +
-    '<button class="lightbox-btn lightbox-close" type="button" aria-label="Close">×</button>' +
-    '<button class="lightbox-btn lightbox-prev" type="button" aria-label="Previous image">‹</button>' +
-    '<button class="lightbox-btn lightbox-next" type="button" aria-label="Next image">›</button>' +
+    `<button class="lightbox-btn lightbox-close" type="button" aria-label="Close">${icon('M4 4l8 8M12 4l-8 8')}</button>` +
+    `<button class="lightbox-btn lightbox-prev" type="button" aria-label="Previous image">${icon('M10 3.5 5.5 8l4.5 4.5')}</button>` +
+    `<button class="lightbox-btn lightbox-next" type="button" aria-label="Next image">${icon('M6 3.5 10.5 8 6 12.5')}</button>` +
     '<p class="lightbox-count" aria-live="polite"></p>';
   document.body.appendChild(dlg);
   const scrim = dlg.querySelector<HTMLElement>('.lightbox-scrim')!;
@@ -450,7 +457,7 @@ function wireCoverClips(reduce: boolean) {
     });
     return;
   }
-  if (!('IntersectionObserver' in window)) return;
+  if (!('IntersectionObserver' in window)) { clips.forEach(play); return; }
   const io = new IntersectionObserver((entries) => {
     entries.forEach((e) => {
       const v = e.target as HTMLVideoElement;

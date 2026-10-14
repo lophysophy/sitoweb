@@ -22,9 +22,9 @@ const cells = await Promise.all(
 );
 ---
 <section class="work-grid" aria-label={`${category.title} projects`}>
-  {cells.map(({ proj, cover, frames }) => (
+  {cells.map(({ proj, cover, frames }, i) => (
     <a class="grid-cell" href={projectUrl(proj)} data-frames={JSON.stringify(frames)}>
-      <Artwork piece={cover} alt="" class="grid-img" sizes="(max-width: 768px) 100vw, 50vw" widths={[800, 1280]} />
+      <Artwork piece={cover} alt="" class="grid-img" sizes="(max-width: 768px) 100vw, 50vw" widths={[800, 1280, 1920]} eager={i < 2} />
       <span class="grid-overlay"><span class="grid-label">{proj.title}</span></span>
     </a>
   ))}

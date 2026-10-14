@@ -6,7 +6,7 @@ import { categories } from '../lib/portfolio';
 ---
 <Base title="Page not found" description="This page doesn't exist." noindex>
   <section class="page-head not-found">
-    <Image class="not-found-tanuki" src={tanuki} alt="" widths={[220, 440]} sizes="220px" format="webp" />
+    <Image class="not-found-tanuki" src={tanuki} alt="" widths={[220, 440]} sizes="220px" format="webp" loading="eager" fetchpriority="high" />
     <h1 class="page-title">Lost in the sketchbook</h1>
     <p class="intro-line">This page may have been moved or renamed.</p>
     <p class="not-found-links">

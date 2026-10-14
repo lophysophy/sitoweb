@@ -1,19 +1,42 @@
 ---
 // A YouTube film that loads only when asked for: a still and a play button
 // until clicked, then the player starts (with sound, since the click allows it).
+// The still is fetched from YouTube at build time and served from this site, so
+// visitors' browsers don't contact Google until they choose to play.
+import { getImage, inferRemoteSize } from 'astro:assets';
+
 interface Props { id: string; title: string; label?: string; eager?: boolean }
 const { id, title, label = `Play ${title}`, eager = false } = Astro.props;
-const still = (q: string) => `https://i.ytimg.com/vi/${id}/${q}.jpg`;
+
+// The largest still YouTube has (maxres is missing for some uploads and comes
+// back as a 120px placeholder), cropped to 16:9 (sddefault is letterboxed).
+async function still() {
+  for (const q of ['maxresdefault', 'sddefault', 'hqdefault']) {
+    const url = `https://i.ytimg.com/vi/${id}/${q}.jpg`;
+    try {
+      const { width } = await inferRemoteSize(url);
+      if (width <= 120) continue;
+      const w = Math.min(width, 1280);
+      return await getImage({ src: url, width: w, height: Math.round((w * 9) / 16), fit: 'cover', format: 'avif', quality: 70 });
+    } catch {}
+  }
+  return null;
+}
+const img = await still();
 ---
 <div class="video-frame">
   <button class="yt-facade" type="button" data-youtube={id} data-title={title} aria-label={label}>
-    <img
-      src={still('maxresdefault')}
-      alt=""
-      loading={eager ? 'eager' : 'lazy'}
-      onload={`if(this.naturalWidth<=120&&!this.dataset.fb){this.dataset.fb=1;this.src='${still('sddefault')}'}`}
-      onerror={`this.onerror=null;this.src='${still('sddefault')}'`}
-    />
+    {img && (
+      <img
+        src={img.src}
+        width={img.attributes.width}
+        height={img.attributes.height}
+        alt=""
+        loading={eager ? 'eager' : 'lazy'}
+        fetchpriority={eager ? 'high' : undefined}
+        decoding="async"
+      />
+    )}
     <span class="yt-play" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M4 2.5v11l9-5.5z" /></svg></span>
   </button>
 </div>

@@ -2079,3 +2079,14 @@ body.nav-pinned .hero-corners .corner-right a:hover {
     padding: 14px 18px;
   }
 }
+
+/* Montserrat is loaded up to 600: bold text uses it rather than a faked bold. */
+strong,
+b {
+  font-weight: 600;
+}
+
+.lightbox-btn svg {
+  width: 45%;
+  height: 45%;
+}

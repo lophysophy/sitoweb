@@ -1,6 +1,7 @@
 /* Media compression with ffmpeg. Run from the project root after adding files:
        npm run media
    - GIFs  -> MP4 (H.264, max 1280px, crf 22) — animations belong in video.
+   - MP4 -> a first-frame poster "<name>.poster.avif" next to each clip.
    - PNG/JPG -> AVIF (downscale to max 2560px, alpha flattened onto white,
      libaom-av1 still-picture, crf 28). AVIF is read by all current browsers
      and the gallery uses the file directly via <img src>.
@@ -70,6 +71,23 @@ for (const f of files) {
   if (done % 15 === 0) console.log(`  ${done}/${total} …`);
 }
 
-console.log(`\nDone. gifs->mp4: ${gif}, images->avif: ${img}, failures: ${fails.length}`);
+// Posters: a still of each clip's first frame, shown until the clip plays (and
+// instead of it under reduced motion). Saved next to the clip as
+// "<name>.poster.avif"; the site never lists these as artwork.
+let posters = 0;
+for (const d of MACROS) {
+  for (const f of walk(d)) {
+    if (!/\.(mp4|webm)$/i.test(f)) continue;
+    const poster = f.replace(/\.(mp4|webm)$/i, '.poster.avif');
+    if (fs.existsSync(poster)) continue;
+    try {
+      ff(['-i', f, '-frames:v', '1', '-vf', 'format=yuv420p',
+        '-c:v', 'libaom-av1', '-still-picture', '1', '-crf', '30', '-b:v', '0', '-cpu-used', '6', poster]);
+      posters++;
+    } catch (e) { fails.push('POSTER ' + path.relative(ROOT, f)); try { fs.unlinkSync(poster); } catch {} }
+  }
+}
+
+console.log(`\nDone. gifs->mp4: ${gif}, images->avif: ${img}, posters: ${posters}, failures: ${fails.length}`);
 console.log(`size: ${mb(before)}MB -> ${mb(after)}MB`);
 if (fails.length) { console.log('NOT CONVERTED (locked files: close the app and re-run; name clashes: rename one):'); fails.forEach(x => console.log('  ' + x)); }

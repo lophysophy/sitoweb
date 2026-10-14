@@ -43,6 +43,8 @@ export default defineConfig({
     checkWorkFolder(),
     sitemap({ filter: (page) => !page.includes('/html/') && !page.endsWith('/404/') }),
   ],
+  // Film stills are fetched from YouTube at build time and served locally.
+  image: { domains: ['i.ytimg.com'] },
   build: { inlineStylesheets: 'auto' },
   vite: {
     // Video files are copied as-is; keep their URLs readable.

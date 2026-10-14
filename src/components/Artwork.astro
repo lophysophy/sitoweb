@@ -2,7 +2,7 @@
 // One piece of artwork: a responsive <img>, or a silent looping <video>.
 // Images are never cropped here; layout classes decide how they sit.
 import type { Piece } from '../lib/portfolio';
-import { responsive } from '../lib/images';
+import { responsive, resized } from '../lib/images';
 
 interface Props {
   piece: Piece;
@@ -13,8 +13,7 @@ interface Props {
   /** Lets the image open full screen in the lightbox. */
   zoom?: boolean;
   eager?: boolean;
-  /** <video> only: synced pair rows start paused and let the script loop them. */
-  autoplay?: boolean;
+  /** <video> only: false for synced pair rows, whose loop the script drives. */
   loop?: boolean;
 }
 
@@ -26,11 +25,14 @@ const {
   class: cls,
   zoom = false,
   eager = false,
-  autoplay = true,
   loop = true,
 } = Astro.props;
 
 const r = piece.image ? await responsive(piece.image, widths) : null;
+// Clips show their first-frame still until they play. They don't autoplay from
+// the markup: the page script starts each one when it comes on screen, so
+// clips further down don't download up front.
+const poster = piece.poster ? await resized(piece.poster, 960) : undefined;
 ---
 {r ? (
   <img
@@ -42,6 +44,7 @@ const r = piece.image ? await responsive(piece.image, widths) : null;
     height={r.height}
     alt={alt}
     loading={eager ? 'eager' : 'lazy'}
+    fetchpriority={eager ? 'high' : undefined}
     decoding="async"
     data-zoom={zoom ? r.src : undefined}
     tabindex={zoom ? 0 : undefined}
@@ -52,11 +55,11 @@ const r = piece.image ? await responsive(piece.image, widths) : null;
     src={piece.src}
     width={piece.width}
     height={piece.height}
-    autoplay={autoplay}
+    poster={poster}
     loop={loop}
     muted
     playsinline
-    preload="metadata"
+    preload="none"
     aria-label={alt || undefined}
     aria-hidden={alt ? undefined : 'true'}
   ></video>
