@@ -80,7 +80,7 @@ const person = {
         <p class="kicker tag-line">{cat.tags.map((t, i, all) => <><span>{t}{i < all.length - 1 && ' ·'}</span>{i < all.length - 1 && ' '}</>)}</p>
       </div>
       <Mosaic category={cat} />
-      <p class="discipline-more"><a class="more-link" href={cat.url}>All {cat.title.toLowerCase()} <span aria-hidden="true">→</span></a></p>
+      <p class="discipline-more"><a class="more-link" href={cat.url}>All {cat.title.toLowerCase()} <span class="arrow" aria-hidden="true"></span></a></p>
     </section>
   ))}
 

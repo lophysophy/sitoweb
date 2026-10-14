@@ -131,7 +131,11 @@ if (next && next === prev) pager[0].dir = 'Next';
           <a class:list={['pager-link', `pager-link--${dir.toLowerCase()}`]} href={projectUrl(p)}>
             {img && <img src={img.src} srcset={img.srcset} sizes="(max-width: 768px) 100vw, 50vw" width={img.width} height={img.height} alt="" loading="lazy" decoding="async" />}
             <span class="pager-label">
-              <span class="pager-dir">{dir === 'Previous' ? '← Previous' : 'Next →'}</span>
+              <span class="pager-dir">
+                {dir === 'Previous'
+                  ? <><span class="arrow arrow--back" aria-hidden="true"></span>Previous</>
+                  : <>Next<span class="arrow" aria-hidden="true"></span></>}
+              </span>
               <span class="pager-title">{p.title}</span>
             </span>
           </a>
