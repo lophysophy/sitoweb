@@ -4,6 +4,10 @@
    colour. Comfortaa sets the titles and labels, Montserrat the text.
    ========================================================================== */
 
+/* --------------------------------------------------------------------------
+   Tokens
+   -------------------------------------------------------------------------- */
+
 :root {
   --white: #FFFFFF;
   --ink: #10302E;
@@ -11,14 +15,18 @@
   --tiffany-deep: #067A76;   /* 5.1:1 on white: links and current page */
   --aqua-gray: #4F7774;      /* 4.9:1 on white: secondary text */
   --aqua-mist: #EAF7F6;
+  --nav-text: #2A4D4A;       /* 9:1 on white: links read clearly without being loud */
 
   --font-display: 'Comfortaa', 'Montserrat', sans-serif;
   --font-ui: 'Montserrat', system-ui, sans-serif;
-  --font-brand: 'Comfortaa', 'Montserrat', sans-serif;
 
   --gutter: 28px;
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
+
+/* --------------------------------------------------------------------------
+   Base
+   -------------------------------------------------------------------------- */
 
 *,
 *::before,
@@ -100,14 +108,24 @@ a {
   transition: color 0.4s ease, background-color 0.4s ease, border-color 0.4s ease, opacity 0.4s ease;
 }
 
-:focus-visible {
-  outline: 2px solid var(--tiffany-deep);
-  outline-offset: 3px;
+/* Montserrat is loaded up to 600: bold text uses it rather than a faked bold. */
+strong,
+b {
+  font-weight: 600;
 }
 
 ::selection {
   background: var(--aqua-mist);
   color: var(--ink);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 .skip-link {
@@ -127,12 +145,48 @@ a {
   top: 12px;
 }
 
+/* Focus: a tiffany ring on the white page. */
+:focus-visible {
+  outline: 2px solid var(--tiffany-deep);
+  outline-offset: 3px;
+}
+
+/* On dark surfaces (art, grid cells, lightbox): a white ring inset over an ink
+   halo reads on any image and isn't clipped at the screen edges. */
+[data-zoom]:focus-visible,
+.yt-facade:focus-visible,
+.lightbox-btn:focus-visible {
+  outline: 2px solid var(--white);
+  outline-offset: -4px;
+  box-shadow: inset 0 0 0 6px var(--ink);
+}
+
+/* Covers are filled by absolutely placed pictures that would paint over an
+   outline on the link itself, so the ring is drawn on the top layer. */
+.grid-cell:focus-visible,
+.tile:focus-visible,
+.pager-link:focus-visible {
+  outline: none;
+}
+
+.grid-cell:focus-visible .grid-overlay,
+.tile:focus-visible .tile-overlay,
+.pager-link:focus-visible .pager-label {
+  box-shadow: inset 0 0 0 2px var(--white), inset 0 0 0 6px var(--ink);
+}
+
+/* Over the dark intro the ring is white. */
+.hero :focus-visible,
+.hero-corners :focus-visible {
+  outline-color: var(--white);
+}
+
 /* --------------------------------------------------------------------------
    Type
    -------------------------------------------------------------------------- */
 
 .kicker {
-  font-family: var(--font-brand);
+  font-family: var(--font-display);
   font-weight: 700;
   font-size: 13px;
   letter-spacing: 2px;
@@ -170,23 +224,15 @@ a {
   font-size: 24px;
 }
 
-.chip-row {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px;
+/* Tag lines and the hero role break between terms, never inside one. */
+.tag-line,
+.hero-role {
+  text-wrap: balance;
 }
 
-.chip {
-  font-family: var(--font-ui);
-  font-weight: 600;
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--tiffany-deep);
-  background: var(--aqua-mist);
-  border-radius: 999px;
-  padding: 7px 14px 7px 15px;
+.tag-line span,
+.hero-role span {
+  white-space: nowrap;
 }
 
 .text-link {
@@ -244,7 +290,7 @@ a:hover .pager-dir .arrow--back {
 }
 
 /* --------------------------------------------------------------------------
-   Header
+   Header and nav
    -------------------------------------------------------------------------- */
 
 .site-header {
@@ -252,10 +298,8 @@ a:hover .pager-dir .arrow--back {
   top: 0;
   z-index: 10;
   height: 60px;
-  background: rgba(255, 255, 255, 0.92);
-  -webkit-backdrop-filter: saturate(1.4) blur(12px);
-  backdrop-filter: saturate(1.4) blur(12px);
-  border-bottom: 1px solid var(--aqua-mist);
+  background: var(--white);
+  border-bottom: 1px solid #D3EAE8;
 }
 
 .header-inner {
@@ -279,7 +323,7 @@ a:hover .pager-dir .arrow--back {
 }
 
 .wordmark {
-  font-family: var(--font-brand);
+  font-family: var(--font-display);
   font-weight: 700;
   font-size: 18px;
   line-height: 1.2;
@@ -314,7 +358,7 @@ a:hover .pager-dir .arrow--back {
   font-family: var(--font-ui);
   font-weight: 600;
   font-size: 14px;
-  color: var(--aqua-gray);
+  color: var(--nav-text);
   text-decoration: none;
   padding: 12px 8px;
   white-space: nowrap;
@@ -328,16 +372,15 @@ a:hover .pager-dir .arrow--back {
   color: var(--ink);
 }
 
-/* A small tiffany dot under the current section. */
+/* The current section is underlined by a short tiffany stroke. */
 .site-nav a[aria-current="page"]::after {
   content: '';
   position: absolute;
-  left: 50%;
-  bottom: 4px;
-  width: 4px;
-  height: 4px;
-  margin-left: -2px;
-  border-radius: 50%;
+  left: 8px;
+  right: 8px;
+  bottom: 5px;
+  height: 2px;
+  border-radius: 2px;
   background: var(--tiffany);
 }
 
@@ -370,21 +413,19 @@ a:hover .pager-dir .arrow--back {
   pointer-events: auto;
 }
 
+/* White over the intro, with a soft shadow for bright skies. */
 .hero-corners .wordmark,
 .hero-corners .corner-right a,
 .hero-corners .menu-toggle {
   color: var(--white);
-  text-shadow: 0 1px 12px rgba(16, 48, 46, 0.35);
+  text-shadow: 0 1px 2px rgba(10, 30, 29, 0.35), 0 1px 14px rgba(10, 30, 29, 0.4);
 }
 
 .hero-corners .wordmark-sub {
-  color: rgba(255, 255, 255, 0.86);
+  color: var(--white);
 }
 
-.hero-corners .corner-right a[aria-current="page"]::after {
-  background: var(--white);
-}
-
+/* Pinned bar (or open menu): back to the ink colours of the inner pages. */
 body.nav-pinned .hero-corners .wordmark,
 body.menu-open .hero-corners .wordmark {
   color: var(--ink);
@@ -399,10 +440,12 @@ body.menu-open .hero-corners .wordmark-sub {
 body.nav-pinned .hero-corners .corner-right a,
 body.nav-pinned .hero-corners .menu-toggle,
 body.menu-open .hero-corners .menu-toggle {
-  color: var(--aqua-gray);
+  color: var(--nav-text);
   text-shadow: none;
 }
 
+/* Showreel/About turn tiffany on hover, over the intro and once pinned. */
+.hero-corners .corner-right a:hover,
 body.nav-pinned .hero-corners .corner-right a:hover {
   color: var(--tiffany-deep);
 }
@@ -417,7 +460,7 @@ body.nav-pinned .hero-corners .corner-right a:hover {
   background: none;
   border: 0;
   cursor: pointer;
-  color: var(--aqua-gray);
+  color: var(--nav-text);
 }
 
 /* The bars are pinned by absolute `top` rather than a flex column + gap, so the
@@ -532,9 +575,20 @@ body.nav-pinned .hero-corners .corner-right a:hover {
   transition: opacity 0.6s ease;
 }
 
-.hero-video.is-playing,
-.hero-video[poster] {
+.hero-video.is-playing {
   opacity: 1;
+}
+
+/* A soft shade along the top keeps the white name and links readable on
+   bright skies, without a visible bar. */
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  z-index: 1;
+  height: 180px;
+  background: linear-gradient(to bottom, rgba(10, 30, 29, 0.5), rgba(10, 30, 29, 0));
+  pointer-events: none;
 }
 
 /* Name, role and calls to action, bottom-left over a soft scrim. The video's
@@ -636,7 +690,7 @@ body.nav-pinned .hero-corners .corner-right a:hover {
 }
 
 /* --------------------------------------------------------------------------
-   Hello section (homepage)
+   Home: hello, discipline sections and mosaic tiles
    -------------------------------------------------------------------------- */
 
 .hello {
@@ -657,17 +711,14 @@ body.nav-pinned .hero-corners .corner-right a:hover {
   margin-bottom: 12px;
 }
 
-/* --------------------------------------------------------------------------
-   Discipline sections and mosaic tiles (homepage)
-   -------------------------------------------------------------------------- */
-
+/* More air between categories, each title close to its work. */
 .discipline {
-  padding-top: 72px;
+  padding-top: 112px;
 }
 
 .discipline-head {
   text-align: center;
-  margin-bottom: 28px;
+  margin-bottom: 24px;
   padding: 0 24px;
 }
 
@@ -688,7 +739,6 @@ body.nav-pinned .hero-corners .corner-right a:hover {
   --row-h: min(30vw, 380px);
   display: flex;
   height: var(--row-h);
-  margin-top: 28px;
 }
 
 .tile {
@@ -764,6 +814,10 @@ body.nav-pinned .hero-corners .corner-right a:hover {
 
 .page-head > .kicker {
   margin-bottom: 12px;
+}
+
+.page-head .tag-line {
+  margin-top: -4px;
 }
 
 .intro {
@@ -861,13 +915,6 @@ body.nav-pinned .hero-corners .corner-right a:hover {
   color: var(--white);
 }
 
-/* Touch screens have no hover: keep every title visible. */
-@media (hover: none) {
-  .grid-overlay {
-    opacity: 1;
-  }
-}
-
 /* --------------------------------------------------------------------------
    Project page
    -------------------------------------------------------------------------- */
@@ -917,9 +964,17 @@ body.nav-pinned .hero-corners .corner-right a:hover {
 }
 
 .gallery img,
-.gallery video {
+.gallery video,
+.story-grid img,
+.story-grid video {
   width: 100%;
   height: auto;
+}
+
+/* Soft placeholder while a piece loads, instead of an empty white gap. */
+.gallery img,
+.story-grid img {
+  background: var(--aqua-mist);
 }
 
 .project-gallery {
@@ -935,6 +990,7 @@ body.nav-pinned .hero-corners .corner-right a:hover {
    sets the row height; variants differ in resolution, so they are cropped at
    the sides (object-fit: cover) just enough to line up. */
 .pair-row {
+  position: relative;
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: 1fr;
@@ -946,13 +1002,67 @@ body.nav-pinned .hero-corners .corner-right a:hover {
   height: auto;
 }
 
-.pair-row > :not(:first-child) {
+.pair-row > :not(:first-child):not(.clip-toggle) {
   height: 100%;
   object-fit: cover;
 }
 
 [data-zoom] {
   cursor: zoom-in;
+}
+
+/* Pause / play over project clips: quiet until the pointer or focus is on the
+   clip, and kept visible while paused so it's easy to resume. */
+.clip {
+  position: relative;
+}
+
+.clip-toggle {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  z-index: 1;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(16, 48, 46, 0.55);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  color: var(--white);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s ease, background-color 0.3s ease;
+}
+
+.clip-toggle svg {
+  width: 12px;
+  height: 12px;
+  fill: currentColor;
+}
+
+.clip-toggle .i-play,
+.clip-toggle.is-paused .i-pause {
+  display: none;
+}
+
+.clip-toggle.is-paused .i-play {
+  display: block;
+}
+
+.clip:hover .clip-toggle,
+.pair-row:hover .clip-toggle,
+.clip-toggle:focus-visible,
+.clip-toggle.is-paused {
+  opacity: 1;
+}
+
+.clip-toggle:hover {
+  background: var(--ink);
 }
 
 .group-block {
@@ -973,16 +1083,11 @@ body.nav-pinned .hero-corners .corner-right a:hover {
   gap: 16px;
 }
 
-.story-grid img,
-.story-grid video {
-  width: 100%;
-  height: auto;
-}
-
-/* The finished film closing an animation project. */
+/* The finished film closing an animation project. It follows the pieces
+   closely, so the page doesn't seem to end. */
 .video-block {
   max-width: 960px;
-  margin: 80px auto 0;
+  margin: 48px auto 0;
   padding: 0 24px;
   text-align: center;
 }
@@ -998,7 +1103,8 @@ body.nav-pinned .hero-corners .corner-right a:hover {
   background: #000;
 }
 
-.video-block .video-frame {
+.video-block .video-frame,
+.reel-stage .video-frame {
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 18px 40px rgba(16, 48, 46, 0.18);
@@ -1200,6 +1306,10 @@ body.nav-pinned .hero-corners .corner-right a:hover {
   will-change: transform;
 }
 
+.lightbox-img:focus {
+  outline: none;
+}
+
 .lightbox-btn {
   position: absolute;
   z-index: 1;
@@ -1221,6 +1331,11 @@ body.nav-pinned .hero-corners .corner-right a:hover {
   opacity: 1;
 }
 
+.lightbox-btn svg {
+  width: 45%;
+  height: 45%;
+}
+
 .lightbox-prev,
 .lightbox-next {
   top: 50%;
@@ -1231,16 +1346,12 @@ body.nav-pinned .hero-corners .corner-right a:hover {
 }
 
 .lightbox-prev { left: 20px; }
+.lightbox-next { right: 20px; }
 
 .lightbox.is-single .lightbox-prev,
 .lightbox.is-single .lightbox-next {
   display: none;
 }
-
-.lightbox-img:focus {
-  outline: none;
-}
-.lightbox-next { right: 20px; }
 
 .lightbox-close {
   top: 18px;
@@ -1265,11 +1376,6 @@ html.lightbox-open {
   overflow: hidden;
 }
 
-@keyframes fade {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
 /* --------------------------------------------------------------------------
    Showreel page
    -------------------------------------------------------------------------- */
@@ -1278,12 +1384,6 @@ html.lightbox-open {
   max-width: 1280px;
   margin: 32px auto 0;
   padding: 0 24px;
-}
-
-.reel-stage .video-frame {
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 18px 40px rgba(16, 48, 46, 0.18);
 }
 
 .reel-notes {
@@ -1295,8 +1395,8 @@ html.lightbox-open {
   margin-top: 14px;
 }
 
-.reel-links {
-  margin-top: 24px !important;
+.reel-notes .reel-links {
+  margin-top: 24px;
 }
 
 /* --------------------------------------------------------------------------
@@ -1339,11 +1439,6 @@ html.lightbox-open {
   color: var(--white);
 }
 
-.btn--solid:hover {
-  background: var(--ink);
-  border-color: var(--ink);
-}
-
 /* Buttons over the intro video. */
 .btn--light {
   background: var(--white);
@@ -1379,7 +1474,13 @@ html.lightbox-open {
   display: grid;
   grid-template-columns: 380px 1fr;
   gap: 56px;
-  align-items: center;
+  align-items: start;
+}
+
+/* The portrait stays in view while the text scrolls past. */
+.about-figure {
+  position: sticky;
+  top: 96px;
 }
 
 .about-figure img {
@@ -1431,11 +1532,11 @@ html.lightbox-open {
   color: var(--tiffany-deep);
 }
 
-.about-actions {
+.contact-card .about-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin: 18px 0 0 !important;
+  margin: 18px 0 0;
 }
 
 /* Education timeline. */
@@ -1446,7 +1547,7 @@ html.lightbox-open {
 }
 
 .edu-heading {
-  padding: 80px var(--gutter) 0;
+  padding: 80px 0 0;
   margin: 0 0 20px;
 }
 
@@ -1495,7 +1596,7 @@ html.lightbox-open {
 .edu-time {
   display: block;
   text-align: center;
-  font-family: var(--font-brand);
+  font-family: var(--font-display);
   font-weight: 700;
   font-size: 13px;
   letter-spacing: 0.02em;
@@ -1527,12 +1628,23 @@ html.lightbox-open {
    404
    -------------------------------------------------------------------------- */
 
+.not-found .not-found-tanuki {
+  width: 200px;
+  height: auto;
+  margin: 0 auto 8px;
+}
+
 .not-found-links {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 10px;
   margin-top: 28px;
+}
+
+.not-found-more {
+  margin-top: 20px;
+  font-size: 14px;
 }
 
 /* --------------------------------------------------------------------------
@@ -1562,6 +1674,13 @@ html.lightbox-open {
 /* --------------------------------------------------------------------------
    Responsive
    -------------------------------------------------------------------------- */
+
+@media (min-width: 769px) {
+  /* Keep the lightbox arrows outside the picture so they read on light sketches. */
+  .lightbox-img {
+    max-width: calc(100vw - 160px);
+  }
+}
 
 @media (max-width: 768px) {
   :root {
@@ -1616,7 +1735,8 @@ html.lightbox-open {
     padding: 12px 18px;
   }
 
-  /* No hover on touch: the squeeze is off, tiles stack and show full images */
+  /* No hover on touch: the squeeze is off, tiles stack and show full images,
+     each with its title under the picture rather than over it. */
   .mosaic {
     flex-direction: column;
     height: auto;
@@ -1624,6 +1744,9 @@ html.lightbox-open {
 
   .tile {
     flex: none;
+    flex-direction: column;
+    background: none;
+    text-decoration: none;
   }
 
   .tile img,
@@ -1633,16 +1756,23 @@ html.lightbox-open {
   }
 
   .tile-overlay {
-    align-items: flex-end;
-    justify-content: flex-start;
-    background: linear-gradient(to top, rgba(16, 48, 46, 0.55), rgba(16, 48, 46, 0) 50%);
+    position: static;
+    display: block;
+    background: none;
+    padding: 10px 18px 6px;
+  }
+
+  .tile:hover .tile-overlay,
+  .tile:focus-visible .tile-overlay {
+    background: none;
   }
 
   .tile-label {
+    display: block;
+    color: var(--ink);
+    text-align: left;
     opacity: 1;
     transform: none;
-    font-size: 20px;
-    padding: 16px 18px;
   }
 
   .work-grid {
@@ -1682,11 +1812,6 @@ html.lightbox-open {
 
   .pager-link {
     aspect-ratio: 2 / 1;
-  }
-
-  .edu-heading {
-    padding-left: 24px;
-    padding-right: 24px;
   }
 
   .edu-timeline {
@@ -1738,6 +1863,7 @@ html.lightbox-open {
   }
 
   .about-figure {
+    position: static;
     max-width: 260px;
     margin: 0 auto;
   }
@@ -1755,313 +1881,23 @@ html.lightbox-open {
   .wordmark {
     font-size: 15px;
   }
-}
 
-/* Respect a reduced-motion preference: no animated transitions or cross-fades. */
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-
-  @view-transition {
-    navigation: none;
-  }
-
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
-/* --------------------------------------------------------------------------
-   Refinements
-   -------------------------------------------------------------------------- */
-
-.visually-hidden {
-  position: absolute !important;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-}
-
-/* Tag lines and the hero role break between terms, never inside one. */
-.tag-line,
-.hero-role {
-  text-wrap: balance;
-}
-
-.tag-line span,
-.hero-role span {
-  white-space: nowrap;
-}
-
-.page-head .tag-line {
-  margin-top: -4px;
-}
-
-/* Focus on dark surfaces (art, grid cells, lightbox): a white ring inset over
-   an ink halo reads on any image and isn't clipped at the screen edges. */
-[data-zoom]:focus-visible,
-.yt-facade:focus-visible,
-.lightbox-btn:focus-visible {
-  outline: 2px solid var(--white);
-  outline-offset: -4px;
-  box-shadow: inset 0 0 0 6px var(--ink);
-}
-
-.about-layout {
-  align-items: start;
-}
-
-.about-figure {
-  position: sticky;
-  top: 96px;
-}
-
-.list-section .edu-heading {
-  padding: 80px 0 0;
-}
-
-.not-found .not-found-tanuki {
-  width: 200px;
-  height: auto;
-  margin: 0 auto 8px;
-}
-
-.not-found-more {
-  margin-top: 20px;
-  font-size: 14px;
-}
-
-@media (min-width: 769px) {
-  /* Keep the arrows outside the picture so they read on light sketches. */
-  .lightbox-img {
-    max-width: calc(100vw - 160px);
-  }
-}
-
-@media (max-width: 768px) {
-  /* Home tiles on phones: the title sits under the picture, not over it. */
-  .tile {
-    flex-direction: column;
-    background: none;
-  }
-
-  .tile-overlay {
-    position: static;
-    display: block;
-    background: none;
-    padding: 10px 18px 6px;
-  }
-
-  .tile {
-    text-decoration: none;
-  }
-
-  .tile-label {
-    display: block;
-    color: var(--ink);
-    font-size: 18px;
-    padding: 0;
-    text-align: left;
-  }
-
-  .tile:hover .tile-overlay,
-  .tile:focus-visible .tile-overlay {
-    background: none;
-  }
-
-  .about-figure {
-    position: static;
-  }
-}
-
-@media (max-width: 480px) {
   /* Reel and pause stay on one row; the page scrolls to the work anyway. */
   .hero-work {
     display: none;
   }
 }
 
-/* Pause / play over project clips: quiet until the pointer or focus is on the
-   clip, and kept visible while paused so it's easy to resume. */
-.clip,
-.pair-row {
-  position: relative;
-}
-
-.pair-row > .clip-toggle,
-.clip-toggle {
-  position: absolute;
-  left: 14px;
-  bottom: 14px;
-  z-index: 1;
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  border: 0;
-  border-radius: 50%;
-  background: rgba(16, 48, 46, 0.55);
-  -webkit-backdrop-filter: blur(4px);
-  backdrop-filter: blur(4px);
-  color: var(--white);
-  cursor: pointer;
-  opacity: 0;
-  transition: opacity 0.3s ease, background-color 0.3s ease;
-}
-
-.clip-toggle svg {
-  width: 12px;
-  height: 12px;
-  fill: currentColor;
-}
-
-.clip-toggle .i-play,
-.clip-toggle.is-paused .i-pause {
-  display: none;
-}
-
-.clip-toggle.is-paused .i-play {
-  display: block;
-}
-
-.clip:hover .clip-toggle,
-.pair-row:hover .clip-toggle,
-.clip-toggle:focus-visible,
-.clip-toggle.is-paused {
-  opacity: 1;
-}
-
-.clip-toggle:hover {
-  background: var(--ink);
-}
-
+/* Touch screens have no hover: keep every grid title and every clip's pause
+   button visible. */
 @media (hover: none) {
+  .grid-overlay {
+    opacity: 1;
+  }
+
   .clip-toggle {
     opacity: 0.85;
   }
-}
-
-/* Soft placeholder while a piece loads, instead of an empty white gap. */
-.gallery img,
-.story-grid img {
-  background: var(--aqua-mist);
-}
-
-/* Home rhythm: more air between categories, each title close to its work. */
-.discipline {
-  padding-top: 112px;
-}
-
-.discipline-head {
-  margin-bottom: 24px;
-}
-
-.mosaic {
-  margin-top: 0;
-}
-
-/* The film follows the pieces closely, so the page doesn't seem to end. */
-.video-block {
-  margin-top: 48px;
-}
-
-/* --------------------------------------------------------------------------
-   Nav contrast
-   -------------------------------------------------------------------------- */
-
-:root {
-  --nav-text: #2A4D4A; /* 9:1 on white: links read clearly without being loud */
-}
-
-.site-header {
-  background: var(--white);
-  border-bottom-color: #D3EAE8;
-}
-
-.site-nav a,
-body.nav-pinned .hero-corners .corner-right a,
-body.nav-pinned .hero-corners .menu-toggle,
-body.menu-open .hero-corners .menu-toggle,
-.menu-toggle {
-  color: var(--nav-text);
-}
-
-.site-nav a:hover,
-body.nav-pinned .hero-corners .corner-right a:hover {
-  color: var(--tiffany-deep);
-}
-
-.site-nav a[aria-current="page"] {
-  color: var(--ink);
-}
-
-/* The current section is underlined by a short tiffany stroke. */
-.site-nav a[aria-current="page"]::after {
-  left: 8px;
-  right: 8px;
-  bottom: 5px;
-  width: auto;
-  height: 2px;
-  margin-left: 0;
-  border-radius: 2px;
-}
-
-/* Over the intro: a soft shade along the top keeps the white name and links
-   readable on bright skies, without a visible bar. */
-.hero::before {
-  content: '';
-  position: absolute;
-  inset: 0 0 auto 0;
-  z-index: 1;
-  height: 180px;
-  background: linear-gradient(to bottom, rgba(10, 30, 29, 0.5), rgba(10, 30, 29, 0));
-  pointer-events: none;
-}
-
-.hero-corners .wordmark,
-.hero-corners .corner-right a,
-.hero-corners .menu-toggle {
-  text-shadow: 0 1px 2px rgba(10, 30, 29, 0.35), 0 1px 14px rgba(10, 30, 29, 0.4);
-}
-
-.hero-corners .wordmark-sub {
-  color: var(--white);
-}
-
-/* --------------------------------------------------------------------------
-   Focus on covers and over the intro
-   -------------------------------------------------------------------------- */
-
-/* Covers are filled by absolutely placed pictures that would paint over an
-   outline on the link itself, so the ring is drawn on the top layer. */
-.grid-cell:focus-visible,
-.tile:focus-visible,
-.pager-link:focus-visible {
-  outline: none;
-}
-
-.grid-cell:focus-visible .grid-overlay,
-.tile:focus-visible .tile-overlay,
-.pager-link:focus-visible .pager-label {
-  box-shadow: inset 0 0 0 2px var(--white), inset 0 0 0 6px var(--ink);
-}
-
-.grid-cell:focus-visible .grid-overlay {
-  opacity: 1;
-}
-
-/* Over the dark intro the ring is white. */
-.hero :focus-visible,
-.hero-corners :focus-visible {
-  outline-color: var(--white);
 }
 
 /* Touch tablets wider than the phone layout have no hover either: keep the
@@ -2080,13 +1916,23 @@ body.nav-pinned .hero-corners .corner-right a:hover {
   }
 }
 
-/* Montserrat is loaded up to 600: bold text uses it rather than a faked bold. */
-strong,
-b {
-  font-weight: 600;
-}
+/* --------------------------------------------------------------------------
+   Reduced motion: no animated transitions or cross-fades.
+   -------------------------------------------------------------------------- */
 
-.lightbox-btn svg {
-  width: 45%;
-  height: 45%;
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  @view-transition {
+    navigation: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
