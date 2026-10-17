@@ -7,23 +7,7 @@ import { mountNav } from './nav';
 import { mountGallery } from './gallery';
 import { mountHero } from './hero';
 
-// "Copy" next to the email address.
-function mountCopy() {
-  document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((b) => {
-    b.addEventListener('click', async () => {
-      try {
-        await navigator.clipboard.writeText(b.dataset.copy!);
-        b.textContent = 'Copied';
-      } catch {
-        b.textContent = 'Select & copy';
-      }
-      setTimeout(() => { b.textContent = 'Copy'; }, 1800);
-    });
-  });
-}
-
 function mount() {
-  mountCopy();
   mountNav();
   mountGallery();
   mountHero();

@@ -2045,28 +2045,6 @@ a:hover > .arrow--down {
   font-weight: 400;
 }
 
-/* Contact: copy the address in one click (mailto often has no mail app). */
-.copy-email {
-  margin-left: 10px;
-  padding: 4px 10px;
-  border: 1px solid rgba(16, 48, 46, 0.25);
-  border-radius: 5px;
-  background: var(--white);
-  font-family: var(--font-ui);
-  font-weight: 600;
-  font-size: 11px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--ink);
-  vertical-align: middle;
-  cursor: pointer;
-}
-
-.copy-email:hover {
-  border-color: var(--tiffany-deep);
-  color: var(--tiffany-deep);
-}
-
 /* Footer: each item stays whole on narrow screens. */
 .site-footer {
   font-size: 13px;
