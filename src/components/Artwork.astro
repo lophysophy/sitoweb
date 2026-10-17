@@ -2,7 +2,7 @@
 // One piece of artwork: a responsive <img>, or a silent looping <video>.
 // Images are never cropped here; layout classes decide how they sit.
 import type { Piece } from '../lib/portfolio';
-import { responsive, resized } from '../lib/images';
+import { responsive, resized, placeholder } from '../lib/images';
 
 interface Props {
   piece: Piece;
@@ -21,7 +21,7 @@ const {
   piece,
   alt,
   sizes = '100vw',
-  widths = [640, 1280, 1920],
+  widths = [640, 1280, 1600],
   class: cls,
   zoom = false,
   eager = false,
@@ -32,7 +32,10 @@ const r = piece.image ? await responsive(piece.image, widths) : null;
 // Clips show their first-frame still until they play. They don't autoplay from
 // the markup: the page script starts each one when it comes on screen, so
 // clips further down don't download up front.
-const poster = piece.poster ? await resized(piece.poster, 960) : undefined;
+const poster = piece.poster ? await resized(piece.poster, 1280) : undefined;
+// The blurred preview sits behind the piece until its pixels arrive.
+const blur = await placeholder(piece.stillFile);
+const bg = blur ? `background-image:url(${blur})` : undefined;
 ---
 {r ? (
   <img
@@ -45,7 +48,8 @@ const poster = piece.poster ? await resized(piece.poster, 960) : undefined;
     alt={alt}
     loading={eager ? 'eager' : 'lazy'}
     fetchpriority={eager ? 'high' : undefined}
-    decoding="async"
+    decoding={eager ? undefined : 'async'}
+    style={bg}
     data-zoom={zoom ? r.src : undefined}
     tabindex={zoom ? 0 : undefined}
   />
@@ -56,6 +60,7 @@ const poster = piece.poster ? await resized(piece.poster, 960) : undefined;
     width={piece.width}
     height={piece.height}
     poster={poster}
+    style={bg}
     loop={loop}
     muted
     playsinline

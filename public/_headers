@@ -1,0 +1,12 @@
+# Cache rules for Cloudflare Pages / Netlify (ignored by GitHub Pages).
+# Hashed build files never change: keep them for a year.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Intro videos and posters: a month.
+/media/*
+  Cache-Control: public, max-age=2592000
+
+# Pages: always check for a newer version (cheap, they are tiny).
+/*
+  Cache-Control: public, max-age=0, must-revalidate

@@ -36,6 +36,8 @@ export interface Piece {
   image?: ImageMetadata;
   /** Clips: a still of the first frame ("<name>.poster.avif", made by npm run media). */
   poster?: ImageMetadata;
+  /** File on disk of the still (the image, or the clip's poster), for the blur preview. */
+  stillFile?: string;
   width?: number;
   height?: number;
 }
@@ -140,8 +142,8 @@ function titleCase(s: string) {
 // ---- Video dimensions --------------------------------------------------------
 // Knowing a clip's size at build time lets the page reserve its space (no jump
 // while loading). Locally ffprobe is optional (a warning, and the browser sizes
-// the clip once it loads); on the deploy server it is required, so a broken
-// install can't quietly bring the layout jumps back.
+// the clip once it loads); in the GitHub deploy workflow, which installs it,
+// it is required, so a broken install can't quietly bring layout jumps back.
 
 const probeCache = new Map<string, { width: number; height: number } | null>();
 let ffprobeMissing = false;
@@ -160,7 +162,7 @@ function probeVideo(file: string) {
     if (w && h) dims = { width: w, height: h };
   } catch (e: any) {
     if (e && e.code === 'ENOENT') {
-      if (process.env.CI) throw new Error('ffprobe is missing on the build server: install ffmpeg before building.');
+      if (process.env.GITHUB_ACTIONS) throw new Error('ffprobe is missing on the build server: install ffmpeg before building.');
       ffprobeMissing = true;
       console.warn('[portfolio] ffprobe not found: clip sizes are measured in the browser instead (install ffmpeg to fix).');
     } else {
@@ -183,13 +185,14 @@ function toPiece(absKey: string, name: string): Piece | null {
   const k = indexKey(name);
   const base = { name, major: k.major === Infinity ? null : k.major, minor: k.minor };
   const img = imageFiles[absKey];
-  if (img) return { ...base, src: img.src, type: 'image', image: img, width: img.width, height: img.height };
+  if (img) return { ...base, src: img.src, type: 'image', image: img, width: img.width, height: img.height, stillFile: path.join(process.cwd(), absKey) };
   const vid = videoFiles[absKey];
   if (vid) {
     const dims = probeVideo(path.join(process.cwd(), absKey));
-    const poster = imageFiles[absKey.replace(/\.(mp4|webm)$/i, '.poster.avif')];
+    const posterKey = absKey.replace(/\.(mp4|webm)$/i, '.poster.avif');
+    const poster = imageFiles[posterKey];
     if (!poster) console.warn(`[portfolio] no poster for ${name}: run "npm run media" to make one.`);
-    return { ...base, src: vid, type: 'video', poster, ...(dims || {}) };
+    return { ...base, src: vid, type: 'video', poster, stillFile: poster ? path.join(process.cwd(), posterKey) : undefined, ...(dims || {}) };
   }
   return null;
 }

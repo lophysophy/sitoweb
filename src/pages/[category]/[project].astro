@@ -97,7 +97,7 @@ if (next && next === prev) pager[0].dir = 'Next';
               <ClipToggle />
             </div>
           ) : (
-            <Artwork piece={row.base} alt={`${project.title}, piece ${n + 1}`} zoom eager={n === 0} />
+            <Artwork piece={row.base} alt={`${project.title}, piece ${n + 1}`} zoom eager={n < 2} />
           ),
         )}
       </section>

@@ -1,5 +1,8 @@
 import type { ImageMetadata } from 'astro';
 import { getImage } from 'astro:assets';
+import sharp from 'sharp';
+import fs from 'node:fs';
+import path from 'node:path';
 
 export interface Responsive {
   src: string;
@@ -36,4 +39,47 @@ export async function resized(img: ImageMetadata, width: number) {
 export async function socialImage(img: ImageMetadata) {
   const out = await getImage({ src: img, width: 1200, height: 630, fit: 'cover', format: 'jpg', quality: 80 });
   return out.src;
+}
+
+// ---- Blur preview -------------------------------------------------------------
+// A ~200-byte blurred thumbnail, inlined in the page, shown behind each piece
+// until it loads: the composition and colours are there at once, never an empty
+// box. Cached on disk between builds.
+
+const CACHE = path.join(process.cwd(), 'node_modules/.astro/placeholders.json');
+let cache: Record<string, string> | null = null;
+
+function load() {
+  if (cache) return cache;
+  try { cache = JSON.parse(fs.readFileSync(CACHE, 'utf8')); } catch { cache = {}; }
+  return cache!;
+}
+
+// Saved on every new entry (a few KB; the build can end without an exit event).
+function save() {
+  try {
+    fs.mkdirSync(path.dirname(CACHE), { recursive: true });
+    fs.writeFileSync(CACHE, JSON.stringify(cache));
+  } catch {}
+}
+
+export async function placeholder(file?: string): Promise<string | undefined> {
+  if (!file) return undefined;
+  const c = load();
+  let key: string;
+  try {
+    const st = fs.statSync(file);
+    key = `${file}:${st.size}:${st.mtimeMs}`;
+  } catch {
+    return undefined;
+  }
+  if (c[key]) return c[key];
+  try {
+    const buf = await sharp(file).resize(24).blur(0.6).webp({ quality: 45 }).toBuffer();
+    c[key] = `data:image/webp;base64,${buf.toString('base64')}`;
+    save();
+    return c[key];
+  } catch {
+    return undefined;
+  }
 }

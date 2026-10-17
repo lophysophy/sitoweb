@@ -509,6 +509,23 @@ function wireCoverClips(reduce: boolean) {
   nearAndVisible(clips, (v) => { (v as HTMLVideoElement).preload = 'auto'; }, (v) => play(v as HTMLVideoElement), (v) => (v as HTMLVideoElement).pause());
 }
 
+// ---- Load ahead ---------------------------------------------------------------
+// Browsers start lazy images at very different distances (Safari and Firefox
+// only just before they scroll in). Start every piece a screen and a half
+// ahead, so it is already there when it arrives, in every browser.
+function loadAhead() {
+  const lazy = Array.from(document.querySelectorAll<HTMLImageElement>('main img[loading="lazy"]'));
+  if (!lazy.length || !('IntersectionObserver' in window)) return;
+  const io = observe((entries) => {
+    entries.forEach((e) => {
+      if (!e.isIntersecting) return;
+      (e.target as HTMLImageElement).loading = 'eager';
+      io.unobserve(e.target);
+    });
+  }, { rootMargin: '150% 0px' });
+  lazy.forEach((img) => io.observe(img));
+}
+
 // ---- Mount (runs on every page, after each client-side navigation) ----------
 export function mountGallery() {
   const reduceMotion = reducedMotion();
@@ -525,6 +542,7 @@ export function mountGallery() {
   }, { signal: signal() });
   document.querySelectorAll<HTMLElement>('.grid-cell').forEach(wireCycle);
   wireCoverClips(reduceMotion);
+  loadAhead();
 
   // Reduced motion: project clips start paused with their own controls.
   const project = document.querySelector<HTMLElement>('[data-project]');

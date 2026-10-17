@@ -1975,3 +1975,17 @@ a:active video {
   opacity: 0.9;
   transition: none;
 }
+
+/* Blur preview (inlined by Artwork.astro) behind a piece until it has loaded. */
+img[style*="background-image"],
+video[style*="background-image"] {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Long storyboard grids lay themselves out only when they come near. */
+.group-block {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
+}

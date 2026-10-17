@@ -46,3 +46,23 @@ Text written here appears under the project title.
 ```
 
 Categories, nav labels and page texts live in `src/lib/site.ts`.
+
+## Hosting: faster with Cloudflare Pages (optional)
+
+GitHub Pages caches every file for only 10 minutes and has no HTTP/3. Cloudflare
+Pages (free, unlimited bandwidth) honours `public/_headers`, so returning visitors
+load the artwork from their own cache instantly.
+
+1. Create a free Cloudflare account and add the domain `lophysophy.com`
+   (Cloudflare shows the two nameservers to set at the domain registrar).
+2. Workers & Pages → Create → Pages → Connect to Git → pick this repository.
+   Build command `npm run build`, output directory `dist`, environment variable
+   `NODE_VERSION=24`.
+3. Custom domains → add `lophysophy.com`.
+4. Once it serves the site, turn off GitHub Pages (Settings → Pages) and remove
+   `.github/workflows/deploy.yml`.
+
+Note: Cloudflare's builder has no ffmpeg, so clip sizes would be measured in the
+browser instead. To keep them exact, deploy from GitHub Actions with
+`npx wrangler pages deploy dist` (secret `CLOUDFLARE_API_TOKEN`) after the
+existing build step, which installs ffmpeg.
