@@ -2,7 +2,9 @@
 // AV1 where the device decodes it (smaller files). Choosing in JS means only the
 // file actually used is downloaded. The poster image sits underneath until the
 // first frame is ready. Reduced-motion users start paused.
-(function () {
+import { signal, onCleanup, observe, reducedMotion } from './lifecycle';
+
+export function mountHero() {
   const v = document.querySelector<HTMLVideoElement>('.hero-video');
   const toggle = document.querySelector<HTMLButtonElement>('.hero-toggle');
   if (!v) return;
@@ -13,13 +15,14 @@
   const h264 = (mobile ? d.mobile : d.desktop) || d.desktop!;
   v.src = (av1 && (mobile ? d.mobileAv1 : d.desktopAv1)) || h264;
   // If the AV1 file can't be played after all, fall back to H.264 once.
+  let left = false;
   v.addEventListener('error', () => {
-    if (v.getAttribute('src') === h264) return;
+    if (left || v.getAttribute('src') === h264) return;
     v.src = h264;
     if (!wantPaused) v.play().catch(() => {});
   });
 
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const reduce = reducedMotion();
   const conn = (navigator as any).connection;
   const saveData = !!(conn && (conn.saveData || /(^|-)2g$/.test(conn.effectiveType || '')));
   v.addEventListener('playing', () => v.classList.add('is-playing'), { once: true });
@@ -52,15 +55,23 @@
     if (onScreen) start();
   };
   if (document.readyState === 'complete') begin();
-  else window.addEventListener('load', begin, { once: true });
+  else window.addEventListener('load', begin, { once: true, signal: signal() });
+
+  // Leaving the page: stop the film and its download.
+  onCleanup(() => {
+    left = true;
+    v.pause();
+    v.removeAttribute('src');
+    v.load();
+  });
 
   // Off screen the loop rests (saves battery while browsing the work below).
   if ('IntersectionObserver' in window) {
-    new IntersectionObserver(([e]) => {
+    observe(([e]) => {
       onScreen = e.isIntersecting;
       if (!begun || wantPaused) return;
       if (onScreen) start();
       else v.pause();
     }).observe(v);
   }
-})();
+}

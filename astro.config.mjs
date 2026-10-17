@@ -43,6 +43,9 @@ export default defineConfig({
     checkWorkFolder(),
     sitemap({ filter: (page) => !page.includes('/html/') && !page.endsWith('/404/') }),
   ],
+  // Pages in view are fetched ahead (a few KB each), so a click shows the next
+  // page at once.
+  prefetch: { prefetchAll: true, defaultStrategy: 'viewport' },
   // Film stills are fetched from YouTube at build time and served locally.
   image: { domains: ['i.ytimg.com'] },
   build: { inlineStylesheets: 'auto' },

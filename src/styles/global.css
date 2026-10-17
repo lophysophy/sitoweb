@@ -40,23 +40,32 @@ html {
   /* Reserve the scrollbar's space on every page, so short and long pages lay
      out the same and the nav doesn't jump sideways between them. */
   scrollbar-gutter: stable;
-  scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
 }
 
-/* Soft cross-fade between pages in browsers that support it (no JS). */
-@view-transition {
-  navigation: auto;
+/* Smooth in-page scrolling (e.g. "See the work"), but never while the router
+   restores a position on Back/Forward. */
+html:not([data-astro-transition]) {
+  scroll-behavior: smooth;
 }
 
-/* Changing section: the page settles in with a short rise while the header
-   bar stays put, so only the content changes. */
+/* --------------------------------------------------------------------------
+   Page transitions (ClientRouter + view transitions, in every browser)
+   The old page dissolves quickly; the new one settles in with a short rise.
+   The header bar stays still: only the current-section mark crossfades.
+   Going back is a plain fade. Opacity and transform only.
+   -------------------------------------------------------------------------- */
+
 ::view-transition-old(root) {
-  animation: page-out 0.22s ease both;
+  animation: vt-out 120ms cubic-bezier(0.4, 0, 1, 1) both;
 }
 
 ::view-transition-new(root) {
-  animation: page-in 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  animation: vt-in 260ms cubic-bezier(0.16, 1, 0.3, 1) 40ms both;
+}
+
+:root[data-astro-transition="back"]::view-transition-new(root) {
+  animation: vt-fade 200ms ease-out both;
 }
 
 .site-header:not(.site-header--home) {
@@ -67,24 +76,21 @@ html {
   animation: none;
 }
 
-@keyframes page-out {
-  to { opacity: 0; transform: translateY(-6px); }
+::view-transition-old(site-header),
+::view-transition-new(site-header) {
+  animation-duration: 150ms;
 }
 
-@keyframes page-in {
-  from { opacity: 0; transform: translateY(14px); }
+@keyframes vt-out {
+  to { opacity: 0; }
 }
 
-/* Page transition fallback: the same rise-in and fade-out, played by hand where
-   cross-page view transitions aren't supported. The header stays put. */
-.pt main,
-.pt .site-footer {
-  animation: page-in 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+@keyframes vt-in {
+  from { opacity: 0; transform: translateY(8px); }
 }
 
-.pt.pt-out main,
-.pt.pt-out .site-footer {
-  animation: page-out 0.22s ease both;
+@keyframes vt-fade {
+  from { opacity: 0; }
 }
 
 body {
@@ -117,7 +123,7 @@ video {
 
 a {
   color: var(--ink);
-  transition: color 0.4s ease, background-color 0.4s ease, border-color 0.4s ease, opacity 0.4s ease;
+  transition: color 0.18s ease-out, background-color 0.18s ease-out, border-color 0.18s ease-out, opacity 0.18s ease-out;
 }
 
 /* Montserrat is loaded up to 600: bold text uses it rather than a faked bold. */
@@ -282,7 +288,7 @@ b {
   background: currentColor;
   -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M2.75 8h10.1M9.1 4.25 12.85 8 9.1 11.75' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M2.75 8h10.1M9.1 4.25 12.85 8 9.1 11.75' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
-  transition: transform 0.35s var(--ease);
+  transition: transform 0.25s var(--ease);
 }
 
 .arrow--back {
@@ -487,7 +493,7 @@ body.nav-pinned .hero-corners .corner-right a:hover {
   border-radius: 2px;
   background: currentColor;
   transform-origin: center;
-  transition: transform 0.3s ease, top 0.3s ease, opacity 0.3s ease;
+  transition: transform 0.24s cubic-bezier(0.2, 0.8, 0.2, 1), top 0.24s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.2s ease;
 }
 
 .menu-toggle span:nth-child(1) { top: 13px; }
@@ -622,7 +628,12 @@ body.nav-pinned .hero-corners .corner-right a:hover {
   z-index: 1;
   max-width: 640px;
   color: var(--white);
-  animation: rise 1s var(--ease) 0.2s both;
+  animation: rise 0.6s var(--ease) 0.1s both;
+}
+
+/* Coming back to the homepage: the intro text is simply there. */
+[data-nav="traverse"] .hero-intro {
+  animation: none;
 }
 
 .hero-name {
@@ -762,7 +773,12 @@ body.nav-pinned .hero-corners .corner-right a:hover {
   align-items: center;
   justify-content: center;
   background: var(--aqua-mist);
-  transition: flex 0.45s ease;
+  transition: flex 0.34s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Opening a tile eases out a touch longer than it closes. */
+.tile:hover {
+  transition: flex 0.42s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .tile img,
@@ -791,7 +807,7 @@ body.nav-pinned .hero-corners .corner-right a:hover {
   color: var(--aqua-mist);
   opacity: 0;
   transform: translateY(6px);
-  transition: opacity 0.4s ease, transform 0.4s var(--ease);
+  transition: opacity 0.28s ease 0.04s, transform 0.28s var(--ease) 0.04s;
 }
 
 .tile:hover .tile-overlay,
@@ -857,7 +873,7 @@ body.nav-pinned .hero-corners .corner-right a:hover {
   background: currentColor;
   -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M13.25 8H3.15M6.9 4.25 3.15 8 6.9 11.75' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M13.25 8H3.15M6.9 4.25 3.15 8 6.9 11.75' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
-  transition: transform 0.35s var(--ease);
+  transition: transform 0.25s var(--ease);
 }
 
 .crumb:hover::before {
@@ -906,12 +922,13 @@ body.nav-pinned .hero-corners .corner-right a:hover {
   align-items: flex-end;
   background: linear-gradient(to top, rgba(16, 48, 46, 0.74), rgba(16, 48, 46, 0) 60%);
   opacity: 0;
-  transition: opacity 0.4s ease;
+  transition: opacity 0.32s ease;
 }
 
 .grid-cell:hover .grid-overlay,
 .grid-cell:focus-visible .grid-overlay {
   opacity: 1;
+  transition-duration: 0.22s;
 }
 
 .grid-label {
@@ -1722,11 +1739,12 @@ html.lightbox-open {
     display: block;
     max-height: 0;
     pointer-events: none;
-    transition: max-height 0.45s cubic-bezier(0.4, 0, 0.6, 1);
+    transition: max-height 0.26s cubic-bezier(0.4, 0, 0.6, 1);
   }
 
   .mobile-menu.open {
     pointer-events: auto;
+    transition-duration: 0.32s;
   }
 
   /* Once scrolled past the intro the corners get a solid bar. */
@@ -1937,8 +1955,10 @@ html.lightbox-open {
     scroll-behavior: auto;
   }
 
-  @view-transition {
-    navigation: none;
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
   }
 
   *,
@@ -1947,4 +1967,11 @@ html.lightbox-open {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* A tap on a piece or cover registers at once. */
+a:active img,
+a:active video {
+  opacity: 0.9;
+  transition: none;
 }

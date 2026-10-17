@@ -64,9 +64,6 @@ const pager = await Promise.all(
 if (next && next === prev) pager[0].dir = 'Next';
 ---
 <Base title={project.title} description={description} current={cat.slug} image={project.coverImage}>
-  <Fragment slot="head">
-    {[next, prev].filter(Boolean).map((p) => <link rel="prefetch" href={projectUrl(p!)} />)}
-  </Fragment>
   <article data-project>
     <header class="page-head project-head">
       <p class="kicker"><a class="crumb" href={cat.url}>{cat.title}</a></p>
@@ -145,7 +142,4 @@ if (next && next === prev) pager[0].dir = 'Next';
     </nav>
   </article>
 
-  <script>
-    import '../../scripts/gallery';
-  </script>
 </Base>

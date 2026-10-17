@@ -1,7 +1,9 @@
+import { signal } from './lifecycle';
+
 // Homepage: once the category bar reaches the top, mark the page as pinned so the
 // fixed corners (name + Showreel/About) gain a solid background and read as one
 // bar with the categories. On mobile this also gives the name a solid bar.
-(function () {
+function mountPinnedBar() {
   const hero = document.querySelector<HTMLElement>('.hero');
   const corners = document.querySelector<HTMLElement>('.hero-corners');
   if (!hero || !corners) return;
@@ -13,34 +15,13 @@
   }
   window.addEventListener('scroll', () => {
     if (!ticking) { ticking = true; requestAnimationFrame(update); }
-  }, { passive: true });
-  window.addEventListener('resize', update);
+  }, { passive: true, signal: signal() });
+  window.addEventListener('resize', update, { signal: signal() });
   update();
-})();
-
-// Page transition fallback (browsers without cross-page view transitions, see
-// Base.astro): fade the page out before following an internal link.
-(function () {
-  const root = document.documentElement;
-  if (!root.classList.contains('pt')) return;
-  document.addEventListener('click', (e) => {
-    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-    const a = (e.target as Element).closest?.('a');
-    if (!a || (a.target && a.target !== '_self') || a.hasAttribute('download')) return;
-    const url = new URL(a.href, location.href);
-    if (url.origin !== location.origin) return;
-    if (url.pathname === location.pathname && url.hash) return; // in-page anchor
-    if (/\.[a-z0-9]{2,4}$/i.test(url.pathname) && !/\.html$/i.test(url.pathname)) return; // files (CV…)
-    e.preventDefault();
-    root.classList.add('pt-out');
-    setTimeout(() => { location.href = url.href; }, 200);
-  });
-  // Coming back with Back/Forward restores the page as it was: show it again.
-  window.addEventListener('pageshow', (e) => { if (e.persisted) root.classList.remove('pt-out'); });
-})();
+}
 
 // Mobile dropdown menu (hamburger) holding every section.
-(function () {
+function mountMenu() {
   const btn = document.querySelector<HTMLButtonElement>('.menu-toggle');
   const menu = document.getElementById('mobile-menu');
   if (!btn || !menu) return;
@@ -71,13 +52,14 @@
     e.stopPropagation();
     setOpen(!isOpen());
   });
+  const opts = { signal: signal() };
   document.addEventListener('click', (e) => {
     const t = e.target as Node;
     if (isOpen() && !menu.contains(t) && !btn.contains(t)) setOpen(false);
-  });
+  }, opts);
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && isOpen()) setOpen(false, true);
-  });
+  }, opts);
   // Tabbing out of the open menu closes it.
   menu.addEventListener('focusout', (e) => {
     const to = e.relatedTarget as Node | null;
@@ -92,7 +74,12 @@
   }
   const phone = window.matchMedia('(max-width: 768px)');
   const check = () => { if (!phone.matches && (isOpen() || document.body.classList.contains('menu-open'))) reset(); };
-  phone.addEventListener('change', check);
-  window.addEventListener('resize', check);
-  window.addEventListener('pageshow', (e) => { if (e.persisted) reset(); });
-})();
+  phone.addEventListener('change', check, opts);
+  window.addEventListener('resize', check, opts);
+  window.addEventListener('pageshow', (e) => { if (e.persisted) reset(); }, opts);
+}
+
+export function mountNav() {
+  mountPinnedBar();
+  mountMenu();
+}

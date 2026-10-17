@@ -7,6 +7,7 @@ import { SITE } from '../lib/site';
 import { socialImage } from '../lib/images';
 import favicon from '../assets/lophysophy.jpg';
 import { getImage } from 'astro:assets';
+import { ClientRouter } from 'astro:transitions';
 import type { ImageMetadata } from 'astro';
 // The fonts used above the fold, fetched early so titles don't swap visibly.
 import comfortaa400 from '@fontsource/comfortaa/files/comfortaa-latin-400-normal.woff2?url';
@@ -61,14 +62,8 @@ const icon180 = await getImage({ src: favicon, width: 180, height: 180, format: 
 
   {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
   <slot name="head" />
-  <script is:inline>
-    // Browsers without cross-page view transitions (Firefox today) get the same
-    // section change done by hand (see "Page transition fallback" in global.css
-    // and nav.ts). Set before first paint so the page can rise in.
-    if (!('CSSViewTransitionRule' in window) && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      document.documentElement.classList.add('pt');
-    }
-  </script>
+  <!-- Page changes without a reload: instant, animated in every browser. -->
+  <ClientRouter fallback="swap" />
   <script is:inline data-goatcounter="https://lophysophy.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </head>
 <body class:list={[{ 'is-home': home }]}>
@@ -79,7 +74,7 @@ const icon180 = await getImage({ src: favicon, width: 180, height: 180, format: 
   </main>
   <Footer />
   <script>
-    import '../scripts/nav';
+    import '../scripts/app';
   </script>
 </body>
 </html>

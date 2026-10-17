@@ -1,6 +1,8 @@
 // Client-side behaviour for the galleries. Markup is pre-rendered at build time;
 // these only add motion: mosaic sizing, hover cycling, synced clips, lightbox.
 
+import { signal, onCleanup, observe, reducedMotion } from './lifecycle';
+
 function play(v: HTMLVideoElement) {
   const p = v.play();
   if (p && p.catch) p.catch(() => {});
@@ -95,6 +97,7 @@ function wireImageCycle(cell: HTMLElement, img: HTMLImageElement, frames: string
   cell.addEventListener('mouseleave', stop);
   cell.addEventListener('focus', start); // keyboard users see the cycle too
   cell.addEventListener('blur', stop);
+  onCleanup(() => { if (timer) clearInterval(timer); });
 }
 
 // Video cells: stack one <video> per clip and switch with an instant opacity
@@ -135,6 +138,26 @@ function wireVideoCycle(cell: HTMLElement, cover: HTMLVideoElement, srcs: string
   cell.addEventListener('mouseleave', stop);
   cell.addEventListener('focus', start);
   cell.addEventListener('blur', stop);
+  onCleanup(() => { if (timer) clearInterval(timer); });
+}
+
+// ---- Clips: buffer ahead, play while visible --------------------------------
+// A clip starts downloading a full screen before it arrives, so it is already
+// moving when it scrolls in; it plays only while on screen.
+function nearAndVisible(
+  els: Element[],
+  onNear: (el: Element) => void,
+  onShow: (el: Element) => void,
+  onHide: (el: Element) => void,
+) {
+  if (!('IntersectionObserver' in window)) { els.forEach((el) => { onNear(el); onShow(el); }); return; }
+  const near = observe((entries) => {
+    entries.forEach((e) => { if (e.isIntersecting) { onNear(e.target); near.unobserve(e.target); } });
+  }, { rootMargin: '100% 0px' });
+  const seen = observe((entries) => {
+    entries.forEach((e) => (e.isIntersecting ? onShow(e.target) : onHide(e.target)));
+  }, { rootMargin: '120px 0px' });
+  els.forEach((el) => { near.observe(el); seen.observe(el); });
 }
 
 // ---- Project page: synced side-by-side clips --------------------------------
@@ -184,34 +207,25 @@ function syncGroup(vids: HTMLVideoElement[]) {
     setTimeout(() => { if (!started) { started = true; startAll(); } }, 3000);
   }
 
-  // Rows scrolled out of view rest, and restart together when they come back.
-  if ('IntersectionObserver' in window) {
-    new IntersectionObserver((entries) => {
-      const now = entries[entries.length - 1].isIntersecting;
-      if (now) arm();
-      if (now === visible) return;
-      visible = now;
-      if (!started) return;
-      if (visible) startAll(); else vids.forEach((v) => v.pause());
-    }, { rootMargin: '400px 0px' }).observe(box);
-  } else {
+  // Buffer a screen ahead; rows scrolled out of view rest, and restart
+  // together when they come back.
+  nearAndVisible([box], arm, () => {
+    if (visible) return;
     visible = true;
-    arm();
-  }
+    if (started) startAll();
+  }, () => {
+    if (!visible) return;
+    visible = false;
+    if (started) vids.forEach((v) => v.pause());
+  });
 }
 
-// Single clips also pause while off screen.
+// Single clips (and a clip beside a still) buffer ahead and rest off screen.
 function wireSoloClips(root: HTMLElement) {
-  const solo = root.querySelectorAll<HTMLVideoElement>('.clip > video, .pair-row:not([data-synced]) > video');
-  if (!('IntersectionObserver' in window)) { solo.forEach(play); return; }
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((e) => {
-      const v = e.target as HTMLVideoElement;
-      if (!e.isIntersecting) v.pause();
-      else if ((v.closest('.clip, .pair-row') as HTMLElement).dataset.paused !== 'true') play(v);
-    });
-  }, { rootMargin: '200px 0px' });
-  solo.forEach((v) => io.observe(v));
+  const solo = Array.from(root.querySelectorAll<HTMLVideoElement>('.clip > video, .pair-row:not([data-synced]) > video'));
+  nearAndVisible(solo, (v) => { (v as HTMLVideoElement).preload = 'auto'; }, (v) => {
+    if ((v.closest('.clip, .pair-row') as HTMLElement).dataset.paused !== 'true') play(v as HTMLVideoElement);
+  }, (v) => (v as HTMLVideoElement).pause());
 }
 
 // Pause / play buttons: one per clip, one per side-by-side row (the row's clips
@@ -279,18 +293,46 @@ function wireLightbox(root: HTMLElement) {
     return [Math.round(w * k), Math.round(h * k)];
   }
 
+  // The sharpest file the full view actually needs: the smallest srcset
+  // candidate at least as wide as its on-screen width x pixel density (the
+  // original only when nothing smaller is enough).
+  function bestFor(img: HTMLImageElement) {
+    const need = fit(img)[0] * (window.devicePixelRatio || 1);
+    const set = (img.getAttribute('srcset') || '')
+      .split(',')
+      .map((c) => c.trim().split(/\s+/))
+      .map(([u, w]) => ({ u, w: parseInt(w, 10) || 0 }))
+      .filter((c) => c.u && c.w)
+      .sort((a, b) => a.w - b.w);
+    const pick = set.find((c) => c.w >= need) || set[set.length - 1];
+    return new URL(pick ? pick.u : img.dataset.zoom!, location.href).href;
+  }
+  const warmed = new Set<string>();
+  function warm(img?: HTMLImageElement) {
+    if (!img) return;
+    const u = bestFor(img);
+    if (warmed.has(u)) return;
+    warmed.add(u);
+    const pre = new Image();
+    pre.src = u;
+    pre.decode().catch(() => {});
+  }
+
   function setImage(img: HTMLImageElement) {
     const [w, h] = fit(img);
     big.style.width = w + 'px';
     big.style.height = h + 'px';
     big.alt = img.alt;
     big.src = img.currentSrc || img.src; // already decoded: appears instantly
-    const full = new URL(img.dataset.zoom!, location.href).href;
+    const full = bestFor(img);
     if (full !== big.src) {
       const pre = new Image();
       pre.src = full;
       pre.decode().then(() => { if (group[idx] === img) big.src = full; }).catch(() => {});
     }
+    // The neighbours are ready before you ask for them.
+    warm(group[idx + 1]);
+    warm(group[idx - 1]);
     count.textContent = group.length > 1 ? `${idx + 1} / ${group.length}` : '';
     dlg.classList.toggle('is-single', group.length < 2);
   }
@@ -307,8 +349,8 @@ function wireLightbox(root: HTMLElement) {
     const ix = Math.max(0, (b.width - a.width / k) / 2);
     const iy = Math.max(0, (b.height - a.height / k) / 2);
     return [
-      { transform: `translate(${dx}px, ${dy}px) scale(${k})`, clipPath: `inset(${iy}px ${ix}px)`, boxShadow: '0 0 0 rgba(0,0,0,0)' },
-      { transform: 'none', clipPath: 'inset(0px 0px)', boxShadow: '0 20px 60px rgba(0,0,0,0.5)' },
+      { transform: `translate(${dx}px, ${dy}px) scale(${k})`, clipPath: `inset(${iy}px ${ix}px)` },
+      { transform: 'none', clipPath: 'inset(0px 0px)' },
     ];
   }
 
@@ -332,9 +374,9 @@ function wireLightbox(root: HTMLElement) {
 
     busy = true;
     img.style.visibility = 'hidden'; // the piece "lifts off" the page
-    scrim.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 420, easing: 'ease', fill: 'both' });
-    chrome.forEach((el) => el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 260, delay: 300, fill: 'both' }));
-    const anim = big.animate(fromThumb(img), { duration: 520, easing: EASE, fill: 'both' });
+    scrim.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 220, easing: 'ease-out', fill: 'both' });
+    chrome.forEach((el) => el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 160, delay: 180, fill: 'both' }));
+    const anim = big.animate(fromThumb(img), { duration: 360, easing: 'cubic-bezier(0.2, 0.9, 0.1, 1)', fill: 'both' });
     anim.finished.then(() => { img.style.visibility = ''; busy = false; }, () => { img.style.visibility = ''; busy = false; });
   }
 
@@ -347,10 +389,10 @@ function wireLightbox(root: HTMLElement) {
     big.getAnimations().forEach((a) => a.cancel());
     const back = thumb && inView(thumb);
     if (back) thumb.style.visibility = 'hidden';
-    scrim.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 380, easing: 'ease', fill: 'both' });
+    scrim.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 200, easing: 'ease-in', fill: 'both' });
     chrome.forEach((el) => el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 140, fill: 'both' }));
     const anim = back
-      ? big.animate(fromThumb(thumb).reverse(), { duration: 440, easing: EASE, fill: 'both' })
+      ? big.animate(fromThumb(thumb).reverse(), { duration: 260, easing: 'cubic-bezier(0.4, 0, 0.2, 1)', fill: 'both' })
       : big.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'scale(0.96)' }], { duration: 260, easing: 'ease', fill: 'both' });
     const done = () => {
       if (thumb) thumb.style.visibility = '';
@@ -370,8 +412,8 @@ function wireLightbox(root: HTMLElement) {
     if (!reduce) {
       big.getAnimations().forEach((a) => a.cancel());
       big.animate(
-        [{ opacity: 0, transform: `translateX(${dir * 28}px)` }, { opacity: 1, transform: 'none' }],
-        { duration: 320, easing: EASE },
+        [{ opacity: 0, transform: `translateX(${dir * 20}px)` }, { opacity: 1, transform: 'none' }],
+        { duration: 220, easing: EASE },
       );
     }
   }
@@ -394,12 +436,14 @@ function wireLightbox(root: HTMLElement) {
     if (e.key === 'ArrowRight') show(idx + 1, 1);
     else if (e.key === 'ArrowLeft') show(idx - 1, -1);
   });
+  // Leaving the page: close at once (the dialog goes with the old page).
+  onCleanup(() => { if (dlg.open) dlg.close(); dlg.remove(); });
   window.addEventListener('resize', () => {
     if (!dlg.open) return;
     const [w, h] = fit(group[idx]);
     big.style.width = w + 'px';
     big.style.height = h + 'px';
-  });
+  }, { signal: signal() });
   let x0: number | null = null;
   dlg.addEventListener('touchstart', (e) => { x0 = e.touches.length === 1 ? e.touches[0].clientX : null; }, { passive: true });
   dlg.addEventListener('touchend', (e) => {
@@ -413,6 +457,11 @@ function wireLightbox(root: HTMLElement) {
     img.setAttribute('role', 'button');
     img.setAttribute('aria-label', (img.alt ? img.alt + '. ' : '') + 'Open full screen');
     img.addEventListener('click', () => open(img));
+    // Start fetching the full view as the press begins (or after a short hover).
+    img.addEventListener('pointerdown', () => warm(img));
+    let hover = 0;
+    img.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') hover = window.setTimeout(() => warm(img), 150); });
+    img.addEventListener('pointerleave', () => clearTimeout(hover));
     img.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(img); }
     });
@@ -457,50 +506,45 @@ function wireCoverClips(reduce: boolean) {
     });
     return;
   }
-  if (!('IntersectionObserver' in window)) { clips.forEach(play); return; }
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((e) => {
-      const v = e.target as HTMLVideoElement;
-      if (e.isIntersecting) play(v); else v.pause();
+  nearAndVisible(clips, (v) => { (v as HTMLVideoElement).preload = 'auto'; }, (v) => play(v as HTMLVideoElement), (v) => (v as HTMLVideoElement).pause());
+}
+
+// ---- Mount (runs on every page, after each client-side navigation) ----------
+export function mountGallery() {
+  const reduceMotion = reducedMotion();
+
+  document.querySelectorAll<HTMLElement>('[data-mosaic]').forEach(wireMosaic);
+  let fitQueued = false;
+  window.addEventListener('resize', () => {
+    if (fitQueued) return;
+    fitQueued = true;
+    requestAnimationFrame(() => {
+      fitQueued = false;
+      document.querySelectorAll<HTMLElement>('[data-mosaic]').forEach(fitMosaic);
     });
-  }, { rootMargin: '200px 0px' });
-  clips.forEach((v) => io.observe(v));
+  }, { signal: signal() });
+  document.querySelectorAll<HTMLElement>('.grid-cell').forEach(wireCycle);
+  wireCoverClips(reduceMotion);
+
+  // Reduced motion: project clips start paused with their own controls.
+  const project = document.querySelector<HTMLElement>('[data-project]');
+  if (project && reduceMotion) {
+    project.querySelectorAll<HTMLVideoElement>('video').forEach((v) => {
+      v.autoplay = false;
+      v.pause();
+      v.controls = true;
+      v.preload = 'metadata';
+    });
+    project.querySelectorAll('.clip-toggle').forEach((b) => b.remove()); // native controls instead
+    wireLightbox(project);
+  } else if (project) {
+    project.querySelectorAll('.pair-row').forEach((row) => {
+      const vids = Array.from(row.querySelectorAll('video'));
+      if (vids.length >= 2) syncGroup(vids);
+    });
+    wireSoloClips(project);
+    wireClipToggles(project);
+    wireLightbox(project);
+  }
+  wireFilms(document);
 }
-
-// ---- Wire up -----------------------------------------------------------------
-const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-document.querySelectorAll<HTMLElement>('[data-mosaic]').forEach(wireMosaic);
-let fitQueued = false;
-window.addEventListener('resize', () => {
-  if (fitQueued) return;
-  fitQueued = true;
-  requestAnimationFrame(() => {
-    fitQueued = false;
-    document.querySelectorAll<HTMLElement>('[data-mosaic]').forEach(fitMosaic);
-  });
-});
-document.querySelectorAll<HTMLElement>('.grid-cell').forEach(wireCycle);
-wireCoverClips(reduceMotion);
-
-// Reduced motion: project clips start paused with their own controls.
-const project = document.querySelector<HTMLElement>('[data-project]');
-if (project && reduceMotion) {
-  project.querySelectorAll<HTMLVideoElement>('video').forEach((v) => {
-    v.autoplay = false;
-    v.pause();
-    v.controls = true;
-    v.preload = 'metadata';
-  });
-  project.querySelectorAll('.clip-toggle').forEach((b) => b.remove()); // native controls instead
-  wireLightbox(project);
-} else if (project) {
-  project.querySelectorAll('.pair-row').forEach((row) => {
-    const vids = Array.from(row.querySelectorAll('video'));
-    if (vids.length >= 2) syncGroup(vids);
-  });
-  wireSoloClips(project);
-  wireClipToggles(project);
-  wireLightbox(project);
-}
-wireFilms(document);
