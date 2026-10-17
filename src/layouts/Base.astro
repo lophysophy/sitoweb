@@ -61,6 +61,14 @@ const icon180 = await getImage({ src: favicon, width: 180, height: 180, format: 
 
   {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
   <slot name="head" />
+  <script is:inline>
+    // Browsers without cross-page view transitions (Firefox today) get the same
+    // section change done by hand (see "Page transition fallback" in global.css
+    // and nav.ts). Set before first paint so the page can rise in.
+    if (!('CSSViewTransitionRule' in window) && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.documentElement.classList.add('pt');
+    }
+  </script>
   <script is:inline data-goatcounter="https://lophysophy.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </head>
 <body class:list={[{ 'is-home': home }]}>

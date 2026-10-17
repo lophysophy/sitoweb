@@ -75,6 +75,18 @@ html {
   from { opacity: 0; transform: translateY(14px); }
 }
 
+/* Page transition fallback: the same rise-in and fade-out, played by hand where
+   cross-page view transitions aren't supported. The header stays put. */
+.pt main,
+.pt .site-footer {
+  animation: page-in 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+.pt.pt-out main,
+.pt.pt-out .site-footer {
+  animation: page-out 0.22s ease both;
+}
+
 body {
   font-family: var(--font-ui);
   font-weight: 400;
