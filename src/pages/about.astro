@@ -16,11 +16,11 @@ import { SITE } from '../lib/site';
       <p>My work moves between digital and traditional media, I like to incorporate traditional techniques into my projects and sometimes challenge myself to achieve that look only through digital. I love painting and playing with colors!</p>
       <p>Currently I am studying for my Master Degree in Character Animation and Animated Filmmaking at Gobelins Paris (CRFA, class of 2027). Before that I earned a BA in Illustration and Animation at IED Rome.</p>
 
-      <div class="contact-card">
+      <div class="contact-card" id="contact">
         <p class="kicker">Contact</p>
-        <a class="contact-email" href={`mailto:${SITE.email}`}>{SITE.email}</a>
+        <a class="contact-email" href={`mailto:${SITE.email}`}>{SITE.email}</a><button class="copy-email" type="button" data-copy={SITE.email}>Copy</button>
         <p class="about-actions">
-          <a class="btn btn--solid" href={SITE.cv} download>Download CV (PDF)</a>
+          <a class="btn btn--solid" href={SITE.cv} target="_blank" rel="noopener">CV (PDF)</a>
           <a class="btn" href={SITE.instagram} target="_blank" rel="noopener">Instagram</a>
         </p>
       </div>

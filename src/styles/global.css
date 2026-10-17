@@ -961,8 +961,9 @@ body.nav-pinned .hero-corners .corner-right a:hover {
 }
 
 .project-meta dt {
-  font-weight: 600;
-  font-size: 11px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 12px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--aqua-gray);
@@ -1106,7 +1107,7 @@ body.nav-pinned .hero-corners .corner-right a:hover {
 /* Mega grid for a subfolder (e.g. a storyboard): frames read left to right in
    index order, with breathing room between frames. */
 .story-grid {
-  padding: 0 24px;
+  padding: 0 var(--gutter);
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 16px;
@@ -1232,7 +1233,7 @@ body.nav-pinned .hero-corners .corner-right a:hover {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.75;
+  opacity: 0.92;
   transition: opacity 0.5s ease, transform 0.8s var(--ease);
 }
 
@@ -1240,7 +1241,7 @@ body.nav-pinned .hero-corners .corner-right a:hover {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at center, rgba(16, 48, 46, 0.55), rgba(16, 48, 46, 0.1) 70%);
+  background: radial-gradient(ellipse 55% 70% at center, rgba(16, 48, 46, 0.5), rgba(16, 48, 46, 0));
 }
 
 .pager-link:hover img {
@@ -1259,14 +1260,15 @@ body.nav-pinned .hero-corners .corner-right a:hover {
   z-index: 1;
   color: var(--white);
   padding: 16px;
-  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.35);
+  text-shadow: 0 1px 12px rgba(16, 48, 46, 0.5);
 }
 
 .pager-dir {
   display: inline-flex;
   align-items: center;
-  font-weight: 600;
-  font-size: 11px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 12px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
 }
@@ -1284,7 +1286,7 @@ body.nav-pinned .hero-corners .corner-right a:hover {
 }
 
 .back-row {
-  margin-top: 36px;
+  margin-top: 32px;
 }
 
 /* --------------------------------------------------------------------------
@@ -1570,7 +1572,7 @@ html.lightbox-open {
 
 /* Education timeline. */
 .list-section {
-  max-width: 960px;
+  max-width: 1000px;
   margin: 0 auto;
   padding: 0 24px;
 }
@@ -1593,9 +1595,8 @@ html.lightbox-open {
 .edu-timeline::before {
   content: '';
   position: absolute;
-  left: 50%;
-  width: 100vw;
-  transform: translateX(-50%);
+  left: 0;
+  right: 0;
   top: 6px;
   height: 2px;
   background: rgba(10, 186, 181, 0.35);
@@ -1913,8 +1914,25 @@ html.lightbox-open {
   }
 
   /* Reel and pause stay on one row; the page scrolls to the work anyway. */
-  .hero-work {
-    display: none;
+  /* Reel, work and pause still fit on one row. */
+  .hero-actions {
+    flex-wrap: nowrap;
+    gap: 8px;
+  }
+
+  .hero-actions .btn {
+    height: 44px;
+    padding: 0 12px;
+    gap: 6px;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+
+  .hero-toggle {
+    flex: none;
+    width: 44px;
+    height: 44px;
   }
 }
 
@@ -1982,4 +2000,131 @@ video[style*="background-image"] {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+}
+
+/* --------------------------------------------------------------------------
+   UI refinements
+   -------------------------------------------------------------------------- */
+
+/* The intro film's own credits sit at its right edge: on wide screens crop
+   from the left (behind the name) so they aren't cut. */
+@media (min-width: 769px) {
+  .hero-poster img,
+  .hero-video {
+    object-position: 100% 50%;
+  }
+}
+
+/* Project page: what's on the page, with shortcuts down to it. */
+.project-contents {
+  margin-top: 4px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 18px;
+}
+
+.project-contents a {
+  color: var(--aqua-gray);
+  text-decoration: none;
+}
+
+.project-contents a:hover {
+  color: var(--tiffany-deep);
+}
+
+.arrow--down {
+  margin-left: 0.25em;
+  transform: rotate(90deg);
+}
+
+a:hover > .arrow--down {
+  transform: rotate(90deg) translateX(3px);
+}
+
+[id] {
+  scroll-margin-top: 80px;
+}
+
+.pager-count {
+  color: var(--aqua-gray);
+  font-weight: 400;
+}
+
+/* Contact: copy the address in one click (mailto often has no mail app). */
+.copy-email {
+  margin-left: 10px;
+  padding: 4px 10px;
+  border: 1px solid rgba(16, 48, 46, 0.25);
+  border-radius: 5px;
+  background: var(--white);
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink);
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+.copy-email:hover {
+  border-color: var(--tiffany-deep);
+  color: var(--tiffany-deep);
+}
+
+/* Footer: each item stays whole on narrow screens. */
+.site-footer {
+  font-size: 13px;
+}
+
+.site-footer a {
+  white-space: nowrap;
+}
+
+/* 404: centred in the space between header and footer. */
+main:has(> .not-found) {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.not-found {
+  padding-block: 64px;
+}
+
+@media (max-width: 768px) {
+  /* Home tiles on phones: the name always starts at the left gutter. */
+  .tile-overlay {
+    align-self: stretch;
+    padding: 12px var(--gutter) 0;
+  }
+
+  .tile-label {
+    font-size: 16px;
+  }
+
+  /* Pause buttons take less of the narrow side-by-side pieces. */
+  .clip-toggle {
+    width: 28px;
+    height: 28px;
+    left: 8px;
+    bottom: 8px;
+  }
+
+  .clip-toggle svg {
+    width: 10px;
+    height: 10px;
+  }
+}
+
+/* The narrowest phones: the reel button drops its play mark to keep the row. */
+@media (max-width: 370px) {
+  .hero-actions .btn svg {
+    display: none;
+  }
+
+  .hero-actions .btn {
+    padding: 0 10px;
+  }
 }

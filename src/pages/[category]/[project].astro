@@ -62,12 +62,25 @@ const pager = await Promise.all(
     .map(async (x: any) => ({ ...x, img: await thumb(x.p) })),
 );
 if (next && next === prev) pager[0].dir = 'Next';
+
+// What the page holds, with shortcuts down to its sections.
+const sectionId = (t: string) => t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+const pieceCount = project.items.length;
+const contents = [
+  ...project.groups.map((g) => ({ label: g.title, href: `#${sectionId(g.title)}` })),
+  ...(info.youtube ? [{ label: 'Full film', href: '#film' }] : []),
+];
+const position = cat.projects.indexOf(project) + 1;
 ---
 <Base title={project.title} description={description} current={cat.slug} image={project.coverImage}>
   <article data-project>
     <header class="page-head project-head">
       <p class="kicker"><a class="crumb" href={cat.url}>{cat.title}</a></p>
       <h1 class="page-title">{project.title}</h1>
+      <p class="kicker project-contents">
+        {pieceCount > 0 && <span>{pieceCount} {pieceCount === 1 ? 'piece' : 'pieces'}</span>}
+        {contents.map((c) => <a href={c.href}>{c.label}<span class="arrow arrow--down" aria-hidden="true"></span></a>)}
+      </p>
       {meta.length > 0 && (
         <dl class="project-meta">
           {meta.map(([k, v]) => (
@@ -104,7 +117,7 @@ if (next && next === prev) pager[0].dir = 'Next';
     )}
 
     {project.groups.map((group) => (
-      <section class="group-block">
+      <section class="group-block" id={sectionId(group.title)}>
         <h2 class="kicker group-title">{group.title}</h2>
         <div class="story-grid" data-zoom-group>
           {group.items.map((it, n) => (
@@ -115,14 +128,14 @@ if (next && next === prev) pager[0].dir = 'Next';
     ))}
 
     {info.youtube && (
-      <section class="video-block">
+      <section class="video-block" id="film">
         <h2 class="kicker video-heading">Watch the full film</h2>
         <FilmFacade id={info.youtube} title={`${project.title}, film`} label={`Play ${project.title}, full film`} />
       </section>
     )}
 
     <nav class="pager" aria-label="More projects">
-      <p class="kicker pager-heading">More in {cat.title}</p>
+      <p class="kicker pager-heading">More in {cat.title} <span class="pager-count">· {position} of {cat.projects.length}</span></p>
       <div class="pager-grid">
         {pager.map(({ dir, p, img }) => (
           <a class:list={['pager-link', `pager-link--${dir.toLowerCase()}`]} href={projectUrl(p)}>
@@ -138,7 +151,7 @@ if (next && next === prev) pager[0].dir = 'Next';
           </a>
         ))}
       </div>
-      <p class="back-row"><a class="btn" href={cat.url}>All of {cat.title}</a></p>
+      <p class="back-row"><a class="more-link" href={cat.url}>All {cat.title.toLowerCase()} <span class="arrow" aria-hidden="true"></span></a></p>
     </nav>
   </article>
 
