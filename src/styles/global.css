@@ -61,7 +61,7 @@ html:not([data-astro-transition]) {
 }
 
 ::view-transition-new(root) {
-  animation: vt-in 260ms cubic-bezier(0.16, 1, 0.3, 1) 40ms both;
+  animation: vt-in 260ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 :root[data-astro-transition="back"]::view-transition-new(root) {
@@ -1982,10 +1982,4 @@ video[style*="background-image"] {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-}
-
-/* Long storyboard grids lay themselves out only when they come near. */
-.group-block {
-  content-visibility: auto;
-  contain-intrinsic-size: auto 900px;
 }

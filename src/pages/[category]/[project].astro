@@ -108,7 +108,7 @@ if (next && next === prev) pager[0].dir = 'Next';
         <h2 class="kicker group-title">{group.title}</h2>
         <div class="story-grid" data-zoom-group>
           {group.items.map((it, n) => (
-            <Artwork piece={it} alt={`${group.title} ${n + 1}`} sizes="(max-width: 768px) 45vw, 320px" widths={[400, 800]} zoom />
+            <Artwork piece={it} alt={`${group.title} ${n + 1}`} sizes="(max-width: 543px) calc(100vw - 48px), (max-width: 768px) 45vw, 320px" widths={[400, 800]} zoom />
           ))}
         </div>
       </section>

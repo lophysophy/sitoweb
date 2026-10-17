@@ -7,6 +7,5 @@
 /media/*
   Cache-Control: public, max-age=2592000
 
-# Pages: always check for a newer version (cheap, they are tiny).
-/*
-  Cache-Control: public, max-age=0, must-revalidate
+# Pages keep the host's default (revalidated on each visit). A catch-all rule
+# here would be merged into the rules above and cancel their long caching.

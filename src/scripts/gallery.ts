@@ -4,6 +4,7 @@
 import { signal, onCleanup, observe, reducedMotion } from './lifecycle';
 
 function play(v: HTMLVideoElement) {
+  v.muted = true; // iOS autoplays only muted clips; set it on the element too
   const p = v.play();
   if (p && p.catch) p.catch(() => {});
 }
@@ -204,7 +205,8 @@ function syncGroup(vids: HTMLVideoElement[]) {
       v.addEventListener('loadeddata', on);
       try { v.load(); } catch {}
     });
-    setTimeout(() => { if (!started) { started = true; startAll(); } }, 3000);
+    const t = setTimeout(() => { if (!started) { started = true; startAll(); } }, 3000);
+    onCleanup(() => clearTimeout(t));
   }
 
   // Buffer a screen ahead; rows scrolled out of view rest, and restart
@@ -529,6 +531,15 @@ function loadAhead() {
 // ---- Mount (runs on every page, after each client-side navigation) ----------
 export function mountGallery() {
   const reduceMotion = reducedMotion();
+
+  // Leaving the page: release every clip (incl. hover layers) so their
+  // downloads stop and don't compete with the next page's artwork. This runs
+  // after the old page's snapshot, so nothing visible changes.
+  onCleanup(() => {
+    document.querySelectorAll<HTMLVideoElement>('main video').forEach((v) => {
+      try { v.pause(); v.removeAttribute('src'); v.load(); } catch {}
+    });
+  });
 
   document.querySelectorAll<HTMLElement>('[data-mosaic]').forEach(wireMosaic);
   let fitQueued = false;

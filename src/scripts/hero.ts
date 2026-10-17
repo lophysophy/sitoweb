@@ -36,6 +36,7 @@ export function mountHero() {
   };
   v.addEventListener('play', sync);
   v.addEventListener('pause', sync);
+  v.muted = true;
   const start = () => { const p = v.play(); if (p && p.catch) p.catch(sync); };
 
   toggle?.addEventListener('click', () => {

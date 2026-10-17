@@ -17,21 +17,35 @@ mount();
 
 // Before the next page is fetched and shown: also wait (briefly) for its first
 // pictures, so it arrives with its artwork already painted, not empty boxes.
+// The pictures that matter are the ones the page marks as first (high fetch
+// priority) and the posters of its clips. On a slow or data-saving connection
+// the swap never waits: the blur previews cover the gap.
+let prevUrl = location.href;
 document.addEventListener('astro:before-preparation', (e: any) => {
+  prevUrl = e.from?.href || prevUrl;
   const load = e.loader;
   e.loader = async () => {
     await load();
     const doc: Document | undefined = e.newDocument;
     if (!doc) return;
-    const firsts = Array.from(doc.querySelectorAll<HTMLImageElement>('main img')).slice(0, 2);
-    const warm = firsts.map((src) => {
-      const img = new Image();
-      if (src.getAttribute('sizes')) img.sizes = src.getAttribute('sizes')!;
-      if (src.getAttribute('srcset')) img.srcset = src.getAttribute('srcset')!;
-      img.src = src.getAttribute('src') || '';
-      return img.decode().catch(() => {});
+    const conn = (navigator as any).connection;
+    if (conn && (conn.saveData || (conn.effectiveType && conn.effectiveType !== '4g'))) return;
+    const urls: { src: string; srcset?: string; sizes?: string }[] = [];
+    doc.querySelectorAll<HTMLImageElement>('main img[fetchpriority="high"]').forEach((i) => {
+      urls.push({ src: i.getAttribute('src') || '', srcset: i.getAttribute('srcset') || undefined, sizes: i.getAttribute('sizes') || undefined });
     });
-    await Promise.race([Promise.all(warm), new Promise((r) => setTimeout(r, 160))]);
+    doc.querySelectorAll<HTMLVideoElement>('main video[poster]').forEach((v, k) => {
+      if (k < 2) urls.push({ src: v.getAttribute('poster')! });
+    });
+    const imgs = urls.slice(0, 3).map((u) => {
+      const img = new Image();
+      if (u.sizes) img.sizes = u.sizes;
+      if (u.srcset) img.srcset = u.srcset;
+      img.src = u.src;
+      return img;
+    });
+    if (!imgs.length || imgs.every((i) => i.complete)) return; // already cached
+    await Promise.race([Promise.all(imgs.map((i) => i.decode().catch(() => {}))), new Promise((r) => setTimeout(r, 80))]);
   };
 });
 
@@ -56,5 +70,7 @@ let first = true;
 document.addEventListener('astro:page-load', () => {
   if (first) { first = false; return; }
   const gc = (window as any).goatcounter;
-  if (gc && gc.count) gc.count({ path: location.pathname, title: document.title });
+  // Referrer: the page the visitor came from on this site, not the outside
+  // site they first arrived from.
+  if (gc && gc.count) gc.count({ path: location.pathname, title: document.title, referrer: prevUrl });
 });
