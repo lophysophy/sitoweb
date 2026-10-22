@@ -22,6 +22,12 @@
 
   --gutter: 28px;
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1); /* a small, soft overshoot */
+
+  /* One set of soft corners for the whole site. */
+  --radius-ui: 10px;     /* buttons and controls */
+  --radius-media: 12px;  /* framed films and previews */
+  --radius-card: 16px;   /* cards and sheets */
 }
 
 /* --------------------------------------------------------------------------
@@ -143,7 +149,7 @@ b {
   color: var(--white);
   font-weight: 600;
   text-decoration: none;
-  border-radius: 5px;
+  border-radius: var(--radius-ui);
 }
 
 .skip-link:focus {
@@ -259,7 +265,7 @@ b {
   display: inline-flex;
   align-items: center;
   background: var(--tiffany-deep);
-  border-radius: 5px;
+  border-radius: var(--radius-ui);
   font-family: var(--font-ui);
   font-weight: 600;
   font-size: 13px;
@@ -281,18 +287,19 @@ b {
   margin-left: 10px;
 }
 
-/* A slim arrow with rounded ends, drawn to match Comfortaa's soft strokes. It
-   takes the colour of the text around it and nudges toward where it leads. */
+/* A soft caret with rounded ends, drawn to match Comfortaa's strokes. It takes
+   the colour of the text around it and nudges, with a little bounce, toward
+   where it leads. */
 .arrow {
   display: inline-block;
   width: 1.05em;
   height: 1.05em;
   margin-left: 0.35em;
-  vertical-align: -0.17em;
+  vertical-align: -0.15em;
   background: currentColor;
-  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M2.75 8h10.1M9.1 4.25 12.85 8 9.1 11.75' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M2.75 8h10.1M9.1 4.25 12.85 8 9.1 11.75' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
-  transition: transform 0.25s var(--ease);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M6.25 3.75 10.5 8l-4.25 4.25' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M6.25 3.75 10.5 8l-4.25 4.25' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  transition: transform 0.35s var(--ease-bounce);
 }
 
 .arrow--back {
@@ -303,12 +310,12 @@ b {
 
 a:hover > .arrow,
 a:hover .pager-dir .arrow {
-  transform: translateX(4px);
+  transform: translateX(3px);
 }
 
 a:hover > .arrow--back,
 a:hover .pager-dir .arrow--back {
-  transform: scaleX(-1) translateX(4px);
+  transform: scaleX(-1) translateX(3px);
 }
 
 /* --------------------------------------------------------------------------
@@ -538,6 +545,7 @@ body:not(.menu-open) .site-header.is-clear:not(.has-flyout) .site-nav a[aria-cur
   border-bottom: 1px solid var(--aqua-mist);
   box-shadow: 0 14px 28px rgba(16, 48, 46, 0.14);
   padding-bottom: 8px;
+  border-radius: 0 0 var(--radius-card) var(--radius-card);
 }
 
 .mobile-menu a {
@@ -674,7 +682,7 @@ body:not(.menu-open) .site-header.is-clear:not(.has-flyout) .site-nav a[aria-cur
   align-items: center;
   justify-content: center;
   border: 1px solid rgba(255, 255, 255, 0.7);
-  border-radius: 5px;
+  border-radius: var(--radius-ui);
   background: transparent;
   color: var(--white);
   cursor: pointer;
@@ -866,7 +874,7 @@ body:not(.menu-open) .site-header.is-clear:not(.has-flyout) .site-nav a[aria-cur
   min-height: 44px;
   padding: 0 18px 0 14px;
   background: var(--tiffany-deep); /* the same green box as the site's buttons */
-  border-radius: 5px;
+  border-radius: var(--radius-ui);
   font-family: var(--font-ui);
   font-weight: 600;
   font-size: 13px;
@@ -897,13 +905,13 @@ body:not(.menu-open) .site-header.is-clear:not(.has-flyout) .site-nav a[aria-cur
   flex: none;
   margin-right: 0.5em;
   background: currentColor;
-  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M13.25 8H3.15M6.9 4.25 3.15 8 6.9 11.75' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M13.25 8H3.15M6.9 4.25 3.15 8 6.9 11.75' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
-  transition: transform 0.25s var(--ease);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M9.75 3.75 5.5 8l4.25 4.25' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M9.75 3.75 5.5 8l4.25 4.25' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  transition: transform 0.35s var(--ease-bounce);
 }
 
 .back-link:hover::before {
-  transform: translateX(-4px);
+  transform: translateX(-3px);
 }
 
 .back-link:hover {
@@ -1158,10 +1166,11 @@ body:not(.menu-open) .site-header.is-clear:not(.has-flyout) .site-nav a[aria-cur
   background: #000;
 }
 
-/* Films are framed like every other piece: square edges, no shadow. */
+/* Films sit in a softly rounded frame, no shadow. */
 .video-block .video-frame,
 .reel-stage .video-frame {
   overflow: hidden;
+  border-radius: var(--radius-media);
 }
 
 .video-frame iframe {
@@ -1464,7 +1473,7 @@ html.lightbox-open {
   gap: 8px;
   background: transparent;
   border: 1px solid var(--ink);
-  border-radius: 5px;
+  border-radius: var(--radius-ui);
   font-family: var(--font-ui);
   font-weight: 600;
   font-size: 13px;
@@ -1563,7 +1572,7 @@ html.lightbox-open {
   margin-top: 28px;
   padding: 24px 26px;
   background: var(--aqua-mist);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
 }
 
 .contact-card .kicker {
@@ -1661,7 +1670,7 @@ html.lightbox-open {
 .edu-body {
   flex: 1;
   background: var(--aqua-mist);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 16px 20px;
 }
 
@@ -2245,6 +2254,8 @@ main:has(> .not-found) {
 
 .flyout-preview-frame {
   position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-media);
 }
 
 /* An animation project's clip plays over its still once it is running. */
