@@ -88,6 +88,34 @@ html:not([data-astro-transition]) {
   animation: none;
 }
 
+/* Leaving a page from an open category panel: the panel rolls up under the
+   bar and the softened page behind it clears, while the pages crossfade. */
+::view-transition-group(site-header) {
+  z-index: 2;
+}
+
+::view-transition-group(nav-panel),
+::view-transition-group(nav-curtain) {
+  z-index: 1;
+  animation: none;
+}
+
+::view-transition-old(nav-panel) {
+  animation: nav-roll-up 0.3s cubic-bezier(0.4, 0, 0.6, 1) both;
+}
+
+::view-transition-old(nav-curtain) {
+  animation: nav-fade-out 0.3s cubic-bezier(0.4, 0, 0.6, 1) both;
+}
+
+@keyframes nav-roll-up {
+  to { clip-path: inset(0 0 100% 0); }
+}
+
+@keyframes nav-fade-out {
+  to { opacity: 0; }
+}
+
 body {
   font-family: var(--font-ui);
   font-weight: 400;

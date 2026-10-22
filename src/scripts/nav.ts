@@ -245,7 +245,7 @@ function mountFlyouts() {
         // A short pause before opening, and before switching: a pointer that
         // only crosses a neighbouring category on its way down into the
         // panel doesn't change it.
-        openTimer = window.setTimeout(() => open(slug), current !== null ? 110 : 90);
+        openTimer = window.setTimeout(() => open(slug), current !== null ? 110 : 140);
       });
       a.addEventListener('pointerleave', () => clearTimeout(openTimer));
     });
@@ -281,8 +281,17 @@ function mountFlyouts() {
       const a = (e.target as Element).closest('a');
       if (!a || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
       quiet = true;
-      close(true);
+      clearTimeout(openTimer);
+      // Leaving the page with a panel open: it rolls up under the bar while
+      // the pages crossfade (view transition, see global.css), instead of
+      // vanishing the moment you click.
+      if (current !== null && 'startViewTransition' in document && !reducedMotion()) {
+        flyout!.style.setProperty('view-transition-name', 'nav-panel');
+        curtain!.style.setProperty('view-transition-name', 'nav-curtain');
+      } else close(true);
     });
+    // Pressing a category to go there: a panel still waiting to open doesn't.
+    header.addEventListener('pointerdown', () => { if (current === null) clearTimeout(openTimer); });
     window.addEventListener('scroll', () => { if (current !== null) close(true); }, { passive: true, ...opts });
     window.addEventListener('resize', () => { if (current !== null) close(true); }, opts);
     onCleanup(() => close(true));
