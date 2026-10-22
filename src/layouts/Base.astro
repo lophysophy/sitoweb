@@ -21,13 +21,11 @@ interface Props {
   /** Section highlighted in the nav: a category slug, 'showreel' or 'about'. */
   current?: string;
   home?: boolean;
-  /** The page one level up, for the back row under the bar (none on the homepage). */
-  back?: { href: string; label: string };
   jsonLd?: object;
   noindex?: boolean;
 }
 
-const { title, description = SITE.description, image, current, home = false, back, jsonLd, noindex = false } = Astro.props;
+const { title, description = SITE.description, image, current, home = false, jsonLd, noindex = false } = Astro.props;
 const fullTitle = title ? `${title} · ${SITE.name}` : `${SITE.name} · ${SITE.author}, visual development & 2D animation`;
 const canonical = new URL(Astro.url.pathname, SITE.url).href;
 const ogImage = image ? new URL(await socialImage(image), SITE.url).href : new URL('/media/og.jpg', SITE.url).href;
@@ -72,11 +70,6 @@ const icon180 = await getImage({ src: favicon, width: 180, height: 180, format: 
   <a class="skip-link" href="#content">Skip to content</a>
   <Header home={home} current={current} />
   <main id="content">
-    {back && (
-      <nav class="back-nav" aria-label="Back">
-        <a class="back-link" href={back.href} data-back><span class="visually-hidden">Back to </span><span data-back-label>{back.label}</span></a>
-      </nav>
-    )}
     <slot />
   </main>
   <Footer />

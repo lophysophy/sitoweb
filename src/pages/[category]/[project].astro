@@ -72,7 +72,7 @@ const contents = [
 ];
 const position = cat.projects.indexOf(project) + 1;
 ---
-<Base title={project.title} description={description} current={cat.slug} image={project.coverImage} back={{ href: cat.url, label: cat.title }}>
+<Base title={project.title} description={description} current={cat.slug} image={project.coverImage}>
   <article data-project>
     <header class="page-head project-head">
       <h1 class="page-title">{project.title}</h1>
