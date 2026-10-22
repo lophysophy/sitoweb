@@ -2182,12 +2182,13 @@ main:has(> .not-found) {
 }
 
 .flyout-inner {
-  max-width: 1280px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 40px var(--gutter) 64px;
+  padding: 44px var(--gutter) 60px;
   display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) 300px;
-  gap: 56px;
+  grid-template-columns: minmax(0, 1fr) 420px;
+  gap: 80px;
+  align-items: start;
 }
 
 .flyout-head {
@@ -2214,11 +2215,11 @@ main:has(> .not-found) {
 }
 
 .flyout-link--big {
-  padding: 3px 0;
+  padding: 4px 0;
   font-family: var(--font-display);
   font-weight: 400;
-  font-size: 26px;
-  line-height: 1.3;
+  font-size: 32px;
+  line-height: 1.25;
   color: var(--ink);
 }
 
@@ -2229,11 +2230,11 @@ main:has(> .not-found) {
 
 .flyout-preview img {
   display: block;
-  width: 300px;
-  height: 200px;
+  width: 420px;
+  height: 280px;
   object-fit: cover;
   background: var(--aqua-mist);
-  transition: opacity 0.15s ease;
+  transition: opacity 0.18s ease;
 }
 
 .flyout-preview figcaption {
@@ -2258,17 +2259,38 @@ main:has(> .not-found) {
   transition-delay: calc(var(--g, 0) * 80ms + var(--i, 0) * 20ms + 80ms);
 }
 
-/* Moving to another category while open: the new content simply fades in
-   while the panel resizes, no second cascade. */
-.flyout.is-switching .flyout-menu.is-current .flyout-item {
-  transition: opacity 0.2s ease 0.06s, transform 0s;
-  transform: none;
+/* Moving to another category while open: the old content slips out and the
+   new one slides in from the side you're moving towards (--dir: 1 to the
+   right, -1 to the left), item by item, while the panel resizes. */
+.flyout-menu.is-leaving {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  pointer-events: none;
 }
 
-@starting-style {
-  .flyout.is-switching .flyout-menu.is-current .flyout-item {
-    opacity: 0;
-  }
+.flyout-menu.is-leaving .flyout-item {
+  opacity: 1;
+  transform: none;
+  transition: none;
+  animation: flyout-out 0.2s cubic-bezier(0.4, 0, 0.6, 1) both;
+  animation-delay: calc(var(--i, 0) * 12ms);
+}
+
+.flyout.is-open .flyout-menu.is-entering .flyout-item {
+  transition: none;
+  animation: flyout-in 0.38s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: calc(var(--g, 0) * 50ms + var(--i, 0) * 18ms + 70ms);
+}
+
+@keyframes flyout-out {
+  to { opacity: 0; transform: translateX(calc(var(--dir, 1) * -16px)); }
+}
+
+@keyframes flyout-in {
+  from { opacity: 0; transform: translateX(calc(var(--dir, 1) * 28px)); }
 }
 
 /* The page behind softens while the panel is open. */
@@ -2310,5 +2332,13 @@ main:has(> .not-found) {
   .flyout-curtain,
   .flyout-curtain.is-on {
     transition: none !important;
+  }
+
+  .flyout-menu.is-leaving {
+    display: none;
+  }
+
+  .flyout-menu .flyout-item {
+    animation: none !important;
   }
 }

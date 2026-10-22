@@ -93,7 +93,8 @@ function mountFlyouts() {
     const menus = new Map<string, HTMLElement>();
     flyout.querySelectorAll<HTMLElement>('[data-menu]').forEach((m) => menus.set(m.dataset.menu!, m));
     let current: string | null = null;
-    let openTimer = 0, closeTimer = 0;
+    let openTimer = 0, closeTimer = 0, swapTimer = 0;
+    const order = [...menus.keys()];
 
     const items = (slug: string) => header.querySelector<HTMLElement>(`[data-flyout-trigger="${slug}"]`)?.closest('.nav-item');
     const toggles = () => header.querySelectorAll<HTMLButtonElement>('[data-flyout-toggle]');
@@ -111,7 +112,18 @@ function mountFlyouts() {
       const menu = menus.get(slug);
       if (!menu) return;
       const switching = current !== null;
-      flyout!.classList.toggle('is-switching', switching);
+      clearTimeout(swapTimer);
+      menus.forEach((m) => m.classList.remove('is-leaving', 'is-entering'));
+      if (switching) {
+        // Slide towards the side the pointer is moving to.
+        const dir = order.indexOf(slug) > order.indexOf(current!) ? 1 : -1;
+        flyout!.style.setProperty('--dir', String(dir));
+        menus.get(current!)?.classList.add('is-leaving');
+        menu.classList.add('is-entering');
+        swapTimer = window.setTimeout(() => {
+          menus.forEach((m) => m.classList.remove('is-leaving', 'is-entering'));
+        }, 900);
+      }
       menus.forEach((m, k) => m.classList.toggle('is-current', k === slug));
       header.querySelectorAll('.nav-item.is-open').forEach((n) => n.classList.remove('is-open'));
       items(slug)?.classList.add('is-open');
@@ -136,7 +148,9 @@ function mountFlyouts() {
       if (current === null) return;
       current = null;
       if (instant) flyout!.style.transition = 'none';
-      flyout!.classList.remove('is-open', 'is-switching');
+      clearTimeout(swapTimer);
+      flyout!.classList.remove('is-open');
+      menus.forEach((m) => m.classList.remove('is-leaving', 'is-entering'));
       curtain!.classList.remove('is-on');
       flyout!.style.height = '0px';
       header.querySelectorAll('.nav-item.is-open').forEach((n) => n.classList.remove('is-open'));
@@ -154,7 +168,7 @@ function mountFlyouts() {
     function resetPreview(menu: HTMLElement) {
       const img = menu.querySelector<HTMLImageElement>('.flyout-preview img');
       const cap = menu.querySelector<HTMLElement>('.flyout-preview figcaption');
-      if (img && img.dataset.default) img.src = img.dataset.default;
+      if (img && img.dataset.default) { img.src = img.dataset.default; img.dataset.want = ''; img.style.opacity = ''; }
       if (cap && cap.dataset.default) cap.textContent = cap.dataset.default;
     }
     menus.forEach((menu) => {
@@ -162,13 +176,19 @@ function mountFlyouts() {
       const cap = menu.querySelector<HTMLElement>('.flyout-preview figcaption');
       if (!img || !cap) return;
       menu.querySelectorAll<HTMLAnchorElement>('[data-still]').forEach((a) => {
+        // Cross-fade: the old picture fades, the new one comes up once decoded.
         const show = () => {
-          if (!a.dataset.still || img.getAttribute('src') === a.dataset.still) return;
+          const src = a.dataset.still;
+          if (!src || img.dataset.want === src || img.getAttribute('src') === src) return;
+          img.dataset.want = src;
+          img.style.opacity = '0';
           const next = new Image();
-          next.src = a.dataset.still;
-          next.decode().catch(() => {}).then(() => {
-            img.src = a.dataset.still!;
+          next.src = src;
+          Promise.all([next.decode().catch(() => {}), new Promise((r) => setTimeout(r, 120))]).then(() => {
+            if (img.dataset.want !== src) return;
+            img.src = src;
             cap.textContent = a.dataset.title || '';
+            img.style.opacity = '';
           });
         };
         a.addEventListener('mouseenter', show);
