@@ -289,7 +289,34 @@ function mountFlyouts() {
   });
 }
 
+// The current-section mark under the bar slides from the section you left to
+// the one you opened (the bar itself doesn't crossfade between pages).
+let lastMark: DOMRect | null = null;
+let swapped = false; // only after moving between pages, not on the first load
+const markLink = () => document.querySelector<HTMLElement>('.site-header .site-nav a[aria-current="page"]');
+document.addEventListener('astro:before-swap', () => {
+  const a = markLink();
+  lastMark = a && a.offsetParent ? a.getBoundingClientRect() : null;
+  swapped = true;
+});
+function slideMark() {
+  const from = lastMark;
+  lastMark = null;
+  if (!swapped) return;
+  swapped = false;
+  const a = markLink();
+  if (!a || !a.offsetParent || reducedMotion()) return;
+  const to = a.getBoundingClientRect();
+  if (from && Math.abs(from.left - to.left) < 1) return; // same section
+  // No previous mark (from the homepage): it grows in from the left instead.
+  a.style.setProperty('--mark-dx', from ? from.left - to.left + 'px' : '0px');
+  a.style.setProperty('--mark-sx', from ? String(from.width / to.width) : '0');
+  a.classList.add('mark-slide');
+  a.addEventListener('animationend', () => a.classList.remove('mark-slide'), { once: true });
+}
+
 export function mountNav() {
+  slideMark();
   mountBarState();
   mountMenu();
   mountFlyouts();

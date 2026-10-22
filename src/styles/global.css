@@ -53,7 +53,7 @@ html:not([data-astro-transition]) {
 /* --------------------------------------------------------------------------
    Page transitions (ClientRouter + view transitions, in every browser)
    The old page dissolves quickly; the new one settles in with a short rise.
-   The header bar stays still: only the current-section mark crossfades.
+   The header bar stays still: only the current-section mark moves.
    Going back is a plain fade. Opacity and transform only.
    -------------------------------------------------------------------------- */
 
@@ -77,9 +77,15 @@ html:not([data-astro-transition]) {
   animation: none;
 }
 
-::view-transition-old(site-header),
+/* No crossfade on the bar: two layered copies of the glass and of the
+   section mark flashed. The new bar simply replaces the old one, and the
+   mark slides from the old section to the new one (nav.ts). */
+::view-transition-old(site-header) {
+  display: none;
+}
+
 ::view-transition-new(site-header) {
-  animation-duration: 150ms;
+  animation: none;
 }
 
 @keyframes vt-out {
@@ -475,6 +481,15 @@ body:not(.menu-open) .site-header.is-clear:not(.has-flyout) .site-nav a[aria-cur
   height: 2px;
   border-radius: 2px;
   background: var(--tiffany);
+  transform-origin: left center;
+}
+
+.site-nav a[aria-current="page"].mark-slide::after {
+  animation: mark-slide 0.42s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+@keyframes mark-slide {
+  from { transform: translateX(var(--mark-dx, 0)) scaleX(var(--mark-sx, 0)); }
 }
 
 /* Hamburger (mobile only) */
@@ -869,15 +884,18 @@ body:not(.menu-open) .site-header.is-clear:not(.has-flyout) .site-nav a[aria-cur
   align-items: center;
   max-width: 100%;
   min-height: 44px;
-  font-family: var(--font-display);
-  font-weight: 700;
+  padding: 0 18px 0 14px;
+  background: var(--tiffany-deep); /* the same green box as the site's buttons */
+  border-radius: 5px;
+  font-family: var(--font-ui);
+  font-weight: 600;
   font-size: 13px;
-  letter-spacing: 2px;
+  letter-spacing: 1px;
   text-transform: uppercase;
-  color: var(--aqua-gray);
+  color: var(--white);
   text-decoration: none;
   white-space: nowrap;
-  transition: color 0.25s var(--ease);
+  transition: background-color 0.25s var(--ease);
 }
 
 /* The back row takes the room the page head kept above its title. */
@@ -896,8 +914,8 @@ body:not(.menu-open) .site-header.is-clear:not(.has-flyout) .site-nav a[aria-cur
   display: inline-block;
   width: 1.1em;
   height: 1.1em;
-  margin-right: 0.4em;
-  vertical-align: -0.22em;
+  flex: none;
+  margin-right: 0.5em;
   background: currentColor;
   -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M13.25 8H3.15M6.9 4.25 3.15 8 6.9 11.75' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M13.25 8H3.15M6.9 4.25 3.15 8 6.9 11.75' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
@@ -909,7 +927,7 @@ body:not(.menu-open) .site-header.is-clear:not(.has-flyout) .site-nav a[aria-cur
 }
 
 .back-link:hover {
-  color: var(--tiffany-deep);
+  background: var(--ink);
 }
 
 /* --------------------------------------------------------------------------
