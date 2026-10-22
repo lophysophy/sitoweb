@@ -267,15 +267,32 @@ b {
   color: var(--tiffany-deep);
 }
 
+/* "All illustration →" and the like: a solid green button, like the
+   site's other buttons, so the way on to the rest of the work stands out. */
 .more-link {
+  display: inline-flex;
+  align-items: center;
+  background: var(--tiffany-deep);
+  border-radius: 5px;
+  font-family: var(--font-ui);
   font-weight: 600;
-  font-size: 14px;
-  color: var(--tiffany-deep);
+  font-size: 13px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
   text-decoration: none;
+  color: var(--white);
+  padding: 13px 22px 13px 26px;
+  transition: background-color 0.25s var(--ease);
 }
 
 .more-link:hover {
-  color: var(--ink);
+  background: var(--ink);
+  color: var(--white);
+}
+
+.more-link .arrow {
+  vertical-align: 0;
+  margin-left: 10px;
 }
 
 /* A slim arrow with rounded ends, drawn to match Comfortaa's soft strokes. It

@@ -11,7 +11,11 @@ const menus = await Promise.all(
   categories.map(async (cat) => {
     const projects = await Promise.all(
       cat.projects.map(async (p) => {
-        const still = p.coverImage ? await resized(p.coverImage, 840) : undefined;
+        // The same picture as the project's cell on its category page: the
+        // first preview piece (a clip shows its first-frame poster).
+        const cover = (p.preview.length ? p.preview : p.items)[0];
+        const pic = cover?.image ?? cover?.poster;
+        const still = pic ? await resized(pic, 840) : undefined;
         return { title: p.title, url: projectUrl(p), still };
       }),
     );
