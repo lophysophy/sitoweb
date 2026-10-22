@@ -1,7 +1,7 @@
 import { signal, onCleanup, reducedMotion } from './lifecycle';
 
-// Homepage: the fixed bar stays clear (no glass, white type) over the intro
-// film and turns to frosted glass once the page starts to scroll.
+// Homepage: the fixed bar stays clear (white type, no background) over the intro
+// film and turns white once the page starts to scroll.
 function mountBarState() {
   const header = document.querySelector<HTMLElement>('.site-header[data-home]');
   if (!header) return;

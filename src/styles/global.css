@@ -77,7 +77,7 @@ html:not([data-astro-transition]) {
   animation: none;
 }
 
-/* No crossfade on the bar: two layered copies of the glass and of the
+/* No crossfade on the bar: two layered copies of the bar and of the
    section mark flashed. The new bar simply replaces the old one, and the
    mark slides from the old section to the new one (nav.ts). */
 ::view-transition-old(site-header) {
@@ -352,10 +352,10 @@ a:hover .pager-dir .arrow--back {
    Header and nav
    -------------------------------------------------------------------------- */
 
-/* One bar fixed at the top of every page: frosted white glass (after
-   apple.com). Clear over the homepage intro until you scroll. The glass sits
-   on its own layer (::before) so the white of a category panel or the phone
-   menu can roll down from the very top over it, as one sheet. */
+/* One bar fixed at the top of every page, plain white like the category
+   panels. Clear over the homepage intro until you scroll. The white sits on
+   its own layer (::before) so a category panel or the phone menu can roll
+   down from the very top over it, as one sheet. */
 .site-header {
   position: fixed;
   top: 0;
@@ -369,15 +369,11 @@ a:hover .pager-dir .arrow--back {
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(255, 255, 255, 0.78);
-  -webkit-backdrop-filter: saturate(1.8) blur(20px);
-  backdrop-filter: saturate(1.8) blur(20px);
+  background: var(--white);
   border-bottom: 1px solid rgba(16, 48, 46, 0.08);
   transition:
     background-color 0.32s cubic-bezier(0.4, 0, 0.6, 1),
-    border-color 0.32s cubic-bezier(0.4, 0, 0.6, 1),
-    -webkit-backdrop-filter 0.32s cubic-bezier(0.4, 0, 0.6, 1),
-    backdrop-filter 0.32s cubic-bezier(0.4, 0, 0.6, 1);
+    border-color 0.32s cubic-bezier(0.4, 0, 0.6, 1);
 }
 
 .header-inner {
@@ -390,11 +386,9 @@ body:not(.is-home) {
   padding-top: 60px;
 }
 
-/* Over the intro: no glass, white type with a soft shadow for bright skies. */
+/* Over the intro: clear, white type with a soft shadow for bright skies. */
 .site-header.is-clear::before {
   background-color: rgba(255, 255, 255, 0);
-  -webkit-backdrop-filter: saturate(1) blur(0);
-  backdrop-filter: saturate(1) blur(0);
   border-bottom-color: transparent;
 }
 
@@ -558,7 +552,7 @@ body:not(.menu-open) .site-header.is-clear:not(.has-flyout) :is(.site-nav a, .wo
 .mobile-menu {
   display: none;
   position: fixed;
-  top: 0; /* the white rolls down from the top, under the bar's glass */
+  top: 0; /* the white rolls down from the top, under the bar's white */
   left: 0;
   right: 0;
   z-index: 19; /* just below the bar */
@@ -2148,7 +2142,7 @@ main:has(> .not-found) {
 .flyout {
   --flyout-rate: 0.26s;
   position: absolute;
-  z-index: 1; /* over the glass, under the bar's links */
+  z-index: 1; /* over the bar's white, under its links */
   left: 0;
   right: 0;
   top: 0; /* the white unrolls from the very top, behind the bar's links */
