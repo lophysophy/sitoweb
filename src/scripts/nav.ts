@@ -1,22 +1,18 @@
 import { signal, onCleanup } from './lifecycle';
 
-// Homepage: once the category bar reaches the top, mark the page as pinned so the
-// fixed corners (name + Showreel/About) gain a solid background and read as one
-// bar with the categories. On mobile this also gives the name a solid bar.
-function mountPinnedBar() {
-  const hero = document.querySelector<HTMLElement>('.hero');
-  const corners = document.querySelector<HTMLElement>('.hero-corners');
-  if (!hero || !corners) return;
+// Homepage: the fixed bar stays clear (no glass, white type) over the intro
+// film and turns to frosted glass once the page starts to scroll.
+function mountBarState() {
+  const header = document.querySelector<HTMLElement>('.site-header[data-home]');
+  if (!header) return;
   let ticking = false;
   function update() {
     ticking = false;
-    const threshold = hero!.offsetHeight - corners!.offsetHeight;
-    document.body.classList.toggle('nav-pinned', window.scrollY >= threshold);
+    header!.classList.toggle('is-clear', window.scrollY < 40);
   }
   window.addEventListener('scroll', () => {
     if (!ticking) { ticking = true; requestAnimationFrame(update); }
   }, { passive: true, signal: signal() });
-  window.addEventListener('resize', update, { signal: signal() });
   update();
 }
 
@@ -106,8 +102,13 @@ function mountFlyouts() {
       flyout!.style.height = h + 'px';
     }
 
+    // The bar turns solid white while a panel is open, and goes back to glass
+    // once the panel has rolled up.
+    let whiteTimer = 0;
     function open(slug: string) {
       clearTimeout(closeTimer);
+      clearTimeout(whiteTimer);
+      header.classList.add('has-flyout');
       if (current === slug) return;
       const menu = menus.get(slug);
       if (!menu) return;
@@ -156,6 +157,9 @@ function mountFlyouts() {
       header.querySelectorAll('.nav-item.is-open').forEach((n) => n.classList.remove('is-open'));
       toggles().forEach((t) => t.setAttribute('aria-expanded', 'false'));
       if (instant) { void flyout!.offsetHeight; flyout!.style.transition = ''; }
+      clearTimeout(whiteTimer);
+      if (instant) header.classList.remove('has-flyout');
+      else whiteTimer = window.setTimeout(() => header.classList.remove('has-flyout'), 280);
     }
 
     const scheduleClose = () => {
@@ -247,7 +251,7 @@ function mountFlyouts() {
 }
 
 export function mountNav() {
-  mountPinnedBar();
+  mountBarState();
   mountMenu();
   mountFlyouts();
 }

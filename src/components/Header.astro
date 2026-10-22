@@ -1,9 +1,9 @@
 ---
-// Two layouts share this component:
-// - Inner pages: a sticky white bar (name, categories, Showreel/About).
-// - Homepage: the name (left) and Showreel/About (right) float fixed over the
-//   full-screen intro; the category bar lives below the hero (HomeCategoryBar)
-//   and when it pins on scroll, the corners merge with it into one bar.
+// One bar, fixed at the top of every page (after apple.com): frosted white
+// glass with a blur. At the very top of the homepage it is fully clear, with
+// white type, so the intro film shows untouched; scrolling brings the glass
+// in. When a category panel or the phone menu opens it turns solid white and
+// joins the panel below. States are set in nav.ts.
 import { CATEGORIES } from '../lib/site';
 import CategoryLinks from './CategoryLinks.astro';
 import NavFlyouts from './NavFlyouts.astro';
@@ -18,37 +18,23 @@ const main = [
 ];
 const aria = (key: string) => (key === current ? 'page' : undefined);
 ---
-{home ? (
-  <div class="hero-corners">
-    <div class="corners-inner">
+<header class:list={['site-header', { 'is-clear': home }]} data-site-header data-home={home ? '' : undefined}>
+  <div class="header-inner">
+    <div class="header-side">
       <a class="wordmark" href="/">Lophy Sophy<span class="wordmark-sub">Sofia Lucarelli</span></a>
-      <nav class="site-nav corner-right" aria-label="Main navigation">
-        {main.map((l) => <a href={l.href} aria-current={aria(l.key)}>{l.label}</a>)}
-      </nav>
-      <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
-        <span></span><span></span><span></span>
-      </button>
     </div>
+    <CategoryLinks current={current} />
+    <nav class="site-nav header-side right" aria-label="Main navigation">
+      {main.map((l) => <a href={l.href} aria-current={aria(l.key)}>{l.label}</a>)}
+    </nav>
+    <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+      <span></span><span></span><span></span>
+    </button>
   </div>
-) : (
-  <header class="site-header">
-    <div class="header-inner">
-      <div class="header-side">
-        <a class="wordmark" href="/">Lophy Sophy<span class="wordmark-sub">Sofia Lucarelli</span></a>
-      </div>
-      <CategoryLinks current={current} />
-      <nav class="site-nav header-side right" aria-label="Main navigation">
-        {main.map((l) => <a href={l.href} aria-current={aria(l.key)}>{l.label}</a>)}
-      </nav>
-      <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-    <NavFlyouts />
-  </header>
-)}
+  <NavFlyouts />
+</header>
 
-<nav class:list={['mobile-menu', { 'mobile-menu--hero': home }]} id="mobile-menu" aria-label="All sections" inert>
+<nav class="mobile-menu" id="mobile-menu" aria-label="All sections" inert>
   <div class="mobile-menu-inner">
     {[...cats, ...main].map((l) => <a href={l.href} aria-current={aria(l.key)}>{l.label}</a>)}
   </div>

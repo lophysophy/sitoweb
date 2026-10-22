@@ -37,6 +37,7 @@
 }
 
 html {
+  scroll-padding-top: 72px;
   /* Reserve the scrollbar's space on every page, so short and long pages lay
      out the same and the nav doesn't jump sideways between them. */
   scrollbar-gutter: stable;
@@ -68,7 +69,7 @@ html:not([data-astro-transition]) {
   animation: vt-fade 200ms ease-out both;
 }
 
-.site-header:not(.site-header--home) {
+.site-header {
   view-transition-name: site-header;
 }
 
@@ -195,7 +196,7 @@ b {
 
 /* Over the dark intro the ring is white. */
 .hero :focus-visible,
-.hero-corners :focus-visible {
+.site-header.is-clear :focus-visible {
   outline-color: var(--white);
 }
 
@@ -311,13 +312,67 @@ a:hover .pager-dir .arrow--back {
    Header and nav
    -------------------------------------------------------------------------- */
 
+/* One bar fixed at the top of every page: frosted white glass (after
+   apple.com). Clear over the homepage intro until you scroll; solid white
+   while a category panel or the phone menu is open. */
 .site-header {
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 10;
+  left: 0;
+  right: 0;
+  z-index: 20;
   height: 60px;
+  background: rgba(255, 255, 255, 0.78);
+  -webkit-backdrop-filter: saturate(1.8) blur(20px);
+  backdrop-filter: saturate(1.8) blur(20px);
+  border-bottom: 1px solid rgba(16, 48, 46, 0.08);
+  transition: background-color 0.32s cubic-bezier(0.4, 0, 0.6, 1), border-color 0.32s cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+/* Inner pages start below the bar; the homepage intro runs under it. */
+body:not(.is-home) {
+  padding-top: 60px;
+}
+
+/* Over the intro: no glass, white type with a soft shadow for bright skies. */
+body:not(.menu-open) .site-header.is-clear:not(.has-flyout) {
+  background: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  border-bottom-color: transparent;
+}
+
+body:not(.menu-open) .site-header.is-clear:not(.has-flyout) :is(.wordmark, .wordmark-sub, .site-nav a, .menu-toggle) {
+  color: var(--white);
+  text-shadow: 0 1px 2px rgba(10, 30, 29, 0.35), 0 1px 14px rgba(10, 30, 29, 0.4);
+}
+
+body:not(.menu-open) .site-header.is-clear:not(.has-flyout) .site-nav a:hover {
+  color: var(--aqua-mist);
+}
+
+body:not(.menu-open) .site-header.is-clear:not(.has-flyout) .site-nav a[aria-current="page"]::after {
   background: var(--white);
-  border-bottom: 1px solid #D3EAE8;
+}
+
+/* A panel is open: solid white, joined to the panel below. No glass here also
+   keeps the page-wide curtain (position: fixed) sized to the window. */
+.site-header.has-flyout,
+body.menu-open .site-header {
+  background: var(--white);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.site-header.has-flyout {
+  border-bottom-color: transparent;
+}
+
+.wordmark,
+.wordmark-sub,
+.site-nav a,
+.menu-toggle {
+  transition: color 0.32s cubic-bezier(0.4, 0, 0.6, 1), text-shadow 0.32s cubic-bezier(0.4, 0, 0.6, 1);
 }
 
 .header-inner {
@@ -402,72 +457,6 @@ a:hover .pager-dir .arrow--back {
   background: var(--tiffany);
 }
 
-/* Homepage only: the name (left) and Showreel/About (right) stay fixed over the
-   full-screen intro. The category bar lives just below the hero and pins to the
-   top on scroll; when it pins, these corners sit in the same row, so they read
-   as one merged nav bar. */
-.hero-corners {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 20;
-  height: 60px;
-  pointer-events: none;
-  transition: background-color 0.3s ease;
-}
-
-.corners-inner {
-  height: 100%;
-  padding: 0 var(--gutter);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.corners-inner .wordmark,
-.corners-inner .corner-right,
-.corners-inner .menu-toggle {
-  pointer-events: auto;
-}
-
-/* White over the intro, with a soft shadow for bright skies. */
-.hero-corners .wordmark,
-.hero-corners .corner-right a,
-.hero-corners .menu-toggle {
-  color: var(--white);
-  text-shadow: 0 1px 2px rgba(10, 30, 29, 0.35), 0 1px 14px rgba(10, 30, 29, 0.4);
-}
-
-.hero-corners .wordmark-sub {
-  color: var(--white);
-}
-
-/* Pinned bar (or open menu): back to the ink colours of the inner pages. */
-body.nav-pinned .hero-corners .wordmark,
-body.menu-open .hero-corners .wordmark {
-  color: var(--ink);
-  text-shadow: none;
-}
-
-body.nav-pinned .hero-corners .wordmark-sub,
-body.menu-open .hero-corners .wordmark-sub {
-  color: var(--aqua-gray);
-}
-
-body.nav-pinned .hero-corners .corner-right a,
-body.nav-pinned .hero-corners .menu-toggle,
-body.menu-open .hero-corners .menu-toggle {
-  color: var(--nav-text);
-  text-shadow: none;
-}
-
-/* Showreel/About turn tiffany on hover, over the intro and once pinned. */
-.hero-corners .corner-right a:hover,
-body.nav-pinned .hero-corners .corner-right a:hover {
-  color: var(--tiffany-deep);
-}
-
 /* Hamburger (mobile only) */
 .menu-toggle {
   display: none;
@@ -514,18 +503,15 @@ body.nav-pinned .hero-corners .corner-right a:hover {
   transform: rotate(-45deg);
 }
 
-/* Dropdown menu holding every section (mobile only). On most pages it slides
-   down below the sticky bar (top: 60px). On the homepage the bar is transparent
-   over the video, so the --hero variant starts at the very top and reserves the
-   bar row behind the fixed name/hamburger: bar and dropdown grow and collapse
-   together as a single white sheet. */
+/* Dropdown menu holding every section (mobile only): it slides down below the
+   fixed bar, which turns solid white while it is open. */
 .mobile-menu {
   display: none;
   position: fixed;
   top: 60px;
   left: 0;
   right: 0;
-  z-index: 19; /* below .hero-corners (20): name + hamburger sit on the sheet */
+  z-index: 19; /* just below the bar */
   overflow: hidden;
 }
 
@@ -536,14 +522,6 @@ body.nav-pinned .hero-corners .corner-right a:hover {
   border-bottom: 1px solid var(--aqua-mist);
   box-shadow: 0 14px 28px rgba(16, 48, 46, 0.14);
   padding-bottom: 8px;
-}
-
-.mobile-menu--hero {
-  top: 0;
-}
-
-.mobile-menu--hero .mobile-menu-inner {
-  padding-top: 60px;
 }
 
 .mobile-menu a {
@@ -1717,19 +1695,12 @@ html.lightbox-open {
 
   /* Every page collapses its inline nav into the hamburger + dropdown. */
   .nav-center,
-  .header-side.right,
-  .corner-right {
+  .header-side.right {
     display: none;
   }
 
   .menu-toggle {
     display: flex;
-  }
-
-  /* Homepage on mobile: the pinning category bar is gone; the name and
-     hamburger sit over the intro via .hero-corners instead. */
-  .site-header--home {
-    display: none;
   }
 
   /* Apple-style slide: the panel rolls down/up via max-height alone. The exact
@@ -1744,12 +1715,6 @@ html.lightbox-open {
   .mobile-menu.open {
     pointer-events: auto;
     transition-duration: 0.32s;
-  }
-
-  /* Once scrolled past the intro the corners get a solid bar. */
-  body.nav-pinned .hero-corners {
-    background: var(--white);
-    border-bottom: 1px solid var(--aqua-mist);
   }
 
   .wordmark {
