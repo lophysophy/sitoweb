@@ -278,10 +278,8 @@ b {
 .text-link {
   font-weight: 600;
   color: var(--ink);
-  text-decoration: underline;
-  text-decoration-color: var(--tiffany);
-  text-decoration-thickness: 2px;
-  text-underline-offset: 4px;
+  text-decoration: none;
+  transition: color 0.2s ease;
 }
 
 .text-link:hover {
@@ -479,9 +477,9 @@ body:not(.menu-open) .site-header.is-clear:not(.has-flyout) :is(.site-nav a, .wo
   position: absolute;
   left: 50%;
   bottom: 4px;
-  width: 4px;
-  height: 4px;
-  margin-left: -2px;
+  width: 6px;
+  height: 6px;
+  margin-left: -3px;
   border-radius: 50%;
   background: var(--tiffany);
 }
