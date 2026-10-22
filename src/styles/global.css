@@ -1602,7 +1602,6 @@ html.lightbox-open {
   height: 14px;
   border-radius: 50%;
   background: var(--tiffany);
-  box-shadow: 0 0 0 4px var(--aqua-mist);
 }
 
 .edu-time {
