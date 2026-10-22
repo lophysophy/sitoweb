@@ -1,4 +1,4 @@
-import { signal, onCleanup } from './lifecycle';
+import { signal, onCleanup, reducedMotion } from './lifecycle';
 
 // Homepage: the fixed bar stays clear (no glass, white type) over the intro
 // film and turns to frosted glass once the page starts to scroll.
@@ -161,6 +161,7 @@ function mountFlyouts() {
       if (instant) flyout!.style.transition = 'none';
       clearTimeout(swapTimer);
       flyout!.classList.remove('is-open');
+      stopClips();
       menus.forEach((m) => m.classList.remove('is-leaving', 'is-entering'));
       curtain!.classList.remove('is-on');
       flyout!.style.height = '0px';
@@ -179,17 +180,37 @@ function mountFlyouts() {
       closeTimer = window.setTimeout(() => close(), 120);
     };
 
-    // The work preview follows the pointer over the project titles.
+    // The work preview follows the pointer over the project titles. An
+    // animation project's clip plays over its still (not with reduced motion).
+    function setClip(video: HTMLVideoElement | null, clip?: string) {
+      if (!video) return;
+      video.classList.remove('is-playing');
+      if (!clip || reducedMotion()) { video.pause(); return; }
+      video.dataset.want = clip;
+      if (video.getAttribute('src') !== clip) video.src = clip;
+      video.play().catch(() => {});
+    }
+    function stopClips() {
+      flyout!.querySelectorAll<HTMLVideoElement>('.flyout-preview video').forEach((v) => { v.pause(); v.classList.remove('is-playing'); });
+    }
     function resetPreview(menu: HTMLElement) {
+      stopClips();
       const img = menu.querySelector<HTMLImageElement>('.flyout-preview img');
       const cap = menu.querySelector<HTMLElement>('.flyout-preview figcaption');
+      const video = menu.querySelector<HTMLVideoElement>('.flyout-preview video');
       if (img && img.dataset.default) { img.src = img.dataset.default; img.dataset.want = ''; img.style.opacity = ''; }
       if (cap && cap.dataset.default) cap.textContent = cap.dataset.default;
+      setClip(video, video?.dataset.default);
     }
     menus.forEach((menu) => {
       const img = menu.querySelector<HTMLImageElement>('.flyout-preview img');
       const cap = menu.querySelector<HTMLElement>('.flyout-preview figcaption');
+      const video = menu.querySelector<HTMLVideoElement>('.flyout-preview video');
       if (!img || !cap) return;
+      // Fade the clip in only once frames are actually moving.
+      video?.addEventListener('playing', () => {
+        if (video.getAttribute('src') === video.dataset.want && current === menu.dataset.menu) video.classList.add('is-playing');
+      });
       menu.querySelectorAll<HTMLAnchorElement>('[data-still]').forEach((a) => {
         // Cross-fade: the old picture fades, the new one comes up once decoded.
         const show = () => {
@@ -197,6 +218,7 @@ function mountFlyouts() {
           if (!src || img.dataset.want === src || img.getAttribute('src') === src) return;
           img.dataset.want = src;
           img.style.opacity = '0';
+          if (video) { video.classList.remove('is-playing'); video.pause(); video.dataset.want = a.dataset.clip || ''; }
           const next = new Image();
           next.src = src;
           Promise.all([next.decode().catch(() => {}), new Promise((r) => setTimeout(r, 120))]).then(() => {
@@ -204,6 +226,7 @@ function mountFlyouts() {
             img.src = src;
             cap.textContent = a.dataset.title || '';
             img.style.opacity = '';
+            setClip(video, a.dataset.clip);
           });
         };
         a.addEventListener('mouseenter', show);

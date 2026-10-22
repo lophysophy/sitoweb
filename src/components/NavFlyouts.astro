@@ -16,7 +16,9 @@ const menus = await Promise.all(
         const cover = (p.preview.length ? p.preview : p.items)[0];
         const pic = cover?.image ?? cover?.poster;
         const still = pic ? await resized(pic, 840) : undefined;
-        return { title: p.title, url: projectUrl(p), still };
+        // A clip also plays in the preview, over its still.
+        const clip = cover?.type === 'video' ? cover.src : undefined;
+        return { title: p.title, url: projectUrl(p), still, clip };
       }),
     );
     return { cat, projects };
@@ -34,14 +36,17 @@ const menus = await Promise.all(
             <ul class="flyout-list">
               {projects.map((p, i) => (
                 <li class="flyout-item" style={`--i:${i + 1}`}>
-                  <a class="flyout-link flyout-link--big" href={p.url} data-still={p.still} data-title={p.title}>{p.title}</a>
+                  <a class="flyout-link flyout-link--big" href={p.url} data-still={p.still} data-clip={p.clip} data-title={p.title}>{p.title}</a>
                 </li>
               ))}
             </ul>
           </div>
           {first && (
             <figure class="flyout-preview flyout-item" style="--g:1; --i:0" aria-hidden="true">
-              <img src={first.still} alt="" width="420" height="280" loading="lazy" decoding="async" data-default={first.still} />
+              <div class="flyout-preview-frame">
+                <img src={first.still} alt="" width="420" height="280" loading="lazy" decoding="async" data-default={first.still} />
+                <video muted loop playsinline preload="none" width="420" height="280" data-default={first.clip}></video>
+              </div>
               <figcaption data-default={first.title}>{first.title}</figcaption>
             </figure>
           )}
