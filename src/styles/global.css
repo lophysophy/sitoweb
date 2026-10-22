@@ -58,13 +58,15 @@ html:not([data-astro-transition]) {
 
 /* --------------------------------------------------------------------------
    Page transitions (ClientRouter + view transitions)
-   The new page simply replaces the old one, with no entrance animation. The
-   header bar stays still: only the current-section mark moves.
+   A plain crossfade: the two pages dissolve into each other at the same time,
+   with no movement, so there is never a blank frame between them. The header
+   bar stays still: only the current-section mark moves.
    -------------------------------------------------------------------------- */
 
 ::view-transition-old(root),
 ::view-transition-new(root) {
-  animation: none;
+  animation-duration: 0.32s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .site-header {
