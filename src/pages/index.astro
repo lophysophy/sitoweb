@@ -1,6 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
 import Mosaic from '../components/Mosaic.astro';
+import CategoryLinks from '../components/CategoryLinks.astro';
+import NavFlyouts from '../components/NavFlyouts.astro';
 import { categories } from '../lib/portfolio';
 import { CATEGORIES, SITE } from '../lib/site';
 
@@ -60,11 +62,10 @@ const person = {
   <header class="site-header site-header--home">
     <div class="header-inner">
       <div class="header-side" aria-hidden="true"></div>
-      <nav class="site-nav nav-center" aria-label="Work categories">
-        {CATEGORIES.map((c) => <a href={`/${c.slug}/`}>{c.title}</a>)}
-      </nav>
+      <CategoryLinks />
       <div class="header-side right" aria-hidden="true"></div>
     </div>
+    <NavFlyouts />
   </header>
 
   <section class="hello" id="work">

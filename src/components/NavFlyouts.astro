@@ -1,0 +1,57 @@
+---
+// Drop-down panels for the category links in the white bar (desktop only),
+// inspired by apple.com's global nav: hovering a category unrolls a white
+// panel under the bar with that category's projects in large type, a few
+// useful links, and a preview of the work that follows the pointer. Moving
+// between categories only changes the panel's height. Behaviour: nav.ts.
+import { categories, projectUrl } from '../lib/portfolio';
+import { resized } from '../lib/images';
+
+const menus = await Promise.all(
+  categories.map(async (cat) => {
+    const projects = await Promise.all(
+      cat.projects.map(async (p) => {
+        const still = p.coverImage ? await resized(p.coverImage, 640) : undefined;
+        return { title: p.title, url: projectUrl(p), still };
+      }),
+    );
+    return { cat, projects };
+  }),
+);
+---
+<div class="flyout" data-flyout>
+  {menus.map(({ cat, projects }) => {
+    const first = projects.find((p) => p.still);
+    return (
+      <section class="flyout-menu" id={`flyout-${cat.slug}`} data-menu={cat.slug} aria-label={`${cat.title} projects`}>
+        <div class="flyout-inner">
+          <div class="flyout-group" style="--g:0">
+            <p class="flyout-head flyout-item" style="--i:0">{cat.title} · {projects.length} {projects.length === 1 ? 'project' : 'projects'}</p>
+            <ul class="flyout-list">
+              {projects.map((p, i) => (
+                <li class="flyout-item" style={`--i:${i + 1}`}>
+                  <a class="flyout-link flyout-link--big" href={p.url} data-still={p.still} data-title={p.title}>{p.title}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div class="flyout-group" style="--g:1">
+            <p class="flyout-head flyout-item" style="--i:0">Explore</p>
+            <ul class="flyout-list">
+              <li class="flyout-item" style="--i:1"><a class="flyout-link" href={cat.url}>All {cat.title.toLowerCase()}</a></li>
+              <li class="flyout-item" style="--i:2"><a class="flyout-link" href="/showreel/">Showreel</a></li>
+              <li class="flyout-item" style="--i:3"><a class="flyout-link" href="/about/#contact">Contact</a></li>
+            </ul>
+          </div>
+          {first && (
+            <figure class="flyout-preview flyout-item" style="--g:2; --i:0" aria-hidden="true">
+              <img src={first.still} alt="" width="300" height="200" loading="lazy" decoding="async" data-default={first.still} />
+              <figcaption data-default={first.title}>{first.title}</figcaption>
+            </figure>
+          )}
+        </div>
+      </section>
+    );
+  })}
+</div>
+<div class="flyout-curtain" data-flyout-curtain></div>

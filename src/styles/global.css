@@ -2100,3 +2100,215 @@ main:has(> .not-found) {
     padding: 0 10px;
   }
 }
+
+/* --------------------------------------------------------------------------
+   Category drop-down panels (NavFlyouts.astro, behaviour in nav.ts)
+   Timing after apple.com's global nav: the panel unrolls in ~0.25s on
+   cubic-bezier(.4,0,.6,1); items arrive 20ms apart (80ms per column), 4px
+   down, over 0.32s; closing is quicker; the page behind blurs a little.
+   -------------------------------------------------------------------------- */
+
+.nav-item {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.site-nav .nav-item.is-open > a {
+  color: var(--ink);
+}
+
+/* Keyboard opener: invisible until focused, like Apple's chevron. */
+.flyout-toggle {
+  position: absolute;
+  right: -8px;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  margin-top: -9px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--nav-text);
+  opacity: 0;
+  cursor: pointer;
+}
+
+.flyout-toggle:focus-visible {
+  opacity: 1;
+}
+
+.flyout-toggle svg {
+  display: block;
+  width: 10px;
+  height: 6px;
+  margin: 0 auto;
+  transition: transform 0.24s cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+.flyout-toggle[aria-expanded="true"] svg {
+  transform: scaleY(-1);
+}
+
+.flyout {
+  --flyout-rate: 0.26s;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  height: 0;
+  overflow: hidden;
+  background: var(--white);
+  visibility: hidden;
+  transition:
+    height var(--flyout-rate) cubic-bezier(0.4, 0, 0.6, 1) 0.12s,
+    visibility 0s linear calc(var(--flyout-rate) + 0.12s);
+}
+
+.flyout.is-open {
+  visibility: visible;
+  border-bottom: 1px solid #D3EAE8;
+  transition:
+    height var(--flyout-rate) cubic-bezier(0.4, 0, 0.6, 1),
+    visibility 0s;
+}
+
+.flyout-menu {
+  display: none;
+}
+
+.flyout-menu.is-current {
+  display: block;
+}
+
+.flyout-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px var(--gutter) 64px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) 300px;
+  gap: 56px;
+}
+
+.flyout-head {
+  margin-bottom: 14px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--aqua-gray);
+}
+
+.flyout-list {
+  list-style: none;
+}
+
+.flyout-link {
+  display: inline-block;
+  padding: 5px 0;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--nav-text);
+  text-decoration: none;
+}
+
+.flyout-link--big {
+  padding: 3px 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 26px;
+  line-height: 1.3;
+  color: var(--ink);
+}
+
+.flyout-link:hover,
+.flyout-link:focus-visible {
+  color: var(--tiffany-deep);
+}
+
+.flyout-preview img {
+  display: block;
+  width: 300px;
+  height: 200px;
+  object-fit: cover;
+  background: var(--aqua-mist);
+  transition: opacity 0.15s ease;
+}
+
+.flyout-preview figcaption {
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--aqua-gray);
+}
+
+/* Items: hidden a few px up; on opening they arrive one after another. */
+.flyout-item {
+  opacity: 0;
+  transform: translateY(-4px);
+  transition:
+    opacity 0.18s cubic-bezier(0.4, 0, 0.6, 1),
+    transform 0.18s cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+.flyout.is-open .flyout-menu.is-current .flyout-item {
+  opacity: 1;
+  transform: none;
+  transition-duration: 0.32s;
+  transition-delay: calc(var(--g, 0) * 80ms + var(--i, 0) * 20ms + 80ms);
+}
+
+/* Moving to another category while open: the new content simply fades in
+   while the panel resizes, no second cascade. */
+.flyout.is-switching .flyout-menu.is-current .flyout-item {
+  transition: opacity 0.2s ease 0.06s, transform 0s;
+  transform: none;
+}
+
+@starting-style {
+  .flyout.is-switching .flyout-menu.is-current .flyout-item {
+    opacity: 0;
+  }
+}
+
+/* The page behind softens while the panel is open. */
+.flyout-curtain {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: var(--curtain-top, 60px);
+  z-index: -1;
+  background: rgba(234, 247, 246, 0.4);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.32s cubic-bezier(0.4, 0, 0.6, 1) 0.08s, visibility 0s linear 0.4s;
+}
+
+.flyout-curtain.is-on {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.32s cubic-bezier(0.4, 0, 0.6, 1) 0.08s, visibility 0s;
+}
+
+/* Phones use the menu sheet instead. */
+@media (max-width: 768px) {
+  .flyout,
+  .flyout-curtain {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flyout,
+  .flyout.is-open,
+  .flyout-item,
+  .flyout.is-open .flyout-menu.is-current .flyout-item,
+  .flyout-curtain,
+  .flyout-curtain.is-on {
+    transition: none !important;
+  }
+}

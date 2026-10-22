@@ -1,0 +1,19 @@
+---
+// The category links in the white bar. Each one opens its drop-down panel on
+// hover (NavFlyouts); the small chevron button next to it, visible on keyboard
+// focus, opens the same panel from the keyboard.
+import { CATEGORIES } from '../lib/site';
+
+interface Props { current?: string }
+const { current } = Astro.props;
+---
+<nav class="site-nav nav-center" aria-label="Work categories">
+  {CATEGORIES.map((c) => (
+    <span class="nav-item">
+      <a href={`/${c.slug}/`} data-flyout-trigger={c.slug} aria-current={c.slug === current ? 'page' : undefined}>{c.title}</a>
+      <button class="flyout-toggle" type="button" data-flyout-toggle={c.slug} aria-expanded="false" aria-controls={`flyout-${c.slug}`} aria-label={`Show ${c.title} projects`}>
+        <svg viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      </button>
+    </span>
+  ))}
+</nav>

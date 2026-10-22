@@ -5,6 +5,8 @@
 //   full-screen intro; the category bar lives below the hero (HomeCategoryBar)
 //   and when it pins on scroll, the corners merge with it into one bar.
 import { CATEGORIES } from '../lib/site';
+import CategoryLinks from './CategoryLinks.astro';
+import NavFlyouts from './NavFlyouts.astro';
 
 interface Props { home?: boolean; current?: string }
 const { home = false, current } = Astro.props;
@@ -34,9 +36,7 @@ const aria = (key: string) => (key === current ? 'page' : undefined);
       <div class="header-side">
         <a class="wordmark" href="/">Lophy Sophy<span class="wordmark-sub">Sofia Lucarelli</span></a>
       </div>
-      <nav class="site-nav nav-center" aria-label="Work categories">
-        {cats.map((l) => <a href={l.href} aria-current={aria(l.key)}>{l.label}</a>)}
-      </nav>
+      <CategoryLinks current={current} />
       <nav class="site-nav header-side right" aria-label="Main navigation">
         {main.map((l) => <a href={l.href} aria-current={aria(l.key)}>{l.label}</a>)}
       </nav>
@@ -44,6 +44,7 @@ const aria = (key: string) => (key === current ? 'page' : undefined);
         <span></span><span></span><span></span>
       </button>
     </div>
+    <NavFlyouts />
   </header>
 )}
 
