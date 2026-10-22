@@ -80,7 +80,16 @@ function mountMenu() {
 // it); moving to another category swaps the content and resizes the panel;
 // leaving the bar and panel closes it after 0.12s. The chevron button next to
 // each link does the same from the keyboard; Esc closes and returns focus.
+// After a link in the bar or a panel is clicked, the pointer is usually still
+// resting on a category when the next page arrives. Like apple.com, the panel
+// then stays shut until the pointer leaves the category and comes back.
+let quiet = false;
+
 function mountFlyouts() {
+  document.addEventListener('pointermove', (e) => {
+    if (quiet && !(e.target as Element).closest?.('[data-flyout-trigger]')) quiet = false;
+  }, { passive: true, signal: signal() });
+
   document.querySelectorAll<HTMLElement>('.site-header').forEach((header) => {
     const flyout = header.querySelector<HTMLElement>('[data-flyout]');
     const curtain = header.querySelector<HTMLElement>('[data-flyout-curtain]');
@@ -89,21 +98,22 @@ function mountFlyouts() {
     const menus = new Map<string, HTMLElement>();
     flyout.querySelectorAll<HTMLElement>('[data-menu]').forEach((m) => menus.set(m.dataset.menu!, m));
     let current: string | null = null;
-    let openTimer = 0, closeTimer = 0, swapTimer = 0;
+    let openTimer = 0, closeTimer = 0, swapTimer = 0, rate = 260;
     const order = [...menus.keys()];
 
     const items = (slug: string) => header.querySelector<HTMLElement>(`[data-flyout-trigger="${slug}"]`)?.closest('.nav-item');
     const toggles = () => header.querySelectorAll<HTMLButtonElement>('[data-flyout-toggle]');
 
     function setHeight(menu: HTMLElement) {
-      const h = menu.scrollHeight;
+      const h = menu.scrollHeight; // includes the bar's row: the white starts at the top
       // Taller panels take a little longer, as on apple.com (552px ≈ 0.25s).
-      flyout!.style.setProperty('--flyout-rate', Math.min(400, Math.max(200, 160 + h * 0.17)) + 'ms');
+      rate = Math.min(400, Math.max(200, 160 + h * 0.17));
+      flyout!.style.setProperty('--flyout-rate', rate + 'ms');
       flyout!.style.height = h + 'px';
     }
 
-    // The bar turns solid white while a panel is open, and goes back to glass
-    // once the panel has rolled up.
+    // While a panel is open the bar's type reads dark on its white (it matters
+    // over the clear homepage intro).
     let whiteTimer = 0;
     function open(slug: string) {
       clearTimeout(closeTimer);
@@ -159,7 +169,8 @@ function mountFlyouts() {
       if (instant) { void flyout!.offsetHeight; flyout!.style.transition = ''; }
       clearTimeout(whiteTimer);
       if (instant) header.classList.remove('has-flyout');
-      else whiteTimer = window.setTimeout(() => header.classList.remove('has-flyout'), 280);
+      // Bar type turns back once the white has rolled up past it.
+      else whiteTimer = window.setTimeout(() => header.classList.remove('has-flyout'), 120 + rate * 0.85);
     }
 
     const scheduleClose = () => {
@@ -204,7 +215,7 @@ function mountFlyouts() {
     header.querySelectorAll<HTMLElement>('[data-flyout-trigger]').forEach((a) => {
       // Mouse only: a tap on a touch screen just follows the link.
       a.addEventListener('pointerenter', (e) => {
-        if (e.pointerType !== 'mouse') return;
+        if (e.pointerType !== 'mouse' || quiet) return;
         clearTimeout(closeTimer);
         clearTimeout(openTimer);
         const slug = a.dataset.flyoutTrigger!;
@@ -243,7 +254,12 @@ function mountFlyouts() {
     });
 
     // Following a link, scrolling or resizing closes it at once.
-    flyout.addEventListener('click', (e) => { if ((e.target as Element).closest('a')) close(true); });
+    header.addEventListener('click', (e) => {
+      const a = (e.target as Element).closest('a');
+      if (!a || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+      quiet = true;
+      close(true);
+    });
     window.addEventListener('scroll', () => { if (current !== null) close(true); }, { passive: true, ...opts });
     window.addEventListener('resize', () => { if (current !== null) close(true); }, opts);
     onCleanup(() => close(true));

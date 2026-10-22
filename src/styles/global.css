@@ -313,8 +313,9 @@ a:hover .pager-dir .arrow--back {
    -------------------------------------------------------------------------- */
 
 /* One bar fixed at the top of every page: frosted white glass (after
-   apple.com). Clear over the homepage intro until you scroll; solid white
-   while a category panel or the phone menu is open. */
+   apple.com). Clear over the homepage intro until you scroll. The glass sits
+   on its own layer (::before) so the white of a category panel or the phone
+   menu can roll down from the very top over it, as one sheet. */
 .site-header {
   position: fixed;
   top: 0;
@@ -322,11 +323,26 @@ a:hover .pager-dir .arrow--back {
   right: 0;
   z-index: 20;
   height: 60px;
+}
+
+.site-header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
   background: rgba(255, 255, 255, 0.78);
   -webkit-backdrop-filter: saturate(1.8) blur(20px);
   backdrop-filter: saturate(1.8) blur(20px);
   border-bottom: 1px solid rgba(16, 48, 46, 0.08);
-  transition: background-color 0.32s cubic-bezier(0.4, 0, 0.6, 1), border-color 0.32s cubic-bezier(0.4, 0, 0.6, 1);
+  transition:
+    background-color 0.32s cubic-bezier(0.4, 0, 0.6, 1),
+    border-color 0.32s cubic-bezier(0.4, 0, 0.6, 1),
+    -webkit-backdrop-filter 0.32s cubic-bezier(0.4, 0, 0.6, 1),
+    backdrop-filter 0.32s cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+.header-inner {
+  position: relative;
+  z-index: 2;
 }
 
 /* Inner pages start below the bar; the homepage intro runs under it. */
@@ -335,10 +351,10 @@ body:not(.is-home) {
 }
 
 /* Over the intro: no glass, white type with a soft shadow for bright skies. */
-body:not(.menu-open) .site-header.is-clear:not(.has-flyout) {
-  background: transparent;
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
+.site-header.is-clear::before {
+  background-color: rgba(255, 255, 255, 0);
+  -webkit-backdrop-filter: saturate(1) blur(0);
+  backdrop-filter: saturate(1) blur(0);
   border-bottom-color: transparent;
 }
 
@@ -353,19 +369,6 @@ body:not(.menu-open) .site-header.is-clear:not(.has-flyout) .site-nav a:hover {
 
 body:not(.menu-open) .site-header.is-clear:not(.has-flyout) .site-nav a[aria-current="page"]::after {
   background: var(--white);
-}
-
-/* A panel is open: solid white, joined to the panel below. No glass here also
-   keeps the page-wide curtain (position: fixed) sized to the window. */
-.site-header.has-flyout,
-body.menu-open .site-header {
-  background: var(--white);
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
-}
-
-.site-header.has-flyout {
-  border-bottom-color: transparent;
 }
 
 .wordmark,
@@ -508,7 +511,7 @@ body.menu-open .site-header {
 .mobile-menu {
   display: none;
   position: fixed;
-  top: 60px;
+  top: 0; /* the white rolls down from the top, under the bar's glass */
   left: 0;
   right: 0;
   z-index: 19; /* just below the bar */
@@ -518,6 +521,7 @@ body.menu-open .site-header {
 .mobile-menu-inner {
   display: flex;
   flex-direction: column;
+  padding-top: 60px; /* the bar's row */
   background: var(--white);
   border-bottom: 1px solid var(--aqua-mist);
   box-shadow: 0 14px 28px rgba(16, 48, 46, 0.14);
@@ -2118,9 +2122,10 @@ main:has(> .not-found) {
 .flyout {
   --flyout-rate: 0.26s;
   position: absolute;
+  z-index: 1; /* over the glass, under the bar's links */
   left: 0;
   right: 0;
-  top: 100%;
+  top: 0; /* the white unrolls from the very top, behind the bar's links */
   height: 0;
   overflow: hidden;
   background: var(--white);
@@ -2140,6 +2145,7 @@ main:has(> .not-found) {
 
 .flyout-menu {
   display: none;
+  padding-top: 60px; /* the bar's row */
 }
 
 .flyout-menu.is-current {
