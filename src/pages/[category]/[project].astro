@@ -72,10 +72,9 @@ const contents = [
 ];
 const position = cat.projects.indexOf(project) + 1;
 ---
-<Base title={project.title} description={description} current={cat.slug} image={project.coverImage}>
+<Base title={project.title} description={description} current={cat.slug} image={project.coverImage} back={{ href: cat.url, label: cat.title }}>
   <article data-project>
     <header class="page-head project-head">
-      <p class="kicker"><a class="crumb" href={cat.url}>{cat.title}</a></p>
       <h1 class="page-title">{project.title}</h1>
       <p class="kicker project-contents">
         {pieceCount > 0 && <span>{pieceCount} {pieceCount === 1 ? 'piece' : 'pieces'}</span>}

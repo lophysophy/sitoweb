@@ -857,12 +857,41 @@ body:not(.menu-open) .site-header.is-clear:not(.has-flyout) .site-nav a[aria-cur
   margin-top: 8px;
 }
 
-.crumb {
-  color: var(--aqua-gray);
-  text-decoration: none;
+/* Back row: a slim link to the page one level up, just under the bar. With
+   the script it steps back through history instead, so you land where you
+   were in the grid or the homepage (back.ts). */
+.back-nav {
+  padding: 16px var(--gutter) 0;
 }
 
-.crumb::before {
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  min-height: 44px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--aqua-gray);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.25s var(--ease);
+}
+
+/* The back row takes the room the page head kept above its title. */
+.back-nav + .page-head,
+.back-nav + article > .page-head:first-child {
+  padding-top: 20px;
+}
+
+.back-link [data-back-label] {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.back-link::before {
   content: '';
   display: inline-block;
   width: 1.1em;
@@ -875,11 +904,11 @@ body:not(.menu-open) .site-header.is-clear:not(.has-flyout) .site-nav a[aria-cur
   transition: transform 0.25s var(--ease);
 }
 
-.crumb:hover::before {
+.back-link:hover::before {
   transform: translateX(-4px);
 }
 
-.crumb:hover {
+.back-link:hover {
   color: var(--tiffany-deep);
 }
 

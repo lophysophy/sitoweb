@@ -6,11 +6,13 @@ import { teardown } from './lifecycle';
 import { mountNav } from './nav';
 import { mountGallery } from './gallery';
 import { mountHero } from './hero';
+import { mountBack } from './back';
 
 function mount() {
   mountNav();
   mountGallery();
   mountHero();
+  mountBack();
 }
 
 mount();
