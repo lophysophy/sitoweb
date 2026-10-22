@@ -398,7 +398,7 @@ body:not(.is-home) {
   border-bottom-color: transparent;
 }
 
-body:not(.menu-open) .site-header.is-clear:not(.has-flyout) :is(.wordmark, .wordmark-sub, .site-nav a, .menu-toggle) {
+body:not(.menu-open) .site-header.is-clear:not(.has-flyout) :is(.wordmark, .site-nav a, .menu-toggle) {
   color: var(--white);
   text-shadow: 0 1px 2px rgba(10, 30, 29, 0.35), 0 1px 14px rgba(10, 30, 29, 0.4);
 }
@@ -407,12 +407,11 @@ body:not(.menu-open) .site-header.is-clear:not(.has-flyout) .site-nav a:hover {
   color: var(--aqua-mist);
 }
 
-body:not(.menu-open) .site-header.is-clear:not(.has-flyout) .site-nav a[aria-current="page"]::after {
+body:not(.menu-open) .site-header.is-clear:not(.has-flyout) :is(.site-nav a, .wordmark)[aria-current="page"]::after {
   background: var(--white);
 }
 
 .wordmark,
-.wordmark-sub,
 .site-nav a,
 .menu-toggle {
   transition: color 0.32s cubic-bezier(0.4, 0, 0.6, 1), text-shadow 0.32s cubic-bezier(0.4, 0, 0.6, 1);
@@ -438,7 +437,11 @@ body:not(.menu-open) .site-header.is-clear:not(.has-flyout) .site-nav a[aria-cur
   justify-content: flex-end;
 }
 
+/* The name is the link home; on the homepage it carries the same section
+   mark as the links on the right (its stroke spans the whole name). */
 .wordmark {
+  position: relative;
+  padding: 12px 0;
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 18px;
@@ -450,17 +453,6 @@ body:not(.menu-open) .site-header.is-clear:not(.has-flyout) .site-nav a[aria-cur
 
 .wordmark:hover {
   color: var(--tiffany-deep);
-}
-
-.wordmark-sub {
-  display: block;
-  font-family: var(--font-ui);
-  font-weight: 600;
-  font-size: 10px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--aqua-gray);
-  margin-top: 2px;
 }
 
 .site-nav {
@@ -489,7 +481,7 @@ body:not(.menu-open) .site-header.is-clear:not(.has-flyout) .site-nav a[aria-cur
 }
 
 /* The current section is underlined by a short tiffany stroke. */
-.site-nav a[aria-current="page"]::after {
+:is(.site-nav a, .wordmark)[aria-current="page"]::after {
   content: '';
   position: absolute;
   left: 8px;
@@ -501,7 +493,13 @@ body:not(.menu-open) .site-header.is-clear:not(.has-flyout) .site-nav a[aria-cur
   transform-origin: left center;
 }
 
-.site-nav a[aria-current="page"].mark-slide::after {
+.site-header .wordmark[aria-current="page"]::after {
+  left: 0;
+  right: 0;
+  bottom: 3.9px; /* level with the marks under the other links */
+}
+
+:is(.site-nav a, .wordmark)[aria-current="page"].mark-slide::after {
   animation: mark-slide 0.42s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
@@ -1746,6 +1744,11 @@ html.lightbox-open {
 
   .wordmark {
     font-size: 16px;
+  }
+
+  /* Phones show no section links beside it, so no mark either. */
+  .site-header .wordmark[aria-current="page"]::after {
+    display: none;
   }
 
   .hero-intro {

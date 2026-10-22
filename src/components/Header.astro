@@ -21,7 +21,7 @@ const aria = (key: string) => (key === current ? 'page' : undefined);
 <header class:list={['site-header', { 'is-clear': home }]} data-site-header data-home={home ? '' : undefined}>
   <div class="header-inner">
     <div class="header-side">
-      <a class="wordmark" href="/">Lophy Sophy<span class="wordmark-sub">Sofia Lucarelli</span></a>
+      <a class="wordmark" href="/" aria-current={home ? 'page' : undefined}>Lophy Sophy</a>
     </div>
     <CategoryLinks current={current} />
     <nav class="site-nav header-side right" aria-label="Main navigation">

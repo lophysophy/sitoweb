@@ -302,7 +302,7 @@ function mountFlyouts() {
 // the one you opened (the bar itself doesn't crossfade between pages).
 let lastMark: DOMRect | null = null;
 let swapped = false; // only after moving between pages, not on the first load
-const markLink = () => document.querySelector<HTMLElement>('.site-header .site-nav a[aria-current="page"]');
+const markLink = () => document.querySelector<HTMLElement>('.site-header :is(.site-nav a, .wordmark)[aria-current="page"]');
 document.addEventListener('astro:before-swap', () => {
   const a = markLink();
   lastMark = a && a.offsetParent ? a.getBoundingClientRect() : null;
